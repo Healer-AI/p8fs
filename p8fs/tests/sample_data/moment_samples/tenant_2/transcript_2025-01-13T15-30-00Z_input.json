@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T15:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "03:30 PM UTC"
+  },
+  "transcript_id": "t2_20250113_153000",
+  "duration_seconds": 589,
+  "start_timestamp": "2025-01-13T15:30:00Z",
+  "end_timestamp": "2025-01-13T15:39:49Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-13/lyric_writing.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T15:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Alright, lyrics for track nine. The working title is 'Echoes' but that might change.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T15:30:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The theme is... memories that keep coming back. Things you can't let go of, even when you want to.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T15:30:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "First line. Let me try: 'Your voice still lingers in empty rooms.' Too cliché?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T15:30:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Maybe. But sometimes clichés exist because they're true. Let me keep going.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T15:30:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "'Your voice still lingers in empty rooms, like smoke that won't dissolve.' Hmm, better.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T15:30:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "'I keep chasing echoes, thinking they'll resolve into something real again.'",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T15:30:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "That's the hook maybe? Chasing echoes. Yeah, that works with the title.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T15:30:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Second verse needs contrast. Maybe less metaphorical, more concrete details.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-13T15:30:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "'Coffee cups on the left side of the sink, your favorite song still in my playlist.'",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T15:30:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Those small details hurt the most. Let me lean into that.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-13T15:31:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "'I deleted your number but I still know it by heart.' Oh that's good, write that down.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-13T15:31:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Bridge. This is where it gets vulnerable. The admission that I'm stuck.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T15:31:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "'Maybe I don't want to let go. Maybe the echoes are all I have left.'",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T15:31:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Is that too sad? No, it's honest. The whole song is sad. Own it.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T15:31:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, let me sing through what I have so far. [sings quietly] 'Your voice still lingers in empty rooms...'",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T15:31:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The melody fits. This could work. I'll flesh out the rest later, but I've got the bones.",
+      "duration_seconds": 6.1
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  ],
+  "environment": {
+    "location": "home_studio",
+    "background_sounds": "quiet, pen on paper, occasional piano note",
+    "recording_quality": "high"
+  }
+}

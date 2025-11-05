@@ -1,0 +1,23 @@
+title: Sample YAML Document
+metadata:
+  author: Test Author
+  created: 2025-09-06
+  version: "1.0"
+sections:
+  - id: 1
+    heading: Introduction
+    content: This is the introduction section of the document.
+  - id: 2
+    heading: Main Content
+    content: The main content contains important information for testing.
+tags:
+  - test
+  - sample
+  - yaml
+settings:
+  enabled: true
+  level: 5
+  features:
+    - chunking
+    - metadata
+    - parsing

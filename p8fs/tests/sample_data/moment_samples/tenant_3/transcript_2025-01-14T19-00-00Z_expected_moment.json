@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T19:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "07:00 PM UTC"
+  },
+  "name": "Evening Reflection on Leadership Challenges",
+  "content": "James processing day's leadership challenges alone in office. Reflected on difficult conversation with Tony about unprofessional conduct, acknowledging personal growth journey from 20 years ago when he might have acted similarly. Recognized Tony's passion and care for work as root of frustration, reframing coaching as channeling energy constructively. Strategized approach to plumbing contractor issue: firm but fair given labor shortage constraints, one final chance before replacement. Celebrated positive financial outlook and potential Riverside win ($12.8M bringing backlog to $75M). Acknowledged hiring needs (three more people) and growth challenges. Expressed vulnerability about aging and job exhaustion, balanced by renewed purpose when seeing completed projects. Self-aware leadership processing combining empathy, strategy, and long-term perspective.",
+  "summary": "Solo reflection: processed Tony coaching, strategized contractor approach, celebrated growth, acknowledged exhaustion and purpose",
+  "category": "reflection",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-14/evening_reflection.wav",
+  "resource_timestamp": "2025-01-14T19:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T19:09:53Z",
+  "moment_type": "reflection",
+  "emotion_tags": ["reflective", "tired", "thoughtful", "purposeful"],
+  "topic_tags": ["leadership", "self-reflection", "work-life-balance", "personal-growth", "business-strategy"],
+  "present_persons": {
+    "fp_james_t3": {
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    }
+  },
+  "location": "office",
+  "background_sounds": "quiet evening office, distant cleaning crew, occasional car outside",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.88,
+    "word_count": 287,
+    "speaker_count": 1,
+    "activity_type": "personal_reflection",
+    "emotional_depth": "high"
+  }
+}

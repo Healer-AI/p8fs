@@ -1,0 +1,79 @@
+[tool.uv.workspace]
+members = [
+    "p8fs-api",
+    "p8fs-auth",
+    "p8fs",
+    "p8fs-cluster",
+    "p8fs-node"
+]
+
+[tool.uv.sources]
+p8fs-auth = { workspace = true }
+p8fs = { workspace = true }
+p8fs-cluster = { workspace = true }
+p8fs-node = { workspace = true }
+p8fs-api = { workspace = true }
+
+[project]
+name = "p8fs-modules"
+version = "1.1.27"
+description = "P8FS Smart Content Management System - Monorepo"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "p8fs",
+    "p8fs-auth",
+    "p8fs-cluster",
+    "p8fs-node",
+    "p8fs-api",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.12.0",
+    "ruff>=0.1.6",
+    "mypy>=1.0.0"
+]
+workers = [
+    "p8fs-node",
+    "grpcio>=1.60.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.1.0",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.0.0",
+]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["README.md"]  # Minimal files for workspace root
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = [
+    "p8fs-api/tests",
+    "p8fs-auth/tests", 
+    "p8fs/tests",
+    "p8fs-cluster/tests",
+    "p8fs-node/tests"
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[tool.ruff]
+line-length = 88
+target-version = "1.1.27"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]

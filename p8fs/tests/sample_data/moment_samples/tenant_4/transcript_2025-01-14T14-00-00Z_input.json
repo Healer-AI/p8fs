@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T14:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "02:00 PM UTC"
+  },
+  "transcript_id": "t4_20250114_140000",
+  "duration_seconds": 591,
+  "start_timestamp": "2025-01-14T14:00:00Z",
+  "end_timestamp": "2025-01-14T14:09:51Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-14/weather_concern.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T14:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The weather's changing. I can see clouds building to the west. Not what the forecast said.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T14:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me check the barometer on my watch... pressure's dropping. Down 8 millibars in the last two hours.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T14:00:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "That's significant. Could mean a storm moving in faster than predicted.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T14:00:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm going to head back to camp now. I'm about an hour away, should make it before conditions deteriorate.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T14:00:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "When I get there, I need to secure everything. Extra guy lines on the tent, move gear inside, make sure the bear canister is locked down.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T14:00:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The wind's already picking up. I can feel it gusting from the west.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T14:00:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This is why you always watch the weather in the mountains. Forecasts are predictions, not guarantees.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T14:00:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm not worried exactly, but I'm being smart. If this turns into a real storm, I want to be prepared.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T14:01:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "My tent's rated for high winds and snow load. I've got food and water for a week if I need to wait it out.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T14:01:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The satellite communicator is charged. I can call for help if things get bad, though I don't expect that.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T14:01:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Biggest risk is being stuck in the tent for a day or two. Boring, but not dangerous.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T14:01:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I brought books for exactly this scenario. And my journal. Plenty of ways to pass time.",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-14T14:01:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Temperature's dropping too. Feels like it's already down to minus 5 or so.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T14:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Alright, picking up the pace. I want to be at camp in 45 minutes. No point taking unnecessary risks.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T14:01:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This is part of wilderness camping. Mother Nature doesn't care about your plans. You adapt or you suffer.",
+      "duration_seconds": 8.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5515,8.7010",
+    "background_sounds": "increasing wind, boots on rocky trail, fabric rustling",
+    "recording_quality": "medium"
+  }
+}

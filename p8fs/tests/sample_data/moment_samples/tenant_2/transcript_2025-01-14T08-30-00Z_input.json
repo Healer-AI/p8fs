@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T08:30:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:30 AM UTC"
+  },
+  "transcript_id": "t2_20250114_083000",
+  "duration_seconds": 592,
+  "start_timestamp": "2025-01-14T08:30:00Z",
+  "end_timestamp": "2025-01-14T08:39:52Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-14/vocal_warmup.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T08:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, morning vocal warmup. Let me start with some breathing exercises.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T08:30:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[deep breathing sounds] In for four, hold for four, out for eight. Again.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T08:30:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Good. Now lip trills. [makes lip trill sounds ascending and descending]",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T08:30:24Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "My voice feels a bit tight this morning. Probably should have gone to bed earlier. Let me do some sirens.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T08:30:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[makes siren sounds from low to high and back] There we go, that's loosening up.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T08:30:39Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Now scales. Let me do major scales on 'mah meh mee moh moo'. Starting at middle C.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T08:30:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[sings scales] Mah meh mee moh moo, mah meh mee moh moo. Moving up a half step.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T08:30:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[continues scales] Good. I can feel my range opening up. Let me push a bit higher.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T08:31:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[sings higher scales] Okay that's my limit for now. Don't want to strain before the recording session later.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T08:31:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Let me do some articulation exercises. The lips, the teeth, the tip of the tongue.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T08:31:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The lips, the teeth, the tip of the tongue. Faster now.",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-14T08:31:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Red leather yellow leather, red leather yellow leather. Ugh, always mess that one up.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T08:31:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, one more time. Red leather yellow leather. Better.",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-14T08:31:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Now let me run through a bit of the song we're recording today. Just to feel where my voice is at.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T08:31:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[sings] 'In the quiet of the morning light...' Yeah, I'm ready. Voice feels good.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T08:31:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I should make some tea with honey before the session. And probably do another quick warmup right before we start.",
+      "duration_seconds": 6.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  ],
+  "environment": {
+    "location": "home_studio",
+    "background_sounds": "quiet morning ambiance, occasional car passing outside",
+    "recording_quality": "high"
+  }
+}

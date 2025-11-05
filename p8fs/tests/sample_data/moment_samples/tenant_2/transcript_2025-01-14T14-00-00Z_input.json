@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T14:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "02:00 PM UTC"
+  },
+  "transcript_id": "t2_20250114_140000",
+  "duration_seconds": 621,
+  "start_timestamp": "2025-01-14T14:00:00Z",
+  "end_timestamp": "2025-01-14T14:10:21Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-14/label_meeting.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T14:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Hi Jessica, thanks for making time today.",
+      "duration_seconds": 2.8
+    },
+    {
+      "timestamp": "2025-01-14T14:00:03Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "Of course! I'm excited to hear the new tracks. How's the album coming along?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T14:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Really well actually. We've got seven songs fully recorded and mixed. Three more in various stages.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T14:00:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "That's great progress. Are you still on track for the April release date we discussed?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T14:00:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah, I think so. We need to wrap recording by end of February, which feels doable. Then mastering in March.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T14:00:27Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "Perfect. And how are you feeling about the direction? Last time we talked you were worried about the production feeling too polished.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T14:00:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah, that was a real concern. But we've been mixing in more analog gear and keeping some of the imperfections. It feels more authentic now.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T14:00:43Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "I love that. The rawness is what connected with people on your last EP. We don't want to lose that.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T14:00:49Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Exactly. So, I wanted to talk about marketing strategy. I've been thinking about doing some acoustic sessions for social media.",
+      "duration_seconds": 7.1
+    },
+    {
+      "timestamp": "2025-01-14T14:00:56Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "Oh that's perfect timing. We were going to suggest building up content in February and March before the release.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T14:01:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Great minds. I was thinking stripped down versions of the album tracks, maybe film them in different locations around the city.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T14:01:09Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "I really like that. It gives fans a peek behind the curtain and shows the songs in a different light.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T14:01:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Exactly. And I want to be more personal this time. Talk about what inspired each song, the stories behind them.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T14:01:22Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "That vulnerability is what your fans love. Let's schedule a planning session with the marketing team to map this out.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T14:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Perfect. Oh, and one more thing - I want to do a small club tour after the release. Like 10-15 cities, intimate venues.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T14:01:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "I love it. We'll start reaching out to venues. Are you thinking May or June?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-14T14:01:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "June would be ideal. Gives us time to build momentum from the release.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T14:01:46Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jessica",
+      "text": "Sounds like a plan. Send me the finished tracks when you're ready and we'll start building the rollout.",
+      "duration_seconds": 5.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_jessica_t2",
+      "user_id": "user_jessica_004",
+      "user_label": "Jessica"
+    }
+  ],
+  "environment": {
+    "location": "video_conference",
+    "background_sounds": "quiet home office, occasional typing",
+    "recording_quality": "high"
+  }
+}

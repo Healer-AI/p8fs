@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T14:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "02:00 PM UTC"
+  },
+  "name": "Weather Response - Storm Preparation",
+  "content": "Lena observing unexpected weather deterioration: western cloud buildup contrary to forecast, barometric pressure drop of 8mb in two hours indicating approaching storm. Made immediate tactical decision to return to camp (one hour away) before conditions worsen. Planned systematic storm preparation: additional tent guy lines, gear consolidation inside shelter, bear canister security. Wind already increasing from west. Demonstrated mountain wisdom: forecasts are predictions requiring continuous real-world validation. Remained calm, not worried but appropriately cautious. Assessed resources: tent rated for severe conditions, week's supplies for weather delay, charged satellite communicator for emergency. Primary risk: tent confinement for 1-2 days, mitigated with books and journal. Temperature dropping to minus 5°C. Accelerated return pace prioritizing safety over schedule. Philosophical acceptance: wilderness requires adaptation to nature's authority.",
+  "summary": "Storm response: detected pressure drop, returned to camp, planned systematic preparation, calm risk assessment",
+  "category": "outdoor",
+  "uri": "s3://p8fs-tenant4/recordings/2025-01-14/weather_concern.wav",
+  "resource_timestamp": "2025-01-14T14:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T14:09:51Z",
+  "moment_type": "observation",
+  "emotion_tags": ["alert", "calm", "prudent", "adaptable"],
+  "topic_tags": ["weather", "risk-management", "preparedness", "decision-making", "wilderness-skills"],
+  "present_persons": {
+    "fp_lena_t4": {
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  },
+  "location": "46.5515,8.7010",
+  "background_sounds": "increasing wind, boots on rocky trail, fabric rustling",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.85,
+    "word_count": 258,
+    "speaker_count": 1,
+    "activity_type": "emergency_response",
+    "elevation_meters": 2100,
+    "risk_level": "moderate"
+  }
+}

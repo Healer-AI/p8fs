@@ -1,0 +1,21 @@
+This is a sample text file for testing the text content provider.
+
+It contains multiple paragraphs with various types of content including:
+- Lists
+- Headers
+- Code snippets
+
+## Section Header
+
+Here's another paragraph with some inline code: `print("Hello, World!")`.
+
+### Subsection
+
+The text provider should handle this content correctly and extract meaningful chunks for processing.
+
+```python
+def example_function():
+    return "This is a code block"
+```
+
+Final paragraph with conclusion text.

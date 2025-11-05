@@ -1,0 +1,139 @@
+{
+  "basic_completion": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "Hello! I'm doing well, thank you for asking. I'm an AI assistant created by Google. How can I assist you today?"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0,
+        "safetyRatings": [
+          {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "probability": "NEGLIGIBLE"
+          },
+          {
+            "category": "HARM_CATEGORY_HATE_SPEECH", 
+            "probability": "NEGLIGIBLE"
+          }
+        ]
+      }
+    ],
+    "promptFeedback": {
+      "safetyRatings": [
+        {
+          "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+          "probability": "NEGLIGIBLE"
+        }
+      ]
+    },
+    "usageMetadata": {
+      "promptTokenCount": 8,
+      "candidatesTokenCount": 24,
+      "totalTokenCount": 32
+    }
+  },
+  "function_call_response": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "functionCall": {
+                "name": "calculate_area",
+                "args": {
+                  "shape": "circle",
+                  "radius": 5
+                }
+              }
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 25,
+      "candidatesTokenCount": 12,
+      "totalTokenCount": 37
+    }
+  },
+  "streaming_chunk": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "Renewable energy offers several key benefits including reduced carbon emissions"
+            }
+          ],
+          "role": "model"
+        },
+        "index": 0
+      }
+    ]
+  },
+  "streaming_function_call_chunks": [
+    {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "get_weather",
+                  "args": {}
+                }
+              }
+            ],
+            "role": "model"
+          },
+          "index": 0
+        }
+      ]
+    },
+    {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "name": "get_weather",
+                  "args": {
+                    "location": "Dublin",
+                    "units": "celsius"
+                  }
+                }
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ]
+    }
+  ],
+  "error_response": {
+    "error": {
+      "code": 400,
+      "message": "Invalid argument: The `model` field is required.",
+      "status": "INVALID_ARGUMENT",
+      "details": [
+        {
+          "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+          "reason": "INVALID_ARGUMENT",
+          "domain": "googleapis.com"
+        }
+      ]
+    }
+  }
+}

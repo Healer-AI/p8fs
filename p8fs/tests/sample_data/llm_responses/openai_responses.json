@@ -1,0 +1,232 @@
+{
+  "basic_completion": {
+    "id": "chatcmpl-123",
+    "object": "chat.completion",
+    "created": 1677652288,
+    "model": "gpt-4",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Hello! I'm doing well, thank you for asking. How can I help you today?"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 17,
+      "total_tokens": 27
+    }
+  },
+  "function_call_response": {
+    "id": "chatcmpl-456",
+    "object": "chat.completion",
+    "created": 1677652300,
+    "model": "gpt-4",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_abc123",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"location\": \"San Francisco\", \"units\": \"celsius\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 18,
+      "total_tokens": 100
+    }
+  },
+  "streaming_chunk": {
+    "id": "chatcmpl-789",
+    "object": "chat.completion.chunk",
+    "created": 1677652312,
+    "model": "gpt-4",
+    "choices": [
+      {
+        "index": 0,
+        "delta": {
+          "role": "assistant",
+          "content": "In the realm of code and dreams,"
+        },
+        "finish_reason": null
+      }
+    ]
+  },
+  "final_streaming_chunk": {
+    "id": "chatcmpl-789",
+    "object": "chat.completion.chunk",
+    "created": 1677652312,
+    "model": "gpt-4",
+    "choices": [
+      {
+        "index": 0,
+        "delta": {},
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 15,
+      "completion_tokens": 25,
+      "total_tokens": 40
+    }
+  },
+  "streaming_function_call_chunks": [
+    {
+      "id": "chatcmpl-func-001",
+      "object": "chat.completion.chunk",
+      "created": 1677652350,
+      "model": "gpt-4.1-mini",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "index": 0,
+                "id": "call_weather_001",
+                "type": "function",
+                "function": {
+                  "name": "get_weather",
+                  "arguments": ""
+                }
+              }
+            ]
+          },
+          "finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-func-001",
+      "object": "chat.completion.chunk",
+      "created": 1677652351,
+      "model": "gpt-4.1-mini",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "tool_calls": [
+              {
+                "index": 0,
+                "function": {
+                  "arguments": "{\"location\": \"Dublin\""
+                }
+              }
+            ]
+          },
+          "finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-func-001",
+      "object": "chat.completion.chunk",
+      "created": 1677652352,
+      "model": "gpt-4.1-mini",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {
+            "tool_calls": [
+              {
+                "index": 0,
+                "function": {
+                  "arguments": ", \"units\": \"celsius\"}"
+                }
+              }
+            ]
+          },
+          "finish_reason": null
+        }
+      ]
+    },
+    {
+      "id": "chatcmpl-func-001",
+      "object": "chat.completion.chunk",
+      "created": 1677652353,
+      "model": "gpt-4.1-mini",
+      "choices": [
+        {
+          "index": 0,
+          "delta": {},
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 95,
+        "completion_tokens": 28,
+        "total_tokens": 123
+      }
+    }
+  ],
+  "gpt5_response": {
+    "id": "chatcmpl-gpt5-001",
+    "object": "chat.completion",
+    "created": 1677652400,
+    "model": "gpt-5",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "To analyze this complex problem, I'll break it down into systematic steps:\n\n1. **Problem Identification**\n2. **Data Analysis** \n3. **Solution Framework**\n4. **Implementation Strategy**\n\nLet me elaborate on each step..."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 12,
+      "completion_tokens": 150,
+      "total_tokens": 162
+    },
+    "reasoning": "The user is asking for a systematic analysis approach..."
+  },
+  "batch_submission_response": {
+    "batch_id": "batch_1069b8b1",
+    "batch_type": "openai_batch_api",
+    "status": "submitted",
+    "questions_count": 3,
+    "openai_batch_id": "batch_000000000000000000000000",
+    "openai_file_id": "file-000000000000000000000000",
+    "estimated_completion": "24 hours",
+    "cost_savings": "50-95%",
+    "results": null,
+    "errors": null,
+    "results_count": null,
+    "errors_count": null,
+    "job_id": "7d5d2219-1e20-451c-85cf-8e0a95cb3a94",
+    "submitted_at": "2025-09-07T19:05:59.867802+00:00"
+  },
+  "batch_submission_gpt5_response": {
+    "batch_id": "batch_30d26050",
+    "batch_type": "openai_batch_api",
+    "status": "submitted",
+    "questions_count": 2,
+    "openai_batch_id": "batch_000000000000000000000000",
+    "openai_file_id": "file-000000000000000000000000",
+    "estimated_completion": "24 hours",
+    "cost_savings": "50-95%",
+    "results": null,
+    "errors": null,
+    "results_count": null,
+    "errors_count": null,
+    "job_id": "d73bafe3-c0f3-4b85-890c-c786b771925f",
+    "submitted_at": "2025-09-07T19:06:00.505482+00:00"
+  }
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "ml-guide-001",
+    "name": "Machine Learning Guide",
+    "description": "A comprehensive guide to machine learning fundamentals and deep learning architectures",
+    "content": "Machine learning is a subset of artificial intelligence that enables computers to learn from data. Deep learning, a subfield of ML, uses neural networks with multiple layers to learn hierarchical representations. Key concepts include supervised learning, unsupervised learning, and reinforcement learning. Applications range from computer vision and natural language processing to robotics and recommendation systems.",
+    "resource_type": "guide",
+    "metadata": {
+      "category": "AI",
+      "difficulty": "intermediate",
+      "topics": ["ML", "AI", "deep learning"]
+    }
+  },
+  {
+    "id": "python-best-002",
+    "name": "Python Best Practices",
+    "description": "Essential Python programming patterns and clean code principles",
+    "content": "Python programming requires understanding of best practices for maintainable code. Key principles include PEP 8 style guidelines, proper exception handling, and effective use of type hints. Important patterns: context managers, decorators, generators, and comprehensions. Testing strategies include unit tests with pytest, integration testing, and test-driven development.",
+    "resource_type": "tutorial",
+    "metadata": {
+      "category": "programming",
+      "language": "python",
+      "topics": ["python", "testing", "clean code"]
+    }
+  },
+  {
+    "id": "dist-sys-003",
+    "name": "Distributed Systems Architecture",
+    "description": "Design patterns and principles for building scalable distributed systems",
+    "content": "Distributed systems require careful consideration of consistency, availability, and partition tolerance (CAP theorem). Key patterns include microservices, event-driven architecture, and service mesh. Important concepts: consensus algorithms (Raft, Paxos), distributed transactions, and eventual consistency. Technologies: Kubernetes for orchestration, message queues for async communication, and distributed databases.",
+    "resource_type": "architecture",
+    "metadata": {
+      "category": "systems",
+      "difficulty": "advanced",
+      "topics": ["distributed", "architecture", "scalability"]
+    }
+  },
+  {
+    "id": "vector-db-004",
+    "name": "Vector Databases Overview",
+    "description": "Understanding vector databases for embedding storage and similarity search",
+    "content": "Vector databases are specialized for storing and querying high-dimensional embeddings. They enable efficient similarity search using algorithms like HNSW, IVFFlat, and LSH. Key features: approximate nearest neighbor search, filtering capabilities, and horizontal scaling. Popular solutions include Pinecone, Weaviate, Qdrant, and pgvector for PostgreSQL.",
+    "resource_type": "technical",
+    "metadata": {
+      "category": "database",
+      "topics": ["vectors", "embeddings", "search"]
+    }
+  },
+  {
+    "id": "api-design-005",
+    "name": "API Design Guidelines",
+    "description": "RESTful API design principles and GraphQL best practices",
+    "content": "Well-designed APIs follow REST principles: statelessness, resource-based URLs, and standard HTTP methods. Important considerations: versioning strategies, error handling, pagination, and rate limiting. GraphQL offers flexible queries but requires careful schema design and query complexity management. Security best practices: authentication (OAuth 2.0), authorization (RBAC), and input validation.",
+    "resource_type": "guide",
+    "metadata": {
+      "category": "API",
+      "topics": ["REST", "GraphQL", "security"]
+    }
+  }
+]

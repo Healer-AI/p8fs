@@ -1,0 +1,272 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T21:30:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "09:30 PM UTC"
+  },
+  "transcript_id": "t5_20250115_213000",
+  "duration_seconds": 601,
+  "start_timestamp": "2025-01-15T21:30:00Z",
+  "end_timestamp": "2025-01-15T21:40:01Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-15/evening_reflection.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T21:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Personal log, day 89. It's late evening, most of the crew is asleep. I'm in my sleep compartment, just thinking.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T21:30:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Today was long. The water system repair this morning, then that media interview this afternoon. By the time I finished exercise and dinner, I was exhausted.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T21:30:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "But I can't sleep yet. My mind is too active. Sometimes I wonder if I'm doing enough up here, if this mission really matters.",
+      "duration_seconds": 10.6
+    },
+    {
+      "timestamp": "2025-01-15T21:30:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Then I remember the protein crystal experiments. If our work leads to better diabetes treatments, that could help millions of people.",
+      "duration_seconds": 9.8
+    },
+    {
+      "timestamp": "2025-01-15T21:30:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That's not nothing. That's real. But it's also abstract - I'm not seeing the direct impact. I won't see those people whose lives might improve.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T21:30:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "The interview today was interesting. Sarah asked good questions. When I talked about the overview effect, I could hear myself getting emotional.",
+      "duration_seconds": 10.8
+    },
+    {
+      "timestamp": "2025-01-15T21:31:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seeing Earth from space really does change you. Every time I look out the Cupola, I'm struck by how beautiful and fragile our planet is.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T21:31:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "All those borders we fight over, the conflicts, the divisions - they're invisible from up here. It all looks like one connected system.",
+      "duration_seconds": 10.6
+    },
+    {
+      "timestamp": "2025-01-15T21:31:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I wish everyone could see this view. Maybe then we'd take better care of what we have.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T21:31:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ninety-three days left. Three more months away from Lin and Mei. I talked to them yesterday, and Mei is growing so fast.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T21:31:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "She told me about her science test, about learning the planets. Her teacher is teaching them about Jupiter. Eight years old and already curious about space.",
+      "duration_seconds": 11.6
+    },
+    {
+      "timestamp": "2025-01-15T21:31:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Part of me wonders if I'm being selfish. I chose this mission, chose to be away from my family for six months. What kind of father does that?",
+      "duration_seconds": 11.8
+    },
+    {
+      "timestamp": "2025-01-15T21:32:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "But then I remember why I do this. I want Mei to grow up in a world where space exploration is normal, where humanity thinks bigger than just Earth.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T21:32:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Maybe she'll be an astronaut someday. Or a scientist. Or maybe she'll do something completely different. The point is, she'll have options because we're pushing boundaries.",
+      "duration_seconds": 12.2
+    },
+    {
+      "timestamp": "2025-01-15T21:32:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Torres and Kim did exceptional work on that EVA yesterday. Watching them outside, I felt this mix of pride and anxiety.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-15T21:32:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "As commander, their safety is my responsibility. If something had gone wrong, if they'd been injured or worse - I don't know how I'd live with that.",
+      "duration_seconds": 11.8
+    },
+    {
+      "timestamp": "2025-01-15T21:32:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "But they were perfect. Textbook execution. That's what training does - it makes dangerous situations manageable through preparation and discipline.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T21:33:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I've been thinking about the water system issue this morning. Such a small thing - a loose connection - but it could have cascaded into something serious.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T21:33:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Up here, everything is connected. One failure can trigger others. That's why we're so meticulous about maintenance, so careful about procedures.",
+      "duration_seconds": 10.8
+    },
+    {
+      "timestamp": "2025-01-15T21:33:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "There's no calling a plumber when you're orbiting at 27,000 kilometers per hour. We have to be self-sufficient, ready to fix anything.",
+      "duration_seconds": 10.6
+    },
+    {
+      "timestamp": "2025-01-15T21:33:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Sometimes I think about what early astronauts went through. The Apollo missions, the Shuttle program - we stand on their shoulders.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T21:33:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "They took bigger risks with less technology. We have it easier in many ways, but the fundamental challenge remains the same.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-15T21:34:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Humans aren't built for space. We're evolved for gravity, atmosphere, magnetic field protection. Being up here is fundamentally unnatural.",
+      "duration_seconds": 11.6
+    },
+    {
+      "timestamp": "2025-01-15T21:34:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "But we adapt. That's what humans do. We figure out how to survive in environments that should kill us.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T21:34:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Mars will be the ultimate test of that. If we can establish a permanent presence there, it'll prove that humanity can become a multi-planetary species.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T21:34:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I probably won't go to Mars. I'll be too old by the time those missions launch. But maybe I'm helping pave the way for whoever does go.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T21:34:53Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Every experiment we run, every system we test, every problem we solve - it's all data for future missions. We're building the knowledge base.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T21:35:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "It's quiet right now. I can hear the ventilation system humming, the occasional beep from monitoring equipment. These sounds have become familiar.",
+      "duration_seconds": 11.6
+    },
+    {
+      "timestamp": "2025-01-15T21:35:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "In three months, I'll be back on Earth. I'll hear rain, wind, birds, traffic. Right now, those sounds seem alien even though I lived with them my whole life.",
+      "duration_seconds": 12.4
+    },
+    {
+      "timestamp": "2025-01-15T21:35:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "The readjustment is going to be hard. Not just physically - though that'll be brutal - but mentally and emotionally too.",
+      "duration_seconds": 9.8
+    },
+    {
+      "timestamp": "2025-01-15T21:35:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "How do you go back to normal life after seeing Earth from this perspective? After floating for six months? After being part of something this significant?",
+      "duration_seconds": 11.6
+    },
+    {
+      "timestamp": "2025-01-15T21:35:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I guess I'll figure it out. Astronauts before me have done it. They've returned, readjusted, found meaning in normal life again.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T21:36:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright, I should try to sleep. Tomorrow's schedule is packed - more experiments, a communications test, regular maintenance checks.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-15T21:36:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "The work continues. That's what this is about - the work, the mission, the progress we're making for all of humanity.",
+      "duration_seconds": 9.8
+    },
+    {
+      "timestamp": "2025-01-15T21:36:24Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "End personal log.",
+      "duration_seconds": 2.1
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    }
+  ],
+  "environment": {
+    "location": "iss_sleep_compartment",
+    "background_sounds": "quiet ventilation, equipment beeping, station creaking",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,138 @@
+-- Fix ALL table timestamp columns to have proper defaults
+-- Migration: 20251018_180000_fix_all_timestamps.sql
+-- TiDB version
+
+USE public;
+
+-- Fix agents table
+ALTER TABLE agents
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix api_proxies table
+ALTER TABLE api_proxies
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix engrams table
+ALTER TABLE engrams
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix errors table
+ALTER TABLE errors
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix files table
+ALTER TABLE files
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix functions table
+ALTER TABLE functions
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix jobs table
+ALTER TABLE jobs
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix kv_storage table
+ALTER TABLE kv_storage
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix language_model_apis table
+ALTER TABLE language_model_apis
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix projects table
+ALTER TABLE projects
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix resources table
+ALTER TABLE resources
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix sessions table
+ALTER TABLE sessions
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix tasks table
+ALTER TABLE tasks
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix tenants table
+ALTER TABLE tenants
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix token_usage table
+ALTER TABLE token_usage
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix users table
+ALTER TABLE users
+  MODIFY created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  MODIFY updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Fix kv_entity_mapping table (add missing updated_at column)
+ALTER TABLE kv_entity_mapping
+  ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- Update any NULL timestamps to current time
+UPDATE agents SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE agents SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE api_proxies SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE api_proxies SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE engrams SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE engrams SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE errors SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE errors SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE files SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE files SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE functions SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE functions SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE jobs SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE jobs SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE kv_storage SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE kv_storage SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE language_model_apis SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE language_model_apis SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE projects SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE projects SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE resources SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE resources SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE sessions SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE sessions SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE tasks SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE tasks SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE tenants SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE tenants SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE token_usage SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE token_usage SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';
+
+UPDATE users SET created_at = CURRENT_TIMESTAMP WHERE created_at IS NULL;
+UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL OR updated_at = '';

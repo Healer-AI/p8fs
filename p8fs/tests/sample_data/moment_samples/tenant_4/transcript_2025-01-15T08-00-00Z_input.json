@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T08:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "08:00 AM UTC"
+  },
+  "transcript_id": "t4_20250115_080000",
+  "duration_seconds": 594,
+  "start_timestamp": "2025-01-15T08:00:00Z",
+  "end_timestamp": "2025-01-15T08:09:54Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-15/post_storm.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T08:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Morning after the storm. The wind stopped around 3 AM and I actually slept pretty well after that.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T08:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me unzip the vestibule and see what we're dealing with... wow. About 30 centimeters of fresh snow.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T08:00:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The tent performed perfectly. No tears, no bent poles, everything held. This thing's earned my trust.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T08:00:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The landscape looks completely transformed. Everything's blanketed in white. Pristine, untouched snow everywhere.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T08:00:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I need to brush the snow off the tent before it melts and refreezes. And dig out my gear that was outside.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T08:00:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The bear canister is buried. Let me find where I left it... there it is, under about half a meter of snow.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T08:00:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This changes my plans for today. The trail to the higher peaks will be slow going with this much fresh snow.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T08:01:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But avalanche risk is definitely elevated now. I should stick to lower elevations and gentler slopes.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T08:01:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Safety first. No summit is worth dying for. Maybe I'll do a shorter loop hike, let the snowpack stabilize.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-15T08:01:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The sky's clear now. Blue and bright. Hard to believe there was a storm last night.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T08:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me get the stove going for coffee and oatmeal. Then I'll check my gear and make a proper plan for the day.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T08:01:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm honestly proud of how I handled last night. Stayed calm, stayed safe, trusted my preparation.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T08:01:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This trip has been exactly what I needed. Testing myself, finding that I'm stronger than I thought.",
+      "duration_seconds": 8.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "quiet morning, snow crunching, birds starting to call",
+    "recording_quality": "high"
+  }
+}

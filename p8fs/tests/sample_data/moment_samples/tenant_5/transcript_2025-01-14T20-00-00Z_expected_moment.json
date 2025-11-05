@@ -1,0 +1,45 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T20:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:00 PM UTC"
+  },
+  "name": "Family Video Call - Connecting with Daughter and Wife",
+  "content": "Commander Chen conducting family video call from ISS Unity module on mission day 88, connecting with eight-year-old daughter Mei and wife Lin. Educational exchange: explained orbital mechanics (420km altitude, 7.66 km/s velocity, 90-minute orbit period), EVA definition and day's successful antenna repair mission. Demonstrated microgravity environment via live camera tour showing floating objects, performed somersault demonstration delighting daughter. Daughter expressed astronaut career aspiration, reported academic achievement (A grade on solar system test, learned about Jupiter's Great Red Spot storm). Father-daughter connection reinforced through encouragement of education and perseverance values. Emotional intimacy shared: mutual missing expressions, nightly ISS viewing ritual described (Mei watching station pass overhead, waving), countdown to reunion (93 days remaining). Promise made: mission patch souvenir for daughter upon return. Wife providing support during extended absence, managing household and childcare, expressing pride in mission while acknowledging difficulty of separation. Commander acknowledged loneliness - nighttime Earth observation moments thinking of family sleeping below. Warm family dynamic balanced professional responsibilities with personal relationships. Call concluded with scheduling next communication session, expressing love, and parental reminder about continued study and good behavior. Successful maintenance of family bonds across 420-kilometer distance through regular communication rituals.",
+  "summary": "Family call: showed Mei the station, discussed EVA, shared mutual missing, 93 days until return, promised mission patch",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-14/family_video_call.wav",
+  "resource_timestamp": "2025-01-14T20:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T20:10:03Z",
+  "moment_type": "conversation",
+  "emotion_tags": ["loving", "homesick", "proud", "connected", "warm"],
+  "topic_tags": ["family", "video-call", "parent-child-relationship", "long-distance-connection", "educational-sharing"],
+  "present_persons": {
+    "fp_chen_t5": {
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    "fp_mei_t5": {
+      "fingerprint_id": "fp_mei_t5",
+      "user_id": "user_mei_005",
+      "user_label": "Daughter Mei"
+    },
+    "fp_lin_t5": {
+      "fingerprint_id": "fp_lin_t5",
+      "user_id": "user_lin_006",
+      "user_label": "Wife Lin"
+    }
+  },
+  "location": "iss_unity_module",
+  "background_sounds": "ventilation hum, occasional video call static, equipment beeping",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.05,
+    "word_count": 326,
+    "speaker_count": 3,
+    "activity_type": "video_call",
+    "mission_day": 88,
+    "relationship": "family"
+  }
+}

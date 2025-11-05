@@ -1,0 +1,361 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T20:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:00 PM UTC"
+  },
+  "transcript_id": "t5_20250114_200000",
+  "duration_seconds": 603,
+  "start_timestamp": "2025-01-14T20:00:00Z",
+  "end_timestamp": "2025-01-14T20:10:03Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-14/family_video_call.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T20:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Hi sweetheart! Can you see me okay? The video link from up here can be a little choppy sometimes.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T20:00:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I can see you, Dad! You're floating! Are you really in space right now?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T20:00:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I really am. I'm 420 kilometers above Earth, traveling at 7.66 kilometers per second. We orbit the planet every 90 minutes.",
+      "duration_seconds": 9.8
+    },
+    {
+      "timestamp": "2025-01-14T20:00:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "That's so fast! Mom, Dad is going super fast in space!",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T20:00:28Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "I know, honey. Your dad is pretty amazing. How are you feeling, Chen? You look good.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T20:00:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'm good. A little tired - we had an EVA this morning. But everyone's healthy, mission is going well.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T20:00:43Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "What's an EVA? Is that like a spaceship thing?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-14T20:00:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "EVA means Extra-Vehicular Activity. It's when astronauts put on spacesuits and go outside the space station to fix things.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T20:00:57Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "You went OUTSIDE? In actual space? That's so cool! Were you scared?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T20:01:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Actually, I stayed inside today. Two of my crew members, Torres and Kim, did the spacewalk. I was their commander, making sure they stayed safe.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:13Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "Did everything go okay? No problems?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Perfect execution. They replaced a broken antenna bracket in 87 minutes. Textbook operation.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T20:01:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "Dad, can you show us your space station? I want to see where you sleep!",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Sure! Let me turn the camera around. This is the Unity module where we eat and have meetings.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T20:01:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "Everything is floating! Look Mom, there's a pen just floating in the air!",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T20:01:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Yeah, we have to be careful not to lose things. If you let go of something, it just drifts away. See, I'll push this pen and it floats.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:54Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "That's so cool! Can you do a flip?",
+      "duration_seconds": 3.4
+    },
+    {
+      "timestamp": "2025-01-14T20:01:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "A flip? Alright, watch this. I'll do a somersault for you.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T20:02:04Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "Wow! You're upside down! No, now you're right-side up again! That's amazing!",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T20:02:11Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "Careful, don't make yourself dizzy. Mei, let your dad rest. He's been working hard.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T20:02:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'm okay, really. I love showing Mei around. This is what it's all for - inspiring the next generation.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T20:02:26Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "When I grow up, I want to be an astronaut just like you, Dad!",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T20:02:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "You can be anything you want, sweetie. Astronaut, scientist, teacher - whatever makes you happy. But you have to study hard and never give up.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T20:02:41Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I'm studying! I got an A on my science test about the solar system!",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T20:02:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That's wonderful! I'm so proud of you. Tell me, what was your favorite thing you learned?",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T20:02:54Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I learned that Jupiter has a big red spot that's actually a giant storm! And it's been going for hundreds of years!",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T20:03:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That's right! The Great Red Spot. It's a storm bigger than Earth itself. Jupiter is incredible.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T20:03:10Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "She talks about you constantly. Tells everyone her dad is in space. The other parents are very impressed.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T20:03:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "How are you holding up, Lin? I know this isn't easy, me being gone for months.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T20:03:25Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "We're managing. I miss you, of course. But I'm proud of what you're doing. And Mei helps keep me busy.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T20:03:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I miss you both so much. Sometimes at night I look down at Earth and think about you sleeping in our house.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T20:03:42Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "We think about you too. Every night before bed, Mei looks for the space station in the sky.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T20:03:49Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I saw it yesterday! It was moving really fast across the sky like a bright star!",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T20:03:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That was probably us! When we pass over at night, the sun reflects off the solar panels and makes us visible.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T20:04:04Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I waved at you! Did you see me waving?",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-14T20:04:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I couldn't see you from up here, but I felt it in my heart. I always know when you're thinking about me.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T20:04:16Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "When are you coming home? We're counting down the days.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-14T20:04:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ninety-three days left. Three more months. It sounds like a long time, but it'll go fast with all the work we have scheduled.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T20:04:31Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "Will you bring me something from space? Like a moon rock or a star?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T20:04:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I can't bring moon rocks, but I have a mission patch that's been in space with me. I'll give it to you when I get home.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T20:04:46Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "Really? That's going to be the coolest thing ever! I'll show all my friends!",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T20:04:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'm glad. Listen, I have to go soon. We have a crew meeting in fifteen minutes. But I love you both so much.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T20:05:01Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Wife Lin",
+      "text": "We love you too. Stay safe up there. We'll talk again in a few days?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T20:05:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Absolutely. Same time, same channel. Mei, keep studying hard and being good for your mom, okay?",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T20:05:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Daughter Mei",
+      "text": "I will, Dad! Bye! I love you!",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-14T20:05:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I love you too, sweetheart. Bye Lin. Miss you.",
+      "duration_seconds": 4.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_mei_t5",
+      "user_id": "user_mei_005",
+      "user_label": "Daughter Mei"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_lin_t5",
+      "user_id": "user_lin_006",
+      "user_label": "Wife Lin"
+    }
+  ],
+  "environment": {
+    "location": "iss_unity_module",
+    "background_sounds": "ventilation hum, occasional video call static, equipment beeping",
+    "recording_quality": "medium"
+  }
+}

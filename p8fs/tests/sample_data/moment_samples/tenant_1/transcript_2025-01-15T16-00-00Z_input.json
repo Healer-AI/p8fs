@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T16:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "04:00 PM UTC"
+  },
+  "transcript_id": "t1_20250115_160000",
+  "duration_seconds": 618,
+  "start_timestamp": "2025-01-15T16:00:00Z",
+  "end_timestamp": "2025-01-15T16:10:18Z",
+  "source_uri": "s3://p8fs-tenant1/recordings/2025-01-15/code_review.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T16:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "Hey Alex, got a minute for a quick code review?",
+      "duration_seconds": 3.1
+    },
+    {
+      "timestamp": "2025-01-15T16:00:04Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Yeah sure! What've you got?",
+      "duration_seconds": 2.2
+    },
+    {
+      "timestamp": "2025-01-15T16:00:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "It's the dashboard refactor. I'm mostly happy with it but there's this one component that feels... off.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T16:00:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "The DataVisualization component. It's doing too much - fetching data, transforming it, rendering charts, handling loading states.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T16:00:21Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Yeah, that's a classic God component. How many lines?",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T16:00:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "Like 450 lines. I know, I know. It grew organically and now it's a monster.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T16:00:31Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Okay, so let's break it down. Data fetching should probably be a custom hook. useVisualizationData or something.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T16:00:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "That makes sense. And I could extract the transformation logic into a utility function.",
+      "duration_seconds": 4.7
+    },
+    {
+      "timestamp": "2025-01-15T16:00:43Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Exactly. Then your component is just responsible for rendering. Much cleaner.",
+      "duration_seconds": 4.3
+    },
+    {
+      "timestamp": "2025-01-15T16:00:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "What about the loading and error states? Those are pretty tightly coupled to the data fetching.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-15T16:00:54Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "The hook can return those. So you'd get back data, loading, error from useVisualizationData.",
+      "duration_seconds": 5.9
+    },
+    {
+      "timestamp": "2025-01-15T16:01:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "Oh yeah, of course. I've done that pattern before. Why didn't I think of that?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-15T16:01:05Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Sometimes you're too close to the code. Fresh eyes help.",
+      "duration_seconds": 3.4
+    },
+    {
+      "timestamp": "2025-01-15T16:01:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "True. Alright, I'll refactor this before I submit the PR. Should only take an hour or so.",
+      "duration_seconds": 5.3
+    },
+    {
+      "timestamp": "2025-01-15T16:01:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Sounds good. And hey, the rest of the PR looks great. The new chart library integration is really clean.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-15T16:01:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "Thanks! Sam really helped with that. Pairing with them made it way easier.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T16:01:27Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Alex",
+      "text": "Nice. Okay, I'll review again once you've split up that component.",
+      "duration_seconds": 3.9
+    },
+    {
+      "timestamp": "2025-01-15T16:01:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Jordan",
+      "text": "Perfect. Thanks Alex!",
+      "duration_seconds": 1.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_jordan_t1",
+      "user_id": "user_jordan_002",
+      "user_label": "Jordan"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_alex_t1",
+      "user_id": "user_alex_001",
+      "user_label": "Alex"
+    }
+  ],
+  "environment": {
+    "location": "video_conference",
+    "background_sounds": "quiet office ambient",
+    "recording_quality": "high"
+  }
+}

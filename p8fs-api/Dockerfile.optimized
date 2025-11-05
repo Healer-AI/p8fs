@@ -1,0 +1,101 @@
+# Optimized P8FS API Container
+FROM python:3.11-slim AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+RUN pip install uv
+
+# Set working directory
+WORKDIR /build
+
+# Copy only necessary files for each module
+# p8fs-cluster
+COPY ../p8fs-cluster/pyproject.toml ../p8fs-cluster/Readme.md ./p8fs-cluster/
+COPY ../p8fs-cluster/src ./p8fs-cluster/src/
+
+# p8fs-auth  
+COPY ../p8fs-auth/pyproject.toml ../p8fs-auth/Readme.md ./p8fs-auth/
+COPY ../p8fs-auth/src ./p8fs-auth/src/
+
+# p8fs-core (without heavy files)
+COPY ../p8fs-core/pyproject.toml ../p8fs-core/Readme.md ./p8fs-core/
+COPY ../p8fs-core/src ./p8fs-core/src/
+
+# p8fs-api
+COPY ./p8fs-api/pyproject.toml ./p8fs-api/
+COPY ./p8fs-api/Readme.md ./p8fs-api/README.md
+COPY ./p8fs-api/src ./p8fs-api/src/
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Fix README case sensitivity
+RUN cd p8fs-cluster && ln -s Readme.md README.md || true
+RUN cd p8fs-auth && ln -s Readme.md README.md || true
+RUN cd p8fs-core && ln -s Readme.md README.md || true
+
+# Remove workspace references
+RUN sed -i '/\[tool.uv.sources\]/,/^$/d' p8fs-auth/pyproject.toml
+RUN sed -i '/\[tool.uv.sources\]/,/^$/d' p8fs-core/pyproject.toml
+RUN sed -i '/\[tool.uv.sources\]/,/^$/d' p8fs-api/pyproject.toml
+
+# Remove p8fs-node dependency
+RUN sed -i '/"p8fs-node"/d' p8fs-core/pyproject.toml
+
+# Install dependencies in order
+RUN cd p8fs-cluster && pip install -e . --no-cache-dir
+RUN cd p8fs-core && pip install -e . --no-cache-dir
+RUN cd p8fs-auth && pip install -e . --no-cache-dir
+RUN cd p8fs-api && pip install -e . --no-cache-dir
+
+# Install uvicorn explicitly
+RUN pip install "uvicorn[standard]>=0.24.0" --no-cache-dir
+
+# Production stage
+FROM python:3.11-slim
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy virtual environment
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy only source code (no build artifacts)
+COPY --from=builder /build/p8fs-cluster/src /app/p8fs-cluster/src
+COPY --from=builder /build/p8fs-auth/src /app/p8fs-auth/src
+COPY --from=builder /build/p8fs-core/src /app/p8fs-core/src
+COPY --from=builder /build/p8fs-api/src /app/p8fs-api/src
+
+# Set working directory
+WORKDIR /app/p8fs-api
+
+# Create non-root user
+RUN useradd -m -r p8fs && \
+    chown -R p8fs:p8fs /app
+USER p8fs
+
+# Environment setup
+ENV PYTHONPATH="/app/p8fs-cluster/src:/app/p8fs-auth/src:/app/p8fs-core/src:/app/p8fs-api/src"
+ENV P8FS_API_HOST="0.0.0.0"
+ENV P8FS_API_PORT="8000"
+
+# Expose ports
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health/ || exit 1
+
+# Run with uvicorn
+CMD ["uvicorn", "p8fs_api.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T17:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "05:00 PM UTC"
+  },
+  "name": "Family Video Call - Check-in from Mountains",
+  "content": "Lena conducting satellite video call with parents from alpine camp. Reassured concerned parents about storm safety, citing proper gear, experience level, and emergency communication capability. Parents expressed natural worry balanced with pride and trust. Lena shared trip significance: necessary escape from months of non-stop work stress, opportunity to \"breathe\" and exist without constant demands. Described trip highlights: chamois herd sighting, dramatic sunrise photography, storm survival. Father expressed pride in daughter's solo courage. Lena experiencing self-discovery: recognizing personal toughness exceeding self-perception. Planned Sunday evening return with family dinner (sauerbraten). Mother acknowledging Lena's self-care priority. Three remaining mountain days before descent. Warm family dynamic balancing parental protection with respect for adult independence. Call maintaining connection while preserving battery and respecting wilderness experience.",
+  "summary": "Family call: reassured parents, shared trip highlights, planned Sunday return dinner, received parental pride and support",
+  "category": "personal",
+  "uri": "s3://p8fs-tenant4/recordings/2025-01-15/family_call.wav",
+  "resource_timestamp": "2025-01-15T17:00:00Z",
+  "resource_ends_timestamp": "2025-01-15T17:10:19Z",
+  "moment_type": "conversation",
+  "emotion_tags": ["warm", "loved", "proud", "connected"],
+  "topic_tags": ["family", "safety-reassurance", "emotional-support", "trip-sharing", "parent-child-relationship"],
+  "present_persons": {
+    "fp_lena_t4": {
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    },
+    "fp_mom_t4": {
+      "fingerprint_id": "fp_mom_t4",
+      "user_id": "user_mom_004",
+      "user_label": "Mom"
+    },
+    "fp_dad_t4": {
+      "fingerprint_id": "fp_dad_t4",
+      "user_id": "user_dad_005",
+      "user_label": "Dad"
+    }
+  },
+  "location": "46.5500,8.7000",
+  "background_sounds": "tent interior, wind outside, occasional satellite connection static",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.32,
+    "word_count": 307,
+    "speaker_count": 3,
+    "communication_type": "video_call",
+    "relationship": "family"
+  }
+}

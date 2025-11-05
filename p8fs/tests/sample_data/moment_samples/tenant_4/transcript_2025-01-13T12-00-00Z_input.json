@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T12:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "12:00 PM UTC"
+  },
+  "transcript_id": "t4_20250113_120000",
+  "duration_seconds": 594,
+  "start_timestamp": "2025-01-13T12:00:00Z",
+  "end_timestamp": "2025-01-13T12:09:54Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-13/lunch_planning.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T12:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Lunch break. Back at camp after a great morning hike. Made it up to 2100 meters - legs are feeling it.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T12:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me eat and then plan this afternoon's route. I've got the map out... okay, so I'm here at base camp.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T12:00:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "If I head northwest from here, there's a ridge trail that goes up to 2400 meters. That's my afternoon goal.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T12:00:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The guidebook says it's about 3 hours round trip. Should get me back before dark, which is around 5:30 PM this time of year.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T12:00:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Snow conditions look good from what I could see this morning. No avalanche risk at these elevations right now.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T12:00:42Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'll pack the emergency bivvy just in case. And extra layers - temperature drops fast up there.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T12:00:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Water - I'll take two liters. Snacks: energy bars, nuts, some chocolate. Chocolate tastes amazing at altitude.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-13T12:00:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Navigation: GPS, compass, paper map. I know it's overkill but redundancy keeps you alive in the mountains.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T12:01:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "First aid kit stays in my pack at all times. Along with the satellite communicator in case something goes wrong.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T12:01:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Okay, let me finish this dehydrated meal. Chicken and rice - surprisingly good for camp food.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T12:01:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "You know what's nice about solo hiking? I can move at exactly my own pace. No pressure to keep up or slow down.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T12:01:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "And if I want to just sit and stare at a view for 20 minutes, I can. No one's waiting for me.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T12:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Alright, food's done. Let me clean up and get moving. I want to be on the ridge by 1:30.",
+      "duration_seconds": 7.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "wind, birds, water boiling on stove, paper map rustling",
+    "recording_quality": "high"
+  }
+}

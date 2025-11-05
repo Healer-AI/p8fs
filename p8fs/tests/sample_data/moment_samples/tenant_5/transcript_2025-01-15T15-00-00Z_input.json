@@ -1,0 +1,306 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T15:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "03:00 PM UTC"
+  },
+  "transcript_id": "t5_20250115_150000",
+  "duration_seconds": 616,
+  "start_timestamp": "2025-01-15T15:00:00Z",
+  "end_timestamp": "2025-01-15T15:10:16Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-15/media_interview.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T15:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Commander Chen, thank you for taking time to speak with us from the International Space Station. Can you see me clearly?",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T15:00:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "I can see you perfectly, Sarah. Happy to be here. Though I should mention I'm literally above you by about 420 kilometers.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T15:00:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "That's incredible. Let's start with the basics - how long have you been on the ISS and what's your primary mission?",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T15:00:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "I've been up here for 89 days now, almost three months. Our mission focuses on microgravity research - everything from protein crystal growth for pharmaceutical development to studying how the human body adapts to space.",
+      "duration_seconds": 13.8
+    },
+    {
+      "timestamp": "2025-01-15T15:00:39Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Protein crystal growth? Can you explain how that benefits people on Earth?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T15:00:45Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Sure. In microgravity, proteins crystallize more uniformly than on Earth. Without gravity causing convection in the solution, the molecules arrange themselves more precisely.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T15:00:57Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "This allows scientists to determine the exact molecular structure, which helps them design better drugs. We're working on insulin variants for diabetes treatment right now.",
+      "duration_seconds": 10.6
+    },
+    {
+      "timestamp": "2025-01-15T15:01:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "That's fascinating. What's a typical day like for you up there?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T15:01:13Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "We wake up around 6 AM UTC. First thing is a systems check - making sure all life support is functioning properly. Then we have breakfast.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-15T15:01:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "From there it's a mix of scientific experiments, maintenance tasks, exercise - we do two hours daily to prevent muscle and bone loss - and coordinating with ground control.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T15:01:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Two hours of exercise every day? That sounds exhausting.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T15:01:40Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "It's necessary. In zero gravity, your body doesn't have to work against resistance. Your muscles atrophy, your bones lose density. Without that daily workout, we'd be unable to walk when we return to Earth.",
+      "duration_seconds": 13.6
+    },
+    {
+      "timestamp": "2025-01-15T15:01:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Let's talk about the spacewalk your crew performed yesterday. What was that mission about?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T15:02:01Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "We had a communications antenna with a loose mounting bracket. Two of my crew members, Lieutenant Torres and Flight Engineer Kim, went outside to replace it.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T15:02:12Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "How dangerous is a spacewalk?",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-15T15:02:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "EVAs - Extra-Vehicular Activities - are inherently risky. You're in a vacuum with extreme temperature swings, radiation exposure, and the constant danger of micrometeorite impacts.",
+      "duration_seconds": 12.4
+    },
+    {
+      "timestamp": "2025-01-15T15:02:28Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "But we train extensively. Every astronaut spends hundreds of hours in the neutral buoyancy tank practicing procedures. By the time we're up here, it's second nature.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T15:02:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "What's the most challenging part of living in space?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T15:02:45Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Honestly? Being away from family. The work is demanding but fulfilling. The isolation is the real challenge. I have an eight-year-old daughter I miss terribly.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T15:02:57Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "How do you stay connected with your family?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-15T15:03:01Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "We have scheduled video calls. The time delay isn't bad - we're close to Earth, relatively speaking. I talk to my wife and daughter every few days.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-15T15:03:12Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "My daughter looks for the space station at night. We pass over her location, and she waves. Knowing that helps.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T15:03:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "That's touching. What about the view? What's it like looking at Earth from space?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T15:03:28Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "It's transformative. Every astronaut talks about the overview effect - seeing Earth as a whole changes your perspective on everything.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-15T15:03:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "You see this beautiful blue marble floating in the blackness of space, and you realize how fragile it is. The atmosphere is just a thin shell protecting everything we know.",
+      "duration_seconds": 11.8
+    },
+    {
+      "timestamp": "2025-01-15T15:03:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Has that changed how you think about environmental issues?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T15:03:55Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Absolutely. When you can see the whole planet at once, borders disappear. Climate change, pollution - these aren't political issues, they're survival issues.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T15:04:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "I've seen typhoons forming, deforestation in real-time, the shrinking polar ice caps. It's sobering.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T15:04:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "What message would you send to young people who dream of becoming astronauts?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T15:04:22Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Study hard, especially in math and science. But also, stay curious about everything. The best astronauts are well-rounded people who can solve problems creatively.",
+      "duration_seconds": 11.8
+    },
+    {
+      "timestamp": "2025-01-15T15:04:34Z",
+      "speaker_id":="speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Physical fitness matters too. And learn to work with others - space exploration is fundamentally about teamwork. No one does this alone.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-15T15:04:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Looking ahead, what's next for human space exploration?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T15:04:50Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Mars. That's the next great challenge. We're learning so much on the ISS about long-duration missions - how to keep humans healthy and productive for months or years in space.",
+      "duration_seconds": 12.6
+    },
+    {
+      "timestamp": "2025-01-15T15:05:03Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "A Mars mission will take years to plan and execute, but I believe we'll see humans on the Red Planet in my lifetime. Maybe even in the next decade.",
+      "duration_seconds": 10.8
+    },
+    {
+      "timestamp": "2025-01-15T15:05:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "One final question - do you ever get used to floating? Does it feel normal now?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T15:05:21Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "You adapt, but I wouldn't say it feels normal. Your brain never fully accepts that there's no up or down. Sometimes I still reach for things as if gravity existed.",
+      "duration_seconds": 11.4
+    },
+    {
+      "timestamp": "2025-01-15T15:05:33Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "The real adjustment will be returning to Earth. After three months of floating, standing and walking will feel bizarre. But it's worth it for this experience.",
+      "duration_seconds": 11.2
+    },
+    {
+      "timestamp": "2025-01-15T15:05:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Journalist Sarah",
+      "text": "Commander Chen, thank you so much for your time. Safe travels up there, and we look forward to your return.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T15:05:53Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Commander Chen",
+      "text": "Thank you, Sarah. It was a pleasure. Take care down there on Earth.",
+      "duration_seconds": 5.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_sarah_t5",
+      "user_id": "user_sarah_008",
+      "user_label": "Journalist Sarah"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    }
+  ],
+  "environment": {
+    "location": "iss_unity_module",
+    "background_sounds": "ventilation system, occasional communication beeps, video call connection",
+    "recording_quality": "high"
+  }
+}

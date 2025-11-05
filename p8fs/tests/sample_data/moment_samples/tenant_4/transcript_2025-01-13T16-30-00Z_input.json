@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T16:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "04:30 PM UTC"
+  },
+  "transcript_id": "t4_20250113_163000",
+  "duration_seconds": 608,
+  "start_timestamp": "2025-01-13T16:30:00Z",
+  "end_timestamp": "2025-01-13T16:40:08Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-13/wildlife_observation.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T16:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Oh wow, I need to record this. I'm about 2200 meters up and I just spotted a herd of chamois on the ridge above me.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T16:30:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "There's... let me count... seven of them. Six adults and what looks like a younger one. They're maybe 100 meters away.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-13T16:30:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm going to stay very still. They haven't noticed me yet. The wind's in my favor, blowing from them toward me.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T16:30:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "They're grazing on the alpine grass poking through the snow. So graceful. Those horns are incredible - they curve back like hooks.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-13T16:30:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This is why I come to the mountains. You can't see this in the city. This is pure, wild nature.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T16:30:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The young one is playing, jumping from rock to rock. The adults are keeping watch while they eat.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T16:30:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "One of the big males just looked up... he's scanning the area. They're so alert. Has to be with eagles and wolves around.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-13T16:31:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Oh! Speaking of eagles - there's one circling above them right now. Golden eagle, I think. Huge wingspan.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T16:31:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The chamois have noticed it too. They've grouped closer together, all facing different directions. Smart.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T16:31:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I wish I had a better camera lens for this. My phone's zoom isn't doing them justice.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T16:31:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Wait, one of them spotted me. It's staring right at me. Don't move, Lena. Don't move.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T16:31:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "It's still watching but it doesn't seem alarmed. I must look like just another rock from this distance.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T16:31:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Okay, it looked away. Back to grazing. This is absolutely magical. I've been sitting here for... what, 15 minutes now?",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T16:31:53Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "They're starting to move upslope. Following the ridgeline toward the summit. Moving like they're floating over the rocks.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-13T16:32:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "And they're gone. Disappeared behind the ridge. What an incredible encounter. My heart's still racing.",
+      "duration_seconds": 8.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5520,8.7015",
+    "background_sounds": "wind, distant bird calls, rocks shifting under boots",
+    "recording_quality": "medium"
+  }
+}

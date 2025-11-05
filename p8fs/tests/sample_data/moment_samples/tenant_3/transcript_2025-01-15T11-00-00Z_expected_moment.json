@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T11:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "11:00 AM UTC"
+  },
+  "name": "Union Negotiation - Labor Agreement",
+  "content": "James negotiating new three-year labor agreement with union representatives Robert and Maria. Initial proposal: 4% annual wage increases met resistance due to regional competitors offering 5-6%. James emphasized superior benefits package (health, pension, training) as differentiator. Attempted compromise: 4.5% raises with Sunday overtime cap rejected as breaking 20-year standard. James cited non-union competition pressuring bid competitiveness. Breakthrough proposal: 4.25% wage increases with preserved Sunday double-time premium plus innovative 2% profit-sharing pool distributed by hours worked. Union receptive to alignment incentive structure. James committed to quarterly third-party audited financial transparency. Negotiations progressing toward potential agreement with executive committee review pending. Strategic negotiation balancing cost control, worker retention, and competitive positioning.",
+  "summary": "Union negotiation: compromised at 4.25% raises plus profit-sharing, maintained Sunday premium, committed to financial transparency",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-15/union_negotiation.wav",
+  "resource_timestamp": "2025-01-15T11:00:00Z",
+  "resource_ends_timestamp": "2025-01-15T11:10:12Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["strategic", "diplomatic", "collaborative", "problem-solving"],
+  "topic_tags": ["labor-relations", "negotiation", "union-management", "compensation", "profit-sharing"],
+  "present_persons": {
+    "fp_james_t3": {
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    "fp_robert_t3": {
+      "fingerprint_id": "fp_robert_t3",
+      "user_id": "user_robert_009",
+      "user_label": "Robert"
+    },
+    "fp_maria_t3": {
+      "fingerprint_id": "fp_maria_t3",
+      "user_id": "user_maria_010",
+      "user_label": "Maria"
+    }
+  },
+  "location": "conference_room",
+  "background_sounds": "quiet meeting room, occasional paper shuffling, coffee cups",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.2,
+    "word_count": 318,
+    "speaker_count": 3,
+    "meeting_type": "labor_negotiation",
+    "business_critical": true
+  }
+}

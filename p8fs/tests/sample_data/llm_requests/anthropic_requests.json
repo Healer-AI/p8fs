@@ -1,0 +1,60 @@
+{
+  "basic_chat": {
+    "model": "claude-3-5-sonnet-20241022",
+    "messages": [
+      {"role": "user", "content": "Hello, how are you?"}
+    ],
+    "max_tokens": 100,
+    "temperature": 0.7
+  },
+  "system_message": {
+    "model": "claude-3-5-sonnet-20241022",
+    "system": "You are a helpful assistant specializing in technical documentation.",
+    "messages": [
+      {"role": "user", "content": "Explain REST APIs in simple terms"}
+    ],
+    "max_tokens": 200
+  },
+  "function_call": {
+    "model": "claude-3-5-sonnet-20241022",
+    "messages": [
+      {"role": "user", "content": "Search for recent papers on machine learning"}
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "search_papers",
+          "description": "Search academic papers by topic",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "query": {"type": "string", "description": "Search query"},
+              "limit": {"type": "integer", "description": "Max results", "default": 10}
+            },
+            "required": ["query"]
+          }
+        }
+      }
+    ],
+    "max_tokens": 300
+  },
+  "streaming_request": {
+    "model": "claude-3-5-sonnet-20241022",
+    "messages": [
+      {"role": "user", "content": "Write a detailed explanation of quantum computing"}
+    ],
+    "stream": true,
+    "max_tokens": 500
+  },
+  "conversation": {
+    "model": "claude-3-5-sonnet-20241022",
+    "system": "You are Claude, an AI assistant created by Anthropic.",
+    "messages": [
+      {"role": "user", "content": "What's your name?"},
+      {"role": "assistant", "content": "I'm Claude, an AI assistant created by Anthropic."},
+      {"role": "user", "content": "What can you help me with?"}
+    ],
+    "max_tokens": 150
+  }
+}

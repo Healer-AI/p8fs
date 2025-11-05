@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T19:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:00 PM UTC"
+  },
+  "name": "Evening Reflection - First Day Complete",
+  "content": "Lena preparing dinner at base camp after successful first day, temperature dropping to minus 2°C. Cooking dehydrated beef stew outside tent following carbon monoxide safety protocols. Processed day's experiences: initial solitude concerns transformed into appreciation for escape from six months of city stress and professional demands. No external pressures - emails, meetings, or obligations. Deeply satisfied by chamois encounter, mentally replaying the experience. Planning tomorrow's potential 2600m peak attempt contingent on weather assessment, emphasizing safety over summit achievement. Appreciated simple pleasures: budget camp meal tasting extraordinary due to hunger and effort. Preparing for cold night with minus-15 sleeping bag, anticipating better sleep than at home. Expressing gratitude for remaining six days, recognizing trip's restorative value for emotional wellbeing.",
+  "summary": "Evening reflection: cooked dinner, processed solitude benefits, relived wildlife encounter, planned conditional summit attempt",
+  "category": "outdoor",
+  "uri": "s3://p8fs-tenant4/recordings/2025-01-13/evening_cooking.wav",
+  "resource_timestamp": "2025-01-13T19:00:00Z",
+  "resource_ends_timestamp": "2025-01-13T19:09:56Z",
+  "moment_type": "reflection",
+  "emotion_tags": ["content", "grateful", "reflective", "peaceful"],
+  "topic_tags": ["camping", "solitude", "self-care", "reflection", "wilderness-living"],
+  "present_persons": {
+    "fp_lena_t4": {
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  },
+  "location": "46.5500,8.7000",
+  "background_sounds": "stove hissing, wind, tent fabric, water boiling",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.93,
+    "word_count": 271,
+    "speaker_count": 1,
+    "activity_type": "evening_routine",
+    "emotional_depth": "high"
+  }
+}

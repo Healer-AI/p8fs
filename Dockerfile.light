@@ -1,0 +1,108 @@
+
+ARG PYTHON_VERSION=3.11
+ARG UV_VERSION=0.5.11
+
+# Use official UV image
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
+
+# Dependencies stage - installs Python dependencies only
+FROM python:${PYTHON_VERSION}-slim AS dependencies
+
+# Install minimal build tools (no media libraries)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ make \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy UV binaries from official image
+COPY --from=uv /uv /uvx /bin/
+
+# Set UV environment for optimal builds
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+# Copy workspace structure
+COPY pyproject.toml ./
+COPY p8fs-cluster p8fs-cluster
+COPY p8fs-auth p8fs-auth
+COPY p8fs p8fs
+COPY p8fs-api p8fs-api
+
+# Create a minimal p8fs-node just for structure (we won't actually install it)
+RUN mkdir -p p8fs-node/src/p8fs_node && \
+    echo '[project]\nname = "p8fs-node"\nversion = "0.1.0"\ndependencies = []\n' > p8fs-node/pyproject.toml && \
+    echo '# P8FS Node' > p8fs-node/README.md && \
+    touch p8fs-node/src/p8fs_node/__init__.py
+
+# CRITICAL: Create a new lockfile that excludes heavy dependencies
+# We do this by temporarily modifying dependencies and regenerating the lock
+RUN --mount=type=cache,target=/root/.cache/uv \
+    # Remove p8fs-node from workspace members temporarily
+    sed -i 's/"p8fs-node",//' pyproject.toml && \
+    # Remove workers extra from p8fs (which pulls in p8fs-node)
+    sed -i '/\[project.optional-dependencies\]/,/\[/{/workers/,/\]/d}' p8fs/pyproject.toml && \
+    # Generate fresh lockfile without heavy deps
+    rm -f uv.lock && \
+    uv lock && \
+    # Install only the core dependencies
+    uv sync --frozen --no-install-project --no-dev
+
+# Builder stage - adds source code to dependencies
+FROM dependencies AS builder
+
+# Copy README.md for the workspace
+COPY README.md ./
+
+# Install the actual projects without extras
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --no-editable
+
+# Runtime stage - minimal dependencies
+FROM python:${PYTHON_VERSION}-slim AS runtime
+
+# Install minimal runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl wget \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r p8fs && useradd -r -g p8fs -m p8fs
+
+# Copy only necessary files from builder
+WORKDIR /app
+
+# Copy virtual environment with correct ownership
+COPY --from=builder --chown=p8fs:p8fs /app/.venv /app/.venv
+
+# Copy only the modules we need for API with correct ownership
+COPY --from=builder --chown=p8fs:p8fs /app/pyproject.toml /app/uv.lock ./
+COPY --from=builder --chown=p8fs:p8fs /app/p8fs-cluster ./p8fs-cluster
+COPY --from=builder --chown=p8fs:p8fs /app/p8fs-auth ./p8fs-auth
+COPY --from=builder --chown=p8fs:p8fs /app/p8fs ./p8fs
+COPY --from=builder --chown=p8fs:p8fs /app/p8fs-api ./p8fs-api
+
+# Set Python environment
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    VIRTUAL_ENV=/app/.venv \
+    P8FS_BUILD_TYPE=light
+
+USER p8fs
+
+# Health check for API
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Labels
+LABEL org.opencontainers.image.source="https://github.com/percolationlabs/p8fs-modules" \
+      org.opencontainers.image.description="P8FS ecosystem Docker image - Light build for API only" \
+      org.opencontainers.image.licenses="MIT" \
+      maintainer="Percolation Labs"
+
+# API Server only
+EXPOSE 8000
+CMD ["hypercorn", "p8fs_api.main:app", "--bind", "0.0.0.0:8000", "--access-logfile", "/dev/null"]

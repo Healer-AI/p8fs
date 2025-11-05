@@ -1,0 +1,166 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T15:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "03:00 PM UTC"
+  },
+  "transcript_id": "t3_20250114_150000",
+  "duration_seconds": 619,
+  "start_timestamp": "2025-01-14T15:00:00Z",
+  "end_timestamp": "2025-01-14T15:10:19Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-14/budget_review.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T15:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Karen, thanks for pulling together the Q4 numbers. Let's go through this before the board meeting next week.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T15:00:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Of course. Overall we're in good shape. Revenue was up 18% year over year, hitting 47.2 million.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T15:00:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's solid growth. What about margins? I know material costs have been volatile.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T15:00:21Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Margins compressed slightly to 12.8% from 13.5% last year. Steel and lumber price increases ate into profitability.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T15:00:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Have we been passing those costs to clients through change orders?",
+      "duration_seconds": 4.4
+    },
+    {
+      "timestamp": "2025-01-14T15:00:35Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "On new contracts, yes. But we have three legacy fixed-price contracts where we're absorbing the increases. That's about 400k in lost margin.",
+      "duration_seconds": 9.1
+    },
+    {
+      "timestamp": "2025-01-14T15:00:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Ouch. When do those contracts complete?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-14T15:00:48Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Two finish in Q1, the third in Q2. After that, we should see margins recover back to the 13-14% range.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T15:00:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. What's our cash position looking like? Are we comfortable with the line of credit?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T15:01:02Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "We've got 3.2 million in cash and we're using about 40% of our credit line. Days payable outstanding is at 52 days, which is healthy.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T15:01:12Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "And receivables? Any clients dragging their feet on payments?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T15:01:17Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Most are current. We have one client 90 days past due for 180k. I've been in contact with them - they're having cash flow issues.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T15:01:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Which client?",
+      "duration_seconds": 1.8
+    },
+    {
+      "timestamp": "2025-01-14T15:01:28Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Westfield Properties. The retail plaza project.",
+      "duration_seconds": 3.4
+    },
+    {
+      "timestamp": "2025-01-14T15:01:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I'll call their CEO directly. We can't let that age any further. If they can't pay, we need to know now so we can take action.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T15:01:41Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Agreed. On the positive side, our backlog is strong - 62 million in signed contracts for next year.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T15:01:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's excellent. And if we land Riverside, that adds another 12.8. We're setting up for a strong 2025.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T15:01:56Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Karen",
+      "text": "Absolutely. My recommendation is we invest in another project manager and a senior estimator to support the growth.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T15:02:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I agree. Put together a hiring plan and budget. Let's get those positions posted next week.",
+      "duration_seconds": 6.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_karen_t3",
+      "user_id": "user_karen_007",
+      "user_label": "Karen"
+    }
+  ],
+  "environment": {
+    "location": "office",
+    "background_sounds": "quiet office, papers rustling, calculator clicking",
+    "recording_quality": "high"
+  }
+}

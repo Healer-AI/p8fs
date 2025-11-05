@@ -1,0 +1,146 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T22:30:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "10:30 PM UTC"
+  },
+  "transcript_id": "t2_20250114_223000",
+  "duration_seconds": 596,
+  "start_timestamp": "2025-01-14T22:30:00Z",
+  "end_timestamp": "2025-01-14T22:39:56Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-14/late_night_worry.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T22:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, I can't sleep. My brain won't shut off about this album.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T22:30:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "What if it's not good enough? What if people don't connect with it the way they did with the EP?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T22:30:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The EP was so raw, so immediate. This feels... I don't know, more calculated? Even with the analog gear.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T22:30:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Maybe I'm overthinking it. Jessica seemed confident today. The band loves the new material.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T22:30:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "But what do I think? Do I love it? Or am I just trying to recreate what worked before?",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T22:30:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "That song we worked on yesterday, 'Morning Light'... that one feels genuine. I believe in that one.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T22:30:39Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "And 'Echoes' from last month. That's strong too. Okay, so there's good stuff here.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T22:30:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I think I'm just scared. This is the first full album. It's a big deal. There's pressure.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T22:30:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The label is investing money. We're planning a tour. What if I let everyone down?",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T22:30:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, breathe. Let me think about this rationally. What would I tell someone else in this situation?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T22:31:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I'd say... trust the process. You've worked hard. The songs are honest. That's all you can control.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T22:31:12Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I can't control how people receive it. I can only make something I'm proud of.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-14T22:31:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "And honestly? I am proud of most of it. There's a couple tracks I'm still not sure about, but overall...",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T22:31:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Overall, it's good work. It's me. It's authentic, even if it's different from the EP.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T22:31:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Different is okay. Different is growth. I need to stop comparing everything to the EP.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T22:31:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Alright. I feel a bit better. I'm going to make some chamomile tea and try to sleep.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T22:31:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Tomorrow I'll focus on finishing that bridge for track six. One thing at a time.",
+      "duration_seconds": 4.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  ],
+  "environment": {
+    "location": "bedroom",
+    "background_sounds": "quiet nighttime, distant traffic, rustling sheets",
+    "recording_quality": "medium"
+  }
+}

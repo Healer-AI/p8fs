@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T14:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "02:00 PM UTC"
+  },
+  "name": "Label Meeting - Album Release Planning",
+  "content": "Maya meeting with label representative Jessica to discuss album progress and release strategy. Album update: 7 songs fully recorded and mixed, 3 in progress, on track for April release with February recording completion and March mastering. Addressed production concerns by incorporating analog gear and preserving authentic imperfections. Marketing discussion: planning acoustic social media sessions filmed in various city locations, sharing song inspiration stories for personal connection. Tour planning: proposed intimate 10-15 city club tour for June to build post-release momentum. Jessica supportive of all initiatives, scheduling follow-up with marketing team.",
+  "summary": "Label meeting: album on track for April, planning acoustic social content, June intimate tour, maintaining authentic sound",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-14/label_meeting.wav",
+  "resource_timestamp": "2025-01-14T14:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T14:10:21Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["optimistic", "strategic", "collaborative", "confident"],
+  "topic_tags": ["music-business", "album-release", "marketing", "tour-planning", "label-relations"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    "fp_jessica_t2": {
+      "fingerprint_id": "fp_jessica_t2",
+      "user_id": "user_jessica_004",
+      "user_label": "Jessica"
+    }
+  },
+  "location": "video_conference",
+  "background_sounds": "quiet home office, occasional typing",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.35,
+    "word_count": 327,
+    "speaker_count": 2,
+    "meeting_type": "business_planning",
+    "industry": "music"
+  }
+}

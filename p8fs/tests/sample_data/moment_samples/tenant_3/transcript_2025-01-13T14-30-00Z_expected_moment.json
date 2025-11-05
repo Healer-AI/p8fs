@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T14:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "02:30 PM UTC"
+  },
+  "name": "Bid Review - Riverside Office Complex Project",
+  "content": "James leading bid review meeting with Sarah and David for $12M Riverside office complex project. Evaluated subcontractor bids: selected Miller Electric ($1.8M) over cheaper Apex based on proven track record and relationships. ClimaTech HVAC ($2.4M) chosen for reliability despite higher cost. Noted industry labor shortage limiting bid competition (Superior HVAC unavailable through Q3). Total hard costs calculated at $11.2M, with overhead and profit bringing bid to $12.8M - $800K over client's stated $12M budget. Strategized solution: submit full bid with value engineering alternatives (facade simplification) to meet budget target. Prioritized relationship value and quality over cost minimization.",
+  "summary": "Bid review: selected reliable subs (Miller, ClimaTech), total $12.8M with value engineering options to meet $12M budget",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-13/bid_review_meeting.wav",
+  "resource_timestamp": "2025-01-13T14:30:00Z",
+  "resource_ends_timestamp": "2025-01-13T14:40:07Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["strategic", "analytical", "pragmatic", "decisive"],
+  "topic_tags": ["bidding", "subcontractors", "budgeting", "value-engineering", "business-strategy"],
+  "present_persons": {
+    "fp_james_t3": {
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    "fp_sarah_t3": {
+      "fingerprint_id": "fp_sarah_t3",
+      "user_id": "user_sarah_004",
+      "user_label": "Sarah"
+    },
+    "fp_david_t3": {
+      "fingerprint_id": "fp_david_t3",
+      "user_id": "user_david_005",
+      "user_label": "David"
+    }
+  },
+  "location": "conference_room",
+  "background_sounds": "paper shuffling, occasional pen clicking, HVAC hum",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.12,
+    "word_count": 326,
+    "speaker_count": 3,
+    "meeting_type": "bid_review",
+    "project_value": 12800000
+  }
+}

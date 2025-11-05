@@ -1,0 +1,24 @@
+repos:
+  # Run unit tests on commit
+  - repo: local
+    hooks:
+      - id: run-unit-tests
+        name: Run unit tests
+        entry: bash -c "cd p8fs && uv run pytest tests/unit/ -v"
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+        verbose: true
+        
+  # Run integration tests on push
+  - repo: local
+    hooks:
+      - id: run-integration-tests
+        name: Run integration tests
+        entry: bash -c "cd p8fs && docker compose up -d postgres tidb && sleep 5 && uv run pytest tests/integration/ -v"
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
+        verbose: true

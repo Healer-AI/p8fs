@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T15:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "03:00 PM UTC"
+  },
+  "name": "Media Interview - Public Outreach from ISS",
+  "content": "Commander Chen conducting media interview with journalist Sarah on mission day 89, providing public education and outreach from ISS orbital position 420km above Earth. Mission overview provided: 89-day duration focused on microgravity research including protein crystal growth for pharmaceutical applications (insulin variants for diabetes treatment) and human physiological adaptation studies. Scientific explanation delivered: microgravity eliminates gravity-induced convection enabling more uniform protein crystallization, yielding precise molecular structure determination for improved drug design. Daily routine described: 6 AM UTC wake, systems verification, breakfast, scientific experiments, maintenance tasks, mandatory two-hour exercise (preventing muscle atrophy and bone density loss), ground coordination. EVA discussion: Torres/Kim antenna repair mission explained with risk assessment (vacuum exposure, extreme temperature variation, radiation, micrometeorite danger) balanced against extensive neutral buoyancy training preparation. Personal challenges acknowledged: family separation primary difficulty (eight-year-old daughter Mei, wife Lin, scheduled video calls, daughter's nightly ISS viewing ritual providing emotional connection). Overview Effect philosophical reflection shared: whole-Earth perspective reveals atmospheric fragility, eliminates political borders, transforms environmental issue perception (witnessed typhoons, deforestation, polar ice reduction). Youth inspiration message: emphasized math/science study, curiosity cultivation, well-rounded development, problem-solving creativity, physical fitness, teamwork fundamentals. Future vision articulated: Mars exploration as next great challenge, ISS providing long-duration mission knowledge, human Martian presence predicted within decade. Microgravity adaptation discussed: brain never fully accepts zero-g orientation, anticipated Earth return adjustment difficulty. Professional representation of space exploration benefits and challenges for public understanding.",
+  "summary": "Media interview: explained mission science, daily routine, family connection, overview effect perspective, inspired youth, discussed Mars future",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-15/media_interview.wav",
+  "resource_timestamp": "2025-01-15T15:00:00Z",
+  "resource_ends_timestamp": "2025-01-15T15:10:16Z",
+  "moment_type": "conversation",
+  "emotion_tags": ["professional", "passionate", "reflective", "inspiring", "articulate"],
+  "topic_tags": ["public-outreach", "science-communication", "mission-overview", "space-advocacy", "education"],
+  "present_persons": {
+    "fp_chen_t5": {
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    "fp_sarah_t5": {
+      "fingerprint_id": "fp_sarah_t5",
+      "user_id": "user_sarah_008",
+      "user_label": "Journalist Sarah"
+    }
+  },
+  "location": "iss_unity_module",
+  "background_sounds": "ventilation system, occasional communication beeps, video call connection",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.27,
+    "word_count": 334,
+    "speaker_count": 2,
+    "activity_type": "media_interview",
+    "mission_day": 89,
+    "public_engagement": true
+  }
+}

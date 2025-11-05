@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T18:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "06:00 PM UTC"
+  },
+  "name": "Phone Call with Mom - Check-in and Support",
+  "content": "Maya calling mother for personal check-in during intense album production period. Shared album progress update (recording completion by end of February). Mother expressed pride and concern about Maya's wellbeing. Maya admitted to sleep difficulties due to racing thoughts about album pressure, label investment, and tour planning. Mother provided gentle parental guidance emphasizing rest and avoiding burnout. Discussed album artistic direction (bigger production with analog authenticity). Father bragging about Maya's career to coworkers. Planned family attendance at Chicago tour date with VIP tickets. Warm, supportive family dynamic with mother balancing pride and protective concern. Maya committed to better self-care (earlier bedtime, chamomile tea).",
+  "summary": "Mom check-in: album update, admitted sleep struggles from stress, received support and rest encouragement, planned tour visit",
+  "category": "personal",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-14/mom_call.wav",
+  "resource_timestamp": "2025-01-14T18:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T18:10:01Z",
+  "moment_type": "conversation",
+  "emotion_tags": ["warm", "stressed", "supported", "loved"],
+  "topic_tags": ["family", "self-care", "emotional-support", "work-life-balance", "parental-relationship"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    "fp_mom_t2": {
+      "fingerprint_id": "fp_mom_t2",
+      "user_id": "user_mom_007",
+      "user_label": "Mom"
+    }
+  },
+  "location": "home",
+  "background_sounds": "quiet home environment, occasional street noise",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.02,
+    "word_count": 298,
+    "speaker_count": 2,
+    "relationship_type": "family",
+    "emotional_support": true
+  }
+}

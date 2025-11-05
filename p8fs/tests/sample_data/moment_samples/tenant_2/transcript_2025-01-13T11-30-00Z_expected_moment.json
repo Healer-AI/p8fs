@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T11:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "11:30 AM UTC"
+  },
+  "name": "Song Composition - Morning Light",
+  "content": "Maya composing new song in home studio. Developed chord progression: C minor to E flat to A flat, creating desired tension. Created verse melody with lyrics 'In the quiet of the morning light, I find pieces of last night'. Set tempo at 85 BPM with strings entering at bar 8. Resolved chorus challenge by shifting from minor to major key for hopeful emotional lift. Envisioned production: synth pads for analog warmth, live drums over programmed beats. Marked as potential album track. Creative flow with iterative refinement, moving from chords to melody to arrangement ideas.",
+  "summary": "Composition session: created verse (C minor, 85 BPM), resolved chorus with major key shift, planned production elements",
+  "category": "creative",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-13/composition_session.wav",
+  "resource_timestamp": "2025-01-13T11:30:00Z",
+  "resource_ends_timestamp": "2025-01-13T11:40:07Z",
+  "moment_type": "observation",
+  "emotion_tags": ["creative", "focused", "exploratory", "satisfied"],
+  "topic_tags": ["songwriting", "composition", "piano", "music-production", "album-work"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  },
+  "location": "home_studio",
+  "background_sounds": "piano notes, occasional humming and singing, chair creaking",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.12,
+    "word_count": 287,
+    "speaker_count": 1,
+    "activity_type": "composition",
+    "creative_domain": "music"
+  }
+}

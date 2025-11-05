@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T18:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "06:00 PM UTC"
+  },
+  "transcript_id": "t2_20250114_180000",
+  "duration_seconds": 601,
+  "start_timestamp": "2025-01-14T18:00:00Z",
+  "end_timestamp": "2025-01-14T18:10:01Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-14/mom_call.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T18:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Hey Mom! How are you?",
+      "duration_seconds": 2.2
+    },
+    {
+      "timestamp": "2025-01-14T18:00:03Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Hi sweetie! I'm good, just got back from my walk. How's the album going?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T18:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "It's coming together! We're almost done recording. Should be finished by end of February.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T18:00:14Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "That's wonderful! Your father and I are so proud of you. Are you taking care of yourself though?",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T18:00:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah, mostly. I've been pretty stressed but I'm managing. Did my vocal warmups this morning.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T18:00:26Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Good! Remember what happened last time you pushed your voice too hard. Are you sleeping enough?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T18:00:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Honestly? Not really. My brain won't shut off at night. I keep thinking about the album.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T18:00:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Oh honey. You need to rest. The album will still be there in the morning.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T18:00:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I know, you're right. I'm just... there's a lot riding on this. The label is investing, we're planning a tour.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T18:00:50Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "And you'll deliver something beautiful, like you always do. But not if you burn yourself out.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-14T18:00:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah. I'll try to get to bed earlier tonight. Maybe some chamomile tea.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T18:01:01Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "That's my girl. So tell me about the music. What's different about this album?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T18:01:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "It's bigger, more produced than the EP. But we're keeping it authentic, using analog gear, real instruments.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T18:01:13Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "I can't wait to hear it. You know your father has been bragging to everyone at his office about you.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T18:01:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "That's so embarrassing! But also sweet. Tell him I said hi.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-14T18:01:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "I will. When can we come see you play? Once the tour starts?",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-14T18:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Definitely! I'll make sure you have VIP tickets for the show nearest you guys. Probably the Chicago date.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T18:01:35Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Perfect. Alright honey, I'll let you go. Promise me you'll get some rest tonight.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-14T18:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I promise. Love you, Mom.",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-14T18:01:43Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Love you too, sweetie. Talk soon!",
+      "duration_seconds": 2.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_mom_t2",
+      "user_id": "user_mom_007",
+      "user_label": "Mom"
+    }
+  ],
+  "environment": {
+    "location": "home",
+    "background_sounds": "quiet home environment, occasional street noise",
+    "recording_quality": "high"
+  }
+}

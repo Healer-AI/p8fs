@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T19:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:00 PM UTC"
+  },
+  "transcript_id": "t4_20250113_190000",
+  "duration_seconds": 596,
+  "start_timestamp": "2025-01-13T19:00:00Z",
+  "end_timestamp": "2025-01-13T19:09:56Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-13/evening_cooking.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T19:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Back at camp. The sun's setting and it's getting cold fast. Maybe minus 2 by now.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T19:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me get dinner going. I'm exhausted but in a good way. That hike to the ridge was incredible.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T19:00:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Setting up the stove outside the tent. Never cook inside - carbon monoxide is no joke.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T19:00:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "[sound of stove lighting] There we go. Tonight's menu: beef stew, dehydrated. Takes about 10 minutes to rehydrate.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T19:00:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "While that cooks, let me reflect on today. This morning I was worried about being alone up here.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T19:00:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But honestly? It's been perfect. The solitude is exactly what I needed after six months of city stress.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T19:00:49Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "No emails, no meetings, no one needing something from me. Just me and the mountain.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T19:00:57Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The chamois encounter was magical. I keep replaying it in my mind. Seven of them, so close.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T19:01:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Tomorrow I'm thinking about going higher. Maybe try for the 2600 meter peak if conditions are good.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T19:01:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But I'll decide in the morning based on weather. No summit is worth taking stupid risks.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T19:01:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The stew's ready. Let me pour it into my bowl... perfect temperature. Smells better than it has any right to.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T19:01:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "You know what's funny? This meal probably costs 8 euros but it tastes like a five-star dinner when you're hungry and exhausted.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T19:01:39Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "After dinner I'll boil water for tea, then get into my sleeping bag. It's going to be a cold night.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T19:01:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But that's what the minus 15 bag is for. I'll be warm enough. Might even sleep better than I do at home.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T19:01:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Already looking forward to tomorrow. Six more days up here. This is going to be good for my soul.",
+      "duration_seconds": 7.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "stove hissing, wind, tent fabric, water boiling",
+    "recording_quality": "high"
+  }
+}

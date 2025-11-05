@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T06:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "06:00 AM UTC"
+  },
+  "transcript_id": "t4_20250114_060000",
+  "duration_seconds": 602,
+  "start_timestamp": "2025-01-14T06:00:00Z",
+  "end_timestamp": "2025-01-14T06:10:02Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-14/sunrise_photography.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T06:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "It's 6 AM and I hiked up to the ridge to catch sunrise. Totally worth the early wake-up.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T06:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The sky is just starting to turn pink on the eastern horizon. The peaks are silhouetted against it.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T06:00:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Temperature's brutal though. My hands are freezing even with gloves. Maybe minus 8 or 9 degrees.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T06:00:24Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But this light... this is why landscape photographers get up at ridiculous hours. The colors are unreal.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T06:00:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I can see four different mountain ranges from up here. Layer after layer fading into the distance.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T06:00:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The nearest peaks are sharp and defined, then they get hazier and bluer the farther out you look.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T06:00:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Oh! The sun just broke the horizon. Golden light is hitting the highest peaks now.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T06:00:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The snow is glowing orange and pink. I'm taking photos but I know they won't capture what I'm seeing.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T06:01:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Some moments you just have to experience. Lock them in your memory because no camera can do them justice.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T06:01:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "There's not a cloud in the sky. Just pure, clear alpine air and this incredible light show.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T06:01:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm completely alone up here. No one else for kilometers. Just me and this sunrise.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T06:01:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This is what freedom feels like. Standing on a mountain ridge at sunrise, accountable to no one.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T06:01:39Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The light's changing fast now. The pink is turning to gold, the shadows are shrinking.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T06:01:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I should head back to camp soon. Make breakfast, plan today's route. But I want to stay just a few more minutes.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T06:01:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Days like this remind me why I work so hard. So I can afford these trips. So I can feel this alive.",
+      "duration_seconds": 8.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5540,8.7020",
+    "background_sounds": "wind, camera shutter clicks, boots on rock",
+    "recording_quality": "medium"
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T14:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "02:00 PM UTC"
+  },
+  "transcript_id": "t5_20250113_140000",
+  "duration_seconds": 605,
+  "start_timestamp": "2025-01-13T14:00:00Z",
+  "end_timestamp": "2025-01-13T14:10:05Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-13/eva_prep_briefing.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T14:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright team, EVA briefing for tomorrow's antenna repair mission. Lieutenant Torres, Flight Engineer Kim, you're suited up.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T14:00:09Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Ready to go. I've reviewed the repair procedures three times. The S-band antenna has a loose mounting bracket.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T14:00:17Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "I've got the replacement parts staged in the airlock. Two spare brackets and the torque wrench calibrated to spec.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T14:00:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Good. Let's walk through the timeline. Depressurization starts at 0800. You'll exit the airlock at approximately 0845.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T14:00:34Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "The antenna is on the Z1 truss segment, correct? That's about 30 meters from the airlock.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:00:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Correct. You'll translate along the starboard side using the handrails. Kim, you're on tether management.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:00:49Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Understood. I'll make sure we stay properly tethered at all times. Safety locks every three meters.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:00:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Once you reach the antenna, Torres will perform the bracket removal. Kim documents with helmet cam footage.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T14:01:04Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "The old bracket has four bolts. I'll remove them counterclockwise, bag them so nothing floats away.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:01:12Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "I'll have the waste bag ready. We can't afford to create orbital debris from loose hardware.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:01:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ground control estimates 45 minutes for the entire repair. That puts you back inside by 1030 at the latest.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T14:01:27Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "What's the backup plan if the bracket is more damaged than we expect?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T14:01:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "We have authorization to remove the antenna entirely and bring it inside for full assessment. That would extend the EVA to two hours.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T14:01:42Z",
+      "speaker_id":="speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Our suits are rated for seven hours, so we have plenty of margin. But let's hope the simple fix works.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:01:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Agreed. Now, environmental conditions. We'll be in sunlight for the first 30 minutes, then eclipse for 15.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T14:01:58Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "That temperature swing is significant. Plus 120 Celsius in sun, minus 150 in shadow.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:02:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Your suit thermal control systems will handle it, but be aware of the transition. Don't rush during eclipse.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T14:02:13Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "We'll use helmet lights in shadow. I've already checked the batteries, full charge.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T14:02:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Excellent preparation. Communication protocol: you'll be on UHF with me as CAPCOM. Ground has the S-band backup.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T14:02:29Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "If we lose comm with you, we abort and return to airlock immediately. No exceptions.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:02:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Correct. Safety is paramount. No heroics. If anything feels wrong, you come back inside.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:02:44Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Understood, Commander. What about the suit integrity checks tonight?",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T14:02:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "We'll do full suit pressure checks at 2000 hours. I want both suits at 4.3 PSI for 30 minutes, zero leaks.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T14:02:58Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "And the prebreathe protocol starts at 0700 tomorrow, one hour before depressurization.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:03:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Exactly. Pure oxygen to purge nitrogen from your bloodstream. Prevents decompression sickness.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T14:03:13Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "I've done this before, but it never gets routine. There's always that moment stepping outside where you think, 'This is really happening.'",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T14:03:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "My first EVA, I was terrified. Now I just focus on the checklist and trust my training.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:03:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That's the right mindset. Fear keeps you sharp, but training keeps you alive. You both are ready for this.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T14:03:38Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Thanks, Commander. Any other concerns or special instructions from ground control?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:03:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "They want extra photos of the solar array while you're out there. We've noticed some degradation on panel 2B.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T14:03:53Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "We can get those on the translation back. That panel is near our return path.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T14:04:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Perfect. Alright, any questions? This is the time to ask.",
+      "duration_seconds": 5.0
+    },
+    {
+      "timestamp": "2025-01-13T14:04:05Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "I think we're good. We've got this.",
+      "duration_seconds": 3.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_torres_t5",
+      "user_id": "user_torres_003",
+      "user_label": "Lt. Torres"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_kim_t5",
+      "user_id": "user_kim_004",
+      "user_label": "Engineer Kim"
+    }
+  ],
+  "environment": {
+    "location": "iss_unity_module",
+    "background_sounds": "ventilation system, equipment beeping, papers rustling",
+    "recording_quality": "high"
+  }
+}

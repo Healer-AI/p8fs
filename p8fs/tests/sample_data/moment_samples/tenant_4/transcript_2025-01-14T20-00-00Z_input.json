@@ -1,0 +1,125 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T20:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:00 PM UTC"
+  },
+  "transcript_id": "t4_20250114_200000",
+  "duration_seconds": 607,
+  "start_timestamp": "2025-01-14T20:00:00Z",
+  "end_timestamp": "2025-01-14T20:10:07Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-14/tent_storm.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T20:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "It's 8 PM and the storm has arrived. Wind is howling, snow's coming down hard. I can hear it hitting the tent.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T20:00:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But I'm warm and dry inside my sleeping bag. The tent's holding up great - those extra guy lines were smart.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T20:00:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I can feel the tent flexing in the gusts but it's designed for this. The poles are bowing and springing back.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T20:00:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "There's something primal about being in a storm like this. Humans have sheltered from weather for thousands of years.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T20:00:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "My ancestors probably huddled in caves during storms just like this. Now I'm in a high-tech tent, but the feeling's the same.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T20:00:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The wind sounds like it's screaming sometimes. Then it drops for a minute before the next gust hits.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T20:00:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm not scared exactly. More like... hyper-aware. Every sound, every movement of the tent, I'm tuned into it.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T20:01:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "If something were to go wrong - a pole breaking, a seam ripping - I'd need to act fast.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "But nothing's going wrong. The tent's solid. I checked the stakes twice before dark.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T20:01:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I've got my headlamp, spare batteries, repair kit all within reach. Emergency gear organized.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T20:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "This is actually kind of meditative. Just me, the storm, and this small shelter. Nothing else matters right now.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T20:01:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "No work emails, no social media, no news. Just the immediate reality of staying warm and dry.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T20:01:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I wonder how long it'll last. Could be all night. Could clear by morning. Nature decides, not me.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T20:01:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm going to read for a bit, then try to sleep. The storm noise might actually help - like white noise.",
+      "duration_seconds": 8.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "intense wind, snow pelting tent, fabric snapping, poles creaking",
+    "recording_quality": "medium"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T09:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "09:00 AM UTC"
+  },
+  "transcript_id": "t1_20250113_090000",
+  "duration_seconds": 612,
+  "start_timestamp": "2025-01-13T09:00:00Z",
+  "end_timestamp": "2025-01-13T09:10:12Z",
+  "source_uri": "s3://p8fs-tenant1/recordings/2025-01-13/morning_standup.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T09:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Morning everyone! Let's do our quick standup. Um, I'll start. Yesterday I finished the authentication middleware refactor.",
+      "duration_seconds": 8.5
+    },
+    {
+      "timestamp": "2025-01-13T09:00:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Today I'm planning to work on the rate limiting implementation. Should be straightforward, just need to add Redis integration.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T09:00:17Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jordan",
+      "text": "Nice! That'll help a lot. I'm, uh, still working on the dashboard redesign. Got about 60% done yesterday.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T09:00:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jordan",
+      "text": "The charting library integration is taking longer than expected though. Might need another day.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T09:00:30Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Sam",
+      "text": "Do you need help with that? I wrapped up my API versioning work early.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-13T09:00:35Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jordan",
+      "text": "Actually, yeah, that'd be great. The data transformation piece is what's slowing me down.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-13T09:00:41Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Sam",
+      "text": "Cool, I'll pair with you after this. So yeah, I finished API versioning yesterday and today I'll help Jordan.",
+      "duration_seconds": 6.3
+    },
+    {
+      "timestamp": "2025-01-13T09:00:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Perfect. Any blockers? I know we're waiting on that database migration approval from ops.",
+      "duration_seconds": 5.7
+    },
+    {
+      "timestamp": "2025-01-13T09:00:54Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Sam",
+      "text": "Yeah, that's my main blocker for next sprint. Can't start the schema changes until that's approved.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T09:01:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "I'll ping Sarah in ops today. She's usually pretty responsive. Anything else?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-13T09:01:05Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Jordan",
+      "text": "Nope, I'm good.",
+      "duration_seconds": 1.5
+    },
+    {
+      "timestamp": "2025-01-13T09:01:07Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Sam",
+      "text": "All good here.",
+      "duration_seconds": 1.4
+    },
+    {
+      "timestamp": "2025-01-13T09:01:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Alright, let's ship it. Good luck everyone!",
+      "duration_seconds": 3.0
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_alex_t1",
+      "user_id": "user_alex_001",
+      "user_label": "Alex"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_jordan_t1",
+      "user_id": "user_jordan_002",
+      "user_label": "Jordan"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_sam_t1",
+      "user_id": "user_sam_003",
+      "user_label": "Sam"
+    }
+  ],
+  "environment": {
+    "location": "video_conference",
+    "background_sounds": "keyboard typing, occasional mouse clicks",
+    "recording_quality": "high"
+  }
+}

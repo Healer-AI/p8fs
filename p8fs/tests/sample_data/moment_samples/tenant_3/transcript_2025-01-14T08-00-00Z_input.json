@@ -1,0 +1,145 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T08:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:00 AM UTC"
+  },
+  "transcript_id": "t3_20250114_080000",
+  "duration_seconds": 611,
+  "start_timestamp": "2025-01-14T08:00:00Z",
+  "end_timestamp": "2025-01-14T08:10:11Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-14/contractor_conflict.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T08:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Tony, I need to talk to you about the incident yesterday with the plumbing crew.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T08:00:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Yeah, I figured you'd want to discuss that. Things got heated.",
+      "duration_seconds": 4.1
+    },
+    {
+      "timestamp": "2025-01-14T08:00:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Heated is putting it mildly. I heard you yelled at their foreman in front of the whole crew. That's not how we operate.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T08:00:18Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "James, they were three hours late and didn't call. That's the third time this month. We had electricians waiting on them.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T08:00:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I get it. You're frustrated. I'm frustrated too. But publicly humiliating their foreman doesn't solve anything. It makes things worse.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T08:00:34Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "So what, I'm just supposed to smile and say thanks for showing up?",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-14T08:00:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "No. You pull him aside, one-on-one, and have a professional conversation. Then you document it and escalate to me if needed.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T08:00:46Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "I hear you. I lost my cool. I should've handled it differently.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T08:00:51Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I appreciate you owning that. Now you need to apologize to him. Today. And we'll have a meeting with their company owner to address the pattern.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T08:01:00Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Apologize? James, he's the one who keeps screwing up our schedule!",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T08:01:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Yes, and we'll address that through proper channels. But you yelled at him. That was wrong, regardless of what he did. Leaders apologize when they're wrong.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T08:01:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Alright. I'll talk to him this morning.",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-14T08:01:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. And Tony, I know you care about this project. That's why you got upset. But we have to maintain professional standards.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T08:01:27Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "You're right. I'll do better.",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-14T08:01:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I know you will. Now let's talk about the plumbing company. I'm calling their owner today. This pattern needs to stop or we find a replacement.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T08:01:39Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Thank you. That's all I wanted - for someone to take this seriously.",
+      "duration_seconds": 4.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_tony_t3",
+      "user_id": "user_tony_002",
+      "user_label": "Tony"
+    }
+  ],
+  "environment": {
+    "location": "office",
+    "background_sounds": "quiet office, door closed, occasional paper rustling",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T13:15:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "01:15 PM UTC"
+  },
+  "transcript_id": "t5_20250114_131500",
+  "duration_seconds": 614,
+  "start_timestamp": "2025-01-14T13:15:00Z",
+  "end_timestamp": "2025-01-14T13:25:14Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-14/exercise_routine.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T13:15:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Afternoon exercise session, day 88. Two hours mandatory to counteract bone and muscle loss. Let's get started.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T13:15:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "First up, the ARED - Advanced Resistive Exercise Device. Starting with squats. Setting resistance to 120 kilograms.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T13:15:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "In microgravity, your muscles atrophy fast without resistance training. We lose about 1 percent muscle mass per month if we don't work out.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T13:15:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Positioning my feet in the restraints. Without these, I'd just float away when I try to push. Okay, starting squats.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T13:15:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "One... two... three... the resistance feels good. My legs are still sore from yesterday's session, but that's normal.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T13:15:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Four... five... six... I'm targeting three sets of fifteen. That's the protocol for maintaining leg strength.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T13:15:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seven... eight... nine... breathing steady. In zero-g, even simple exercises feel different. No gravity to help you down.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T13:16:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ten... eleven... twelve... Torres and Kim did great on the EVA this morning. Antenna bracket replaced successfully in 87 minutes.",
+      "duration_seconds": 10.2
+    },
+    {
+      "timestamp": "2025-01-14T13:16:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Thirteen... fourteen... fifteen. First set complete. Resting for 60 seconds, then set two.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T13:16:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "You know, people ask if exercise in space is easier because there's no gravity. It's not. The resistance is the same, but your body works differently.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-14T13:16:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Your cardiovascular system doesn't have to pump blood uphill against gravity. Your heart can get lazy if you're not careful.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T13:16:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright, rest is over. Starting set two. One... two... three... keeping form consistent.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T13:16:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Four... five... six... when I get back to Earth, the readjustment is going to be brutal. Everything will feel heavy.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T13:17:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seven... eight... nine... astronauts who skip workouts can barely walk when they land. Some can't even stand up.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T13:17:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ten... eleven... twelve... so yeah, two hours daily is non-negotiable. It's medical necessity disguised as exercise.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T13:17:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Thirteen... fourteen... fifteen. Set two done. One more set after a quick break.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T13:17:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "The EVA today reminded me why we do all this preparation. One small bracket failure, and we lose critical communications capability.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T13:17:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Torres handled the repair perfectly. Kim's tether management was textbook. I was proud watching them work together.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T13:17:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright, final set. One... two... three... pushing through the fatigue.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T13:18:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Four... five... six... my quads are burning now. Good sign - means I'm working hard enough.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T13:18:09Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seven... eight... nine... after squats, I'll do deadlifts, then upper body. Full-body workout to maintain overall strength.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T13:18:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ten... eleven... twelve... almost there. Mind over muscle at this point.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T13:18:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Thirteen... fourteen... fifteen. Done! Squats complete. Wiping down the equipment. Next person needs a clean machine.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T13:18:37Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Now switching to deadlift position. Adjusting the bar restraint. Setting resistance to 140 kilograms for deadlifts.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T13:18:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Deadlifts are crucial for posterior chain - back, glutes, hamstrings. All the muscles that keep you upright on Earth.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T13:18:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Gripping the bar. Feet secured. Starting first set. One... two... three... feeling the pull through my entire back.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T13:19:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Four... five... six... we track all our exercise data. Medical monitors it to ensure we're maintaining bone density and muscle mass.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-14T13:19:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seven... eight... nine... they'll do full body scans when we return. Compare before and after measurements.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T13:19:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Ten... eleven... twelve... long-duration missions, like Mars trips, will need even better exercise protocols.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp":="2025-01-14T13:19:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Thirteen... fourteen... fifteen. First set of deadlifts complete. Two more to go, then upper body work.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T13:19:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Resting. Drinking water. Hydration is important - we lose fluids differently up here because of how blood distributes in microgravity.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T13:19:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "This is the unglamorous part of being an astronaut. Two hours every day, sweating in a confined module, lifting weights.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T13:20:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "But it's essential. Can't do the exciting stuff - EVAs, experiments, Earth observation - if my body breaks down.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-14T13:20:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright, back to work. Seventy-five more minutes of this, then I can shower. Well, sponge bath. We don't have showers up here.",
+      "duration_seconds": 10.0
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    }
+  ],
+  "environment": {
+    "location": "iss_exercise_module",
+    "background_sounds": "equipment hydraulics, breathing, metal clanking, fan noise",
+    "recording_quality": "high"
+  }
+}

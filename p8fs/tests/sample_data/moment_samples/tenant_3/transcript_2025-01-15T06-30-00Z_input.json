@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T06:30:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "06:30 AM UTC"
+  },
+  "transcript_id": "t3_20250115_063000",
+  "duration_seconds": 605,
+  "start_timestamp": "2025-01-15T06:30:00Z",
+  "end_timestamp": "2025-01-15T06:40:05Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-15/foundation_pour.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T06:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Morning everyone. Big day - foundation pour for the Maple Street project. Weather's holding, concrete trucks should be here at 7.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T06:30:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Forms are solid, rebar inspection passed yesterday. We're ready to go.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T06:30:14Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Mike",
+      "text": "Pump truck's set up on the north side. We've got good access for the chutes.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T06:30:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. Remind me - how many yards are we pouring today?",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T06:30:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "280 yards. Should take about 6 hours with the crew we have.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T06:30:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "And we've got the vibrators ready? Can't have any voids or cold joints in this foundation.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T06:30:34Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Mike",
+      "text": "Got four vibrators charged and two backups. Plus the finishing crew knows to work it smooth as we go.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T06:30:42Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Perfect. Temperature's supposed to stay above 45 degrees all day, so curing shouldn't be an issue.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T06:30:49Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Yeah, we'll cover it tonight with blankets anyway. Better safe than sorry.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-15T06:30:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I like it. What about test cylinders? We need those for the engineer.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T06:30:59Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Mike",
+      "text": "We'll pull six cylinders - three for 7-day break and three for 28-day. Inspector's coming at 9 to witness.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T06:31:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Excellent. Now, safety brief - this is high-risk work. Concrete burns are serious. Everyone wears long sleeves, gloves, and eye protection.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T06:31:17Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Already briefed the crew this morning. Everyone knows the protocol.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T06:31:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. And keep people away from the pump line. That thing's under serious pressure.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T06:31:27Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Mike",
+      "text": "We've got barriers set up. Only pump operator and finishers allowed in the pour zone.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T06:31:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Perfect. Alright, I'll be here all morning supervising. Tony, you're running point on the pour itself. Mike, you handle logistics with the trucks.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T06:31:43Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Got it. First truck should be rolling in any minute now.",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-15T06:31:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Then let's get our PPE on and make this happen. This is the foundation for a six-story building - we only get one shot at this.",
+      "duration_seconds": 8.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_tony_t3",
+      "user_id": "user_tony_002",
+      "user_label": "Tony"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_mike_t3",
+      "user_id": "user_mike_008",
+      "user_label": "Mike"
+    }
+  ],
+  "environment": {
+    "location": "construction_site",
+    "background_sounds": "early morning, equipment idling, gravel crunching, distant traffic",
+    "recording_quality": "medium"
+  }
+}

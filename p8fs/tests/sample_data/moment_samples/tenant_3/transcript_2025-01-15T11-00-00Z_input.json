@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T11:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "11:00 AM UTC"
+  },
+  "transcript_id": "t3_20250115_110000",
+  "duration_seconds": 612,
+  "start_timestamp": "2025-01-15T11:00:00Z",
+  "end_timestamp": "2025-01-15T11:10:12Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-15/union_negotiation.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T11:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Robert, Maria, thanks for meeting with me. I want to discuss the new labor agreement before it goes to vote.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T11:00:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Robert",
+      "text": "James. We appreciate you coming to the table. Our members have some concerns about the wage proposal.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T11:00:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I understand. We're proposing 4% annual increases over three years. That's in line with inflation projections.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T11:00:23Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Maria",
+      "text": "But it's below what other contractors in the region are offering. We're seeing 5-6% from competitors.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T11:00:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Those contractors don't offer the benefits package we do. Full health coverage, pension contributions, paid training.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T11:00:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Robert",
+      "text": "True, but our members are feeling the squeeze. Cost of living is outpacing wages.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T11:00:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I hear you. What if we split the difference? 4.5% annually, but we cap overtime at time-and-a-half instead of double time on Sundays.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T11:00:54Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Maria",
+      "text": "That's going to be a hard sell. Sunday premium has been standard for twenty years.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T11:01:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I know, but labor costs are killing us on bid competitiveness. We're losing jobs to non-union shops.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T11:01:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Robert",
+      "text": "Then we all lose. No work, no wages. I get it. But we can't give away everything.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T11:01:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "What if we keep Sunday premium at double time, but we move to 4.25% wage increases and add profit-sharing?",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T11:01:24Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Maria",
+      "text": "Profit-sharing? That's interesting. Tell me more.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T11:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "If we hit our annual revenue targets, workers get a bonus pool. Say, 2% of net profits distributed based on hours worked.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T11:01:37Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Robert",
+      "text": "So when the company does well, workers benefit directly. I like the alignment there.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T11:01:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Exactly. It incentivizes productivity and quality. Better work means more contracts means higher profits for everyone.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T11:01:51Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Maria",
+      "text": "We'd need transparency on the financials. Can't have profit-sharing if we don't trust the numbers.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T11:01:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Agreed. We'll provide quarterly financial reports audited by a third party. Full transparency.",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-15T11:02:05Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Robert",
+      "text": "Let us caucus and discuss with our executive committee. This might work.",
+      "duration_seconds": 5.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_robert_t3",
+      "user_id": "user_robert_009",
+      "user_label": "Robert"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_maria_t3",
+      "user_id": "user_maria_010",
+      "user_label": "Maria"
+    }
+  ],
+  "environment": {
+    "location": "conference_room",
+    "background_sounds": "quiet meeting room, occasional paper shuffling, coffee cups",
+    "recording_quality": "high"
+  }
+}

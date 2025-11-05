@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T08:30:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "08:30 AM UTC"
+  },
+  "name": "Morning Vocal Warmup Routine",
+  "content": "Maya's morning vocal warmup routine in preparation for recording session. Started with breathing exercises (4-4-8 pattern), followed by lip trills and siren sounds to address vocal tightness from insufficient sleep. Progressed through major scales on vowel sounds (mah-meh-mee-moh-moo) starting at middle C, consciously limiting upper range to avoid strain before recording. Practiced articulation exercises including tongue twisters. Tested voice with snippet of song to be recorded ('In the quiet of the morning light'). Noted voice feels prepared. Planned for honey tea and additional warmup before recording session.",
+  "summary": "Morning vocal warmup: breathing, lip trills, scales, articulation drills, song test - voice ready for recording",
+  "category": "practice",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-14/vocal_warmup.wav",
+  "resource_timestamp": "2025-01-14T08:30:00Z",
+  "resource_ends_timestamp": "2025-01-14T08:39:52Z",
+  "moment_type": "observation",
+  "emotion_tags": ["focused", "methodical", "prepared", "self-aware"],
+  "topic_tags": ["vocal-warmup", "vocal-health", "practice-routine", "preparation", "singing"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  },
+  "location": "home_studio",
+  "background_sounds": "quiet morning ambiance, occasional car passing outside",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.87,
+    "word_count": 241,
+    "speaker_count": 1,
+    "activity_type": "vocal_practice",
+    "health_awareness": "high"
+  }
+}

@@ -1,0 +1,7 @@
+[build]
+# Put target directory outside of source tree to avoid Docker context bloat
+target-dir = "/tmp/p8fs-rust-target"
+
+[env]
+# Alternative: use CARGO_TARGET_DIR environment variable
+# CARGO_TARGET_DIR = "/tmp/p8fs-rust-target"

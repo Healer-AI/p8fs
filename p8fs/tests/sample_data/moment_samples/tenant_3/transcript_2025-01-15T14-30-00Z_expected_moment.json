@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T14:30:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "02:30 PM UTC"
+  },
+  "name": "Safety Incident Debrief - Process Improvement",
+  "content": "James leading incident investigation with Elena (safety officer) and Tony after Carlos sustained minor hand laceration (5 stitches) from angle grinder kickback. Root cause: Carlos wore regular gloves instead of required cut-resistant PPE due to comfort issues, switched from formwork to rebar cutting mid-day without supervision check. Identified system gap: toolbox talks occur morning only but task hazards change throughout day. Implemented immediate process change: mandatory two-minute supervisor safety check whenever workers change tasks, using simple checklist (task, hazards, PPE). Addressed comfort barrier: Elena tasked with ordering samples from three manufacturers for crew testing and selection. James chose teaching approach over discipline, emphasizing system improvement over punishment since injury itself was consequence. Proactive safety culture focused on preventing recurrence.",
+  "summary": "Incident debrief: implemented task-change safety checks, ordered comfort-tested PPE, chose system fix over discipline",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-15/safety_incident.wav",
+  "resource_timestamp": "2025-01-15T14:30:00Z",
+  "resource_ends_timestamp": "2025-01-15T14:39:58Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["serious", "analytical", "improvement-focused", "empathetic"],
+  "topic_tags": ["safety", "incident-investigation", "process-improvement", "ppe", "learning-culture"],
+  "present_persons": {
+    "fp_james_t3": {
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    "fp_elena_t3": {
+      "fingerprint_id": "fp_elena_t3",
+      "user_id": "user_elena_003",
+      "user_label": "Elena"
+    },
+    "fp_tony_t3": {
+      "fingerprint_id": "fp_tony_t3",
+      "user_id": "user_tony_002",
+      "user_label": "Tony"
+    }
+  },
+  "location": "office",
+  "background_sounds": "quiet office, door closed, serious tone",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.97,
+    "word_count": 305,
+    "speaker_count": 3,
+    "meeting_type": "incident_debrief",
+    "safety_critical": true
+  }
+}

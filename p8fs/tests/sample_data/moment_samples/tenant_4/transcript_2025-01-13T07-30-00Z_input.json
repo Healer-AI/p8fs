@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T07:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:30 AM UTC"
+  },
+  "transcript_id": "t4_20250113_073000",
+  "duration_seconds": 601,
+  "start_timestamp": "2025-01-13T07:30:00Z",
+  "end_timestamp": "2025-01-13T07:40:01Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-13/morning_setup.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T07:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Okay, day one of the Alps trip. Just arrived at the campsite - 1847 meters elevation. Beautiful morning.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T07:30:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Temperature's about 2 degrees Celsius. There's snow on the ground but not too deep. Maybe 15 centimeters.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T07:30:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me get the tent set up first. Finding a flat spot... here, this looks good. Ground's a bit frozen but I can get the stakes in.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T07:30:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The four-season tent was the right choice. Wind's picking up a bit from the north.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T07:30:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Alright, tent body is up. Now the rainfly... and stake it down tight. Don't want this blowing away in the night.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T07:30:42Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Perfect. Now let me organize my gear. Sleeping bag rated to minus 15, check. Sleeping pad, check.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T07:30:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Food bag goes in the bear-resistant container. Even though bears are rare up here, better safe than sorry.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T07:30:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Water situation - there's a stream about 50 meters down. I'll need to filter and boil everything.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T07:31:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Let me fire up the camp stove and make some coffee. Been hiking since 5 AM to get here, I need caffeine.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T07:31:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "[sound of stove lighting] There we go. While that heats up, let me check my navigation.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T07:31:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "GPS shows I'm right where I planned. Trail to the summit starts about 200 meters west of here.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T07:31:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Forecast looks decent for the next three days. Some snow possible Wednesday, but nothing severe.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T07:31:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I'm planning to do a day hike today up to about 2400 meters, then back here to sleep. Get acclimated to the altitude.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-13T07:31:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "The view from here is incredible. I can see three peaks from camp. This is why I love solo trips.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T07:31:53Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Just me, the mountains, and silence. No city noise, no phone pinging, just... peace.",
+      "duration_seconds": 7.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "wind, stream flowing nearby, tent fabric rustling, stove hissing",
+    "recording_quality": "medium"
+  }
+}

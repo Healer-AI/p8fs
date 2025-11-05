@@ -1,0 +1,187 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T10:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "10:00 AM UTC"
+  },
+  "transcript_id": "t2_20250115_100000",
+  "duration_seconds": 608,
+  "start_timestamp": "2025-01-15T10:00:00Z",
+  "end_timestamp": "2025-01-15T10:10:08Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-15/guitar_lesson.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T10:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Hey Emma! Ready for your lesson?",
+      "duration_seconds": 2.4
+    },
+    {
+      "timestamp": "2025-01-15T10:00:03Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "Yes! I've been practicing that barre chord transition you showed me last week.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T10:00:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Awesome, let me hear it. Show me F to B flat.",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T10:00:12Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "[plays guitar] Like this?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T10:00:17Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Nice! Your finger placement is much better. But I'm hearing a little buzz on the high E string. Let me see your hand position.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T10:00:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, so your index finger needs to be a bit closer to the fret. Right now you're in the middle of the fret space, which causes that buzz.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T10:00:33Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "Oh! Like this?",
+      "duration_seconds": 1.8
+    },
+    {
+      "timestamp": "2025-01-15T10:00:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Perfect! Now try the chord.",
+      "duration_seconds": 2.2
+    },
+    {
+      "timestamp": "2025-01-15T10:00:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "[plays] Oh wow, that's so much cleaner!",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T10:00:42Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "See? It's all about the little adjustments. That's the thing with barre chords - they're very precise.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T10:00:48Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "My hand gets tired so quickly though. Is that normal?",
+      "duration_seconds": 3.4
+    },
+    {
+      "timestamp": "2025-01-15T10:00:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Totally normal! You're building up strength in muscles you don't normally use. It'll get easier with practice.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T10:00:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "If your hand gets tired during practice, just take breaks. Shake it out, stretch your fingers. Don't push through pain.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T10:01:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "Okay, good to know. What should I work on this week?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-15T10:01:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Let's add one more barre chord to your repertoire. How about G minor? It's on the third fret.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T10:01:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Let me show you. [plays] Index finger across all six strings, third fret. Then ring finger and pinky here.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T10:01:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "Okay let me try. [plays guitar with some struggle] Ugh, that's hard!",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T10:01:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "It is at first! But you've got the foundation now. Just practice the transition from F to G minor, slowly at first.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T10:01:37Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "How long should I practice each day?",
+      "duration_seconds": 2.4
+    },
+    {
+      "timestamp": "2025-01-15T10:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Quality over quantity. Even 15 minutes of focused practice every day is better than an hour once a week.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T10:01:47Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Emma",
+      "text": "I can do that. Thanks Maya, this is really helpful!",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T10:01:51Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "You're making great progress. See you next week!",
+      "duration_seconds": 3.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_emma_t2",
+      "user_id": "user_emma_005",
+      "user_label": "Emma"
+    }
+  ],
+  "environment": {
+    "location": "music_studio",
+    "background_sounds": "guitar strings, occasional tuning, chair adjustments",
+    "recording_quality": "high"
+  }
+}

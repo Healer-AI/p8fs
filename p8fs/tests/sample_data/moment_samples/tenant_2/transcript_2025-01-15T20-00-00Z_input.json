@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T20:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "08:00 PM UTC"
+  },
+  "transcript_id": "t2_20250115_200000",
+  "duration_seconds": 614,
+  "start_timestamp": "2025-01-15T20:00:00Z",
+  "end_timestamp": "2025-01-15T20:10:14Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-15/coffee_with_producer.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T20:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Thanks for grabbing coffee with me, Marcus. I wanted to pick your brain about the album.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T20:00:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Always! So you're in the home stretch now, right? How's it feeling?",
+      "duration_seconds": 4.4
+    },
+    {
+      "timestamp": "2025-01-15T20:00:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "It's feeling good, but I'm second-guessing myself on a couple production choices. You know how it is.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T20:00:17Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Oh for sure. Every artist goes through that. What specifically are you worried about?",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-15T20:00:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The mix on track three. It's very dense, lots of layers. I'm worried it's going to sound cluttered on streaming platforms.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T20:00:31Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Have you tested it on different playback systems? Like phone speakers, car stereos?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T20:00:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Just on my studio monitors and headphones. I should probably do that, shouldn't I?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-15T20:00:41Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Definitely. I always check my mixes in my car. If it sounds good on crappy car speakers, it'll sound good anywhere.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T20:00:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "That's smart. I'll do that tomorrow. What about loudness? I'm trying to avoid the loudness war trap.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T20:00:55Z",
+      "speaker_id":="speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Good instinct. Streaming platforms normalize everything anyway. I'd aim for around -14 LUFS and preserve the dynamics.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T20:01:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah, that's where I'm at. I want it to breathe. The quiet parts should be quiet.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T20:01:09Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Exactly. That's what makes music interesting. Constant loud is fatiguing to listen to.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T20:01:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, you're making me feel better about my choices. One more thing - mastering. Should I master it myself or send it out?",
+      "duration_seconds": 7.1
+    },
+    {
+      "timestamp": "2025-01-15T20:01:22Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "I always send it out. Fresh ears catch things you miss when you've been living with the tracks for months.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T20:01:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yeah, you're probably right. Do you have any mastering engineers you'd recommend?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T20:01:34Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Sarah Chen. She did my last three albums. She's incredible with indie stuff, really understands dynamics.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T20:01:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Perfect, I'll reach out to her. Thanks Marcus, this really helped.",
+      "duration_seconds": 4.4
+    },
+    {
+      "timestamp": "2025-01-15T20:01:46Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Marcus",
+      "text": "Anytime. Can't wait to hear the finished album. You're going to kill it.",
+      "duration_seconds": 4.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_marcus_t2",
+      "user_id": "user_marcus_006",
+      "user_label": "Marcus"
+    }
+  ],
+  "environment": {
+    "location": "coffee_shop",
+    "background_sounds": "cafe ambiance, espresso machine, background chatter, cups clinking",
+    "recording_quality": "medium"
+  }
+}

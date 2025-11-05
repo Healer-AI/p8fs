@@ -1,0 +1,298 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T08:30:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "08:30 AM UTC"
+  },
+  "transcript_id": "t5_20250115_083000",
+  "duration_seconds": 607,
+  "start_timestamp": "2025-01-15T08:30:00Z",
+  "end_timestamp": "2025-01-15T08:40:07Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-15/equipment_troubleshooting.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T08:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Houston, this is ISS. We've got a problem with the water recycling system. I'm seeing a pressure drop in the primary loop.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T08:30:09Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Copy that, ISS. Can you give us the exact reading? What's the current pressure?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T08:30:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Nominal should be 18 PSI. I'm reading 14.2 and falling slowly. Rate of drop is about 0.3 PSI per hour.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T08:30:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Understood. That's not critical yet, but we need to identify the leak. Can you check the connections at panel R7?",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T08:30:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Roger. Moving to panel R7 now. Dr. Novak, can you pull up the system schematic on your tablet?",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T08:30:41Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "On it. Schematic loading. Okay, panel R7 has six connection points. The most likely culprits are joints three and five.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T08:30:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Opening panel R7. Visual inspection first. I'm looking for moisture, condensation, anything unusual.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T08:30:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Joints one and two look dry. Joint three... wait, I see some wetness around the coupling. Houston, I think we found it.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T08:31:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Good work, Chen. Is it a seal failure or a loose connection?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T08:31:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Let me check the torque. Getting my wrench. Trying to tighten joint three... it's turning. Definitely was loose.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-15T08:31:24Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "That joint gets a lot of thermal cycling. The temperature variations can cause fittings to loosen over time.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T08:31:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Makes sense. Tightening now... quarter turn... half turn... feeling resistance. There, it's snug. Torque feels right.",
+      "duration_seconds": 9.8
+    },
+    {
+      "timestamp": "2025-01-15T08:31:42Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Chen, wipe down the area and wait five minutes. We need to confirm the leak has stopped.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T08:31:49Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Copy that. Using a clean rag to dry the joint completely. It'll be obvious if new moisture appears.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T08:31:57Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "While we wait, want me to check the other joints? Preventive inspection?",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T08:32:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Good idea. Let's make sure the others are secure. Check joints four, five, and six while I monitor the pressure gauge.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-15T08:32:12Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "Joint four looks good, tight and dry. Joint five is also secure. Joint six... this one could use a small adjustment.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-15T08:32:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Go ahead and snug it up. Better to prevent future problems now.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T08:32:27Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "Tightening joint six. There, that's better. All connections now feel uniform.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T08:32:34Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "ISS, how's the pressure reading now?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-15T08:32:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Houston, pressure is holding at 14.2. No further drop in the last... let me check the timestamp... four minutes.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-15T08:32:48Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Excellent. Check joint three for new moisture.",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-15T08:32:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Inspecting joint three now. It's completely dry. No new condensation. The leak appears to be sealed.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T08:33:00Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Outstanding work. We'll continue monitoring remotely. Can you manually repressurize the system back to 18 PSI?",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T08:33:08Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Affirmative. Accessing the pressurization controls. Opening the makeup water valve to restore system pressure.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T08:33:17Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "Pressure rising. 14.5... 15.0... 15.5... looking good.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T08:33:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "16.0... 16.5... 17.0... approaching target. 17.5... 18.0 PSI. Closing the makeup valve now.",
+      "duration_seconds": 10.4
+    },
+    {
+      "timestamp": "2025-01-15T08:33:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Perfect. We're seeing the same readings on our telemetry. System looks stable.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T08:33:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Confirmed. Pressure holding at 18 PSI. All indicators green. Water recycling system is back to nominal operation.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T08:33:52Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "That was some good troubleshooting. Quick identification, clean fix.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T08:33:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Teamwork. Houston's guidance, your schematic support, my wrench. That's how we solve problems up here.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T08:34:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "We'll note this in the maintenance log. Recommend inspecting those joints every two weeks going forward.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T08:34:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Agreed. I'll add it to the recurring maintenance schedule. Dr. Novak and I will do a joint inspection every other Monday.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T08:34:24Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dr. Novak",
+      "text": "Works for me. Better to catch these issues early than deal with a major system failure.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T08:34:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Houston, closing panel R7. Is there anything else you need from us on this issue?",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T08:34:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "CAPCOM Houston",
+      "text": "Negative, Chen. You're cleared to proceed with your scheduled activities. Nice work up there.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T08:34:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Thank you, Houston. Panel secured. Returning to normal operations. ISS out.",
+      "duration_seconds": 6.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_capcom_t5",
+      "user_id": "user_capcom_007",
+      "user_label": "CAPCOM Houston"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_novak_t5",
+      "user_id": "user_novak_002",
+      "user_label": "Dr. Novak"
+    }
+  ],
+  "environment": {
+    "location": "iss_maintenance_area",
+    "background_sounds": "equipment humming, tool sounds, communication static, water system sounds",
+    "recording_quality": "high"
+  }
+}

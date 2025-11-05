@@ -1,0 +1,71 @@
+# Git
+
+.git/
+.gitignore
+
+# Python
+
+**pycache**/
+_.py[cod]
+_$py.class
+_.so
+.Python
+_.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+
+.venv/
+venv/
+ENV/
+env/
+
+# Testing
+
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+\*.cover
+
+# IDEs
+
+.vscode/
+.idea/
+_.swp
+_.swo
+\*~
+.DS_Store
+
+# Development
+
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Project specific
+
+_.log
+_.db
+\*.sqlite
+.env
+.envrc
+
+# Documentation
+
+docs/\_build/
+
+# Notebooks
+
+.ipynb_checkpoints/
+
+# Other build artifacts
+
+node_modules/
+target/
+Cargo.lock

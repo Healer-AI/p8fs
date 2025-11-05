@@ -1,0 +1,35 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T06:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "06:00 AM UTC"
+  },
+  "name": "Morning Systems Check - Day 87",
+  "content": "Commander Chen conducting routine morning systems verification on ISS mission day 87. Comprehensive environmental assessment: cabin pressure nominal (101.3 kPa), temperature comfortable (22°C), CO2 at safe 0.3% with efficient scrubbers, humidity 55%. Oxygen generation system producing required flow with stable tank levels. Power systems strong: solar arrays generating 120 kW, batteries at 98% charge. Communications fully operational with three-satellite coverage ensuring continuous ground contact. Orbital parameters stable at 420km altitude, 7.66 km/s velocity, noting planned reboost in two weeks due to atmospheric drag. Water recovery at impressive 93% efficiency. All safety systems green (fire detection, suppression). Station health confirmed nominal. Reviewed daily schedule: science experiments 0900, EVA prep briefing 1400. Emphasized universal human need for morning coffee, even in microgravity.",
+  "summary": "Day 87 systems check: all station systems nominal, orbital parameters stable, busy schedule planned, heading for breakfast",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-13/morning_systems.wav",
+  "resource_timestamp": "2025-01-13T06:00:00Z",
+  "resource_ends_timestamp": "2025-01-13T06:10:12Z",
+  "moment_type": "observation",
+  "emotion_tags": ["professional", "focused", "routine", "satisfied"],
+  "topic_tags": ["systems-check", "iss-operations", "environmental-control", "orbital-mechanics", "daily-routine"],
+  "present_persons": {
+    "fp_chen_t5": {
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    }
+  },
+  "location": "iss_unity_module",
+  "background_sounds": "ventilation hum, equipment beeping, occasional item floating by",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.2,
+    "word_count": 289,
+    "speaker_count": 1,
+    "activity_type": "systems_verification",
+    "mission_day": 87,
+    "altitude_km": 420
+  }
+}

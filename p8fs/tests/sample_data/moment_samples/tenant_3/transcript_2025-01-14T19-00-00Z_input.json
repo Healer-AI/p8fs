@@ -1,0 +1,146 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T19:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "07:00 PM UTC"
+  },
+  "transcript_id": "t3_20250114_190000",
+  "duration_seconds": 593,
+  "start_timestamp": "2025-01-14T19:00:00Z",
+  "end_timestamp": "2025-01-14T19:09:53Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-14/evening_reflection.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T19:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Long day. Let me just record some thoughts before I head home.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-14T19:00:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "The situation with Tony this morning... that was tough. I hated having to come down on him like that.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T19:00:12Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "But he was wrong. You can't yell at people in front of their crews, no matter how frustrated you are.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T19:00:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "The hard part is, I get it. I've been there. Twenty years ago I probably would've done the same thing.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T19:00:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "But I've learned that leadership isn't about being the toughest guy on the site. It's about building teams that respect each other.",
+      "duration_seconds": 8.1
+    },
+    {
+      "timestamp": "2025-01-14T19:00:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Tony's a good project manager. He cares about the work. That's why he lost his temper - because he gives a damn.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T19:00:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I just need to help him channel that energy into constructive leadership instead of... whatever that was yesterday.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T19:00:51Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "And the plumbing contractor - I need to call them tomorrow. Third late arrival is a pattern. We can't tolerate that.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T19:00:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "But I also can't blow up the relationship. Finding good subs right now is nearly impossible with this labor shortage.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T19:01:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "So I'll be firm but fair. Give them one chance to fix it. If it happens again, we find someone else.",
+      "duration_seconds": 7.1
+    },
+    {
+      "timestamp": "2025-01-14T19:01:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "On the positive side, financials look good. If we get Riverside, we'll have our best year ever.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T19:01:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Patricia seemed confident at dinner. I think we have a real shot at this.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T19:01:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Twelve point eight million. That would put us at nearly 75 million in backlog. We'd need to hire at least three more people.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T19:01:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Growing pains. Good problems to have, but still problems.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-14T19:01:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I wonder sometimes if I'm getting too old for this. Running a construction company is exhausting.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T19:01:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "But then I walk a site and see something we built, and I remember why I love it.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-14T19:01:54Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Alright, enough reflection. Time to go home and not think about work for a few hours.",
+      "duration_seconds": 5.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    }
+  ],
+  "environment": {
+    "location": "office",
+    "background_sounds": "quiet evening office, distant cleaning crew, occasional car outside",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "openai_tool_schema": {
+    "type": "function",
+    "function": {
+      "name": "get_weather",
+      "description": "Get current weather information for a specific location",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The city and state/country, e.g. 'San Francisco, CA'"
+          },
+          "units": {
+            "type": "string",
+            "enum": ["celsius", "fahrenheit"],
+            "description": "Temperature unit",
+            "default": "celsius"
+          }
+        },
+        "required": ["location"]
+      }
+    }
+  },
+  "anthropic_tool_schema": {
+    "name": "search_documents",
+    "description": "Search through document database",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string", 
+          "description": "Search query string"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum number of results",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "filters": {
+          "type": "object",
+          "properties": {
+            "type": {"type": "string"},
+            "date_range": {
+              "type": "object",
+              "properties": {
+                "start": {"type": "string", "format": "date"},
+                "end": {"type": "string", "format": "date"}
+              }
+            }
+          }
+        }
+      },
+      "required": ["query"]
+    }
+  },
+  "google_tool_schema": {
+    "function_declarations": [
+      {
+        "name": "calculate_math",
+        "description": "Perform mathematical calculations",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "expression": {
+              "type": "string",
+              "description": "Mathematical expression to evaluate"
+            },
+            "precision": {
+              "type": "integer", 
+              "description": "Number of decimal places",
+              "default": 2
+            }
+          },
+          "required": ["expression"]
+        }
+      }
+    ]
+  },
+  "complex_function_schema": {
+    "type": "function",
+    "function": {
+      "name": "process_data",
+      "description": "Process complex data structures",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "values": {
+                  "type": "array",
+                  "items": {"type": "number"}
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "required": ["id", "values"]
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "aggregation": {
+                "type": "string",
+                "enum": ["sum", "average", "max", "min"]
+              },
+              "normalize": {"type": "boolean", "default": false}
+            }
+          }
+        },
+        "required": ["data"]
+      }
+    }
+  }
+}

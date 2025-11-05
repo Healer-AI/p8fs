@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T14:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "02:30 PM UTC"
+  },
+  "transcript_id": "t3_20250113_143000",
+  "duration_seconds": 607,
+  "start_timestamp": "2025-01-13T14:30:00Z",
+  "end_timestamp": "2025-01-13T14:40:07Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-13/bid_review_meeting.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T14:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Alright everyone, let's review the bids for the Riverside office complex project. This is a big one - 12 million dollar job.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T14:30:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Sarah",
+      "text": "I've compiled all the subcontractor bids. We have three general contractor options to consider as well.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T14:30:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. Let's start with the electrical. Who are we looking at?",
+      "duration_seconds": 4.1
+    },
+    {
+      "timestamp": "2025-01-13T14:30:19Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Sarah",
+      "text": "Miller Electric came in at 1.8 million, Apex at 1.6, and Volt Solutions at 2.1. Volt's high but they have the best track record.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T14:30:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Apex is tempting on price but have we worked with them before? I don't want to save 200k and have schedule delays.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:30:36Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "David",
+      "text": "We used Apex on the Greenfield warehouse last year. They were okay, couple minor issues but nothing major.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:30:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Okay, so they're not unknowns. What about Miller? They're right in the middle price-wise.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T14:30:49Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Sarah",
+      "text": "Miller's solid. We've used them on three projects. Always on time, good quality. They're my recommendation.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:30:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I agree. Relationships matter more than shaving every dollar. Let's pencil in Miller. What about HVAC?",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:31:03Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "David",
+      "text": "HVAC is tricky. We've got two bids - ClimaTech at 2.4 million and AirFlow Systems at 2.2.",
+      "duration_seconds": 7.1
+    },
+    {
+      "timestamp": "2025-01-13T14:31:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Only two bids? We usually get at least three for a job this size.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-13T14:31:15Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "David",
+      "text": "Yeah, Superior HVAC declined to bid. They're booked solid through Q3. Labor shortage is hitting them hard.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:31:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's concerning. If everyone's busy, it means we need to lock in our subs now or we'll lose them to other projects.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:31:29Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Sarah",
+      "text": "Agreed. Between ClimaTech and AirFlow, I'd go with ClimaTech. Worth the extra 200k for their reliability.",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-13T14:31:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Okay, ClimaTech it is. Now the big question - our total bid. Where are we landing with all subs included?",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:31:44Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Sarah",
+      "text": "With the selections we've discussed, we're at 11.2 million in hard costs. Add overhead and profit, we're bidding 12.8 million.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T14:31:53Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's over budget. The client said 12 million was their max. We need to find 800k somewhere or we won't be competitive.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T14:32:01Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "David",
+      "text": "We could value engineer some finishes. Maybe go with a simpler facade treatment?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T14:32:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Let's put together alternatives for the client. Give them options. We submit at 12.8 with value engineering options that bring it to 12 flat.",
+      "duration_seconds": 8.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_sarah_t3",
+      "user_id": "user_sarah_004",
+      "user_label": "Sarah"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_david_t3",
+      "user_id": "user_david_005",
+      "user_label": "David"
+    }
+  ],
+  "environment": {
+    "location": "conference_room",
+    "background_sounds": "paper shuffling, occasional pen clicking, HVAC hum",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T14:30:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "02:30 PM UTC"
+  },
+  "transcript_id": "t3_20250115_143000",
+  "duration_seconds": 598,
+  "start_timestamp": "2025-01-15T14:30:00Z",
+  "end_timestamp": "2025-01-15T14:39:58Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-15/safety_incident.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T14:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Alright everyone, let's debrief this morning's incident. First - how's Carlos doing?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T14:30:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Elena",
+      "text": "He's okay. Minor laceration on his hand, got five stitches at the clinic. Doctor cleared him to return to light duty tomorrow.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T14:30:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. That could've been much worse. Tony, walk me through what happened.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T14:30:20Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Tony",
+      "text": "Carlos was cutting rebar with the angle grinder. Blade caught and kicked back, hit his hand. He was wearing gloves but not the cut-resistant ones.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-15T14:30:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Why wasn't he wearing cut-resistant gloves? That's standard PPE for grinding operations.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T14:30:37Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Tony",
+      "text": "He said they were uncomfortable and he'd been using regular gloves all week. No one caught it until after the incident.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T14:30:45Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's a supervision failure. Elena, you're the safety officer - how did this slip through?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T14:30:52Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Elena",
+      "text": "I did my walkthrough at 7 AM, before he started that task. By the time I came back around, it had already happened.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T14:31:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "So we have a gap. Toolbox talks happen in the morning, but tasks change throughout the day.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T14:31:07Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Tony",
+      "text": "Right. Carlos switched from form work to rebar cutting around 10 AM. Different hazards, different PPE requirements.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T14:31:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Okay here's what we're changing. Effective immediately: any time a worker changes tasks, they do a quick safety check with their supervisor. Takes two minutes.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-15T14:31:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Elena",
+      "text": "I like that. We can create a simple checklist - task, hazards, required PPE. Sign off and go.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T14:31:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Perfect. Elena, draft that today. I want it implemented tomorrow morning. Also, we need to address the comfort issue with the cut-resistant gloves.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T14:31:42Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Elena",
+      "text": "I'll order samples from three different manufacturers. Let the crew test them and pick the ones they'll actually wear.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T14:31:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good thinking. If the PPE is uncomfortable, people won't use it. We need to find gear that protects AND doesn't make their job harder.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T14:31:59Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Tony",
+      "text": "Should we discipline Carlos for not wearing proper PPE?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T14:32:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "This is a teaching moment, not a punishment moment. Carlos got hurt - that's consequence enough. We fix the system so it doesn't happen again.",
+      "duration_seconds": 9.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_elena_t3",
+      "user_id": "user_elena_003",
+      "user_label": "Elena"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_tony_t3",
+      "user_id": "user_tony_002",
+      "user_label": "Tony"
+    }
+  ],
+  "environment": {
+    "location": "office",
+    "background_sounds": "quiet office, door closed, serious tone",
+    "recording_quality": "high"
+  }
+}

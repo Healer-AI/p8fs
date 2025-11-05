@@ -1,0 +1,108 @@
+{
+  "basic_completion": {
+    "id": "msg_01ABC123",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "Hello! I'm doing well, thank you. I'm Claude, an AI assistant created by Anthropic. How can I help you today?"
+      }
+    ],
+    "model": "claude-3-5-sonnet-20241022",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 10,
+      "output_tokens": 23
+    }
+  },
+  "function_call_response": {
+    "id": "msg_01DEF456",
+    "type": "message", 
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "toolu_01234",
+        "name": "search_papers",
+        "input": {
+          "query": "machine learning recent advances",
+          "limit": 10
+        }
+      }
+    ],
+    "model": "claude-3-5-sonnet-20241022",
+    "stop_reason": "tool_use",
+    "usage": {
+      "input_tokens": 45,
+      "output_tokens": 20
+    }
+  },
+  "streaming_chunk": {
+    "type": "content_block_delta",
+    "index": 0,
+    "delta": {
+      "type": "text_delta",
+      "text": "Quantum computing is a revolutionary computational paradigm"
+    }
+  },
+  "streaming_start": {
+    "type": "message_start",
+    "message": {
+      "id": "msg_01GHI789",
+      "type": "message",
+      "role": "assistant",
+      "content": [],
+      "model": "claude-3-5-sonnet-20241022",
+      "stop_reason": null,
+      "stop_sequence": null,
+      "usage": {
+        "input_tokens": 20,
+        "output_tokens": 0
+      }
+    }
+  },
+  "streaming_function_call_chunks": [
+    {
+      "type": "content_block_start",
+      "index": 0,
+      "content_block": {
+        "type": "tool_use",
+        "id": "toolu_weather_001",
+        "name": "get_weather",
+        "input": {}
+      }
+    },
+    {
+      "type": "content_block_delta",
+      "index": 0,
+      "delta": {
+        "type": "input_json_delta",
+        "partial_json": "{\"location\": \"Dublin\""
+      }
+    },
+    {
+      "type": "content_block_delta",
+      "index": 0,
+      "delta": {
+        "type": "input_json_delta",
+        "partial_json": ", \"units\": \"celsius\"}"
+      }
+    },
+    {
+      "type": "content_block_stop",
+      "index": 0
+    }
+  ],
+  "streaming_end": {
+    "type": "message_delta",
+    "delta": {
+      "stop_reason": "end_turn",
+      "stop_sequence": null
+    },
+    "usage": {
+      "output_tokens": 150
+    }
+  }
+}

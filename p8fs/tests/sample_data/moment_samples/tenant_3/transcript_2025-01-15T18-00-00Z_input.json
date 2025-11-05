@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T18:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "06:00 PM UTC"
+  },
+  "transcript_id": "t3_20250115_180000",
+  "duration_seconds": 606,
+  "start_timestamp": "2025-01-15T18:00:00Z",
+  "end_timestamp": "2025-01-15T18:10:06Z",
+  "source_uri": "s3fs://p8fs-tenant3/recordings/2025-01-15/patricia_call.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T18:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Patricia, thanks for taking my call. I wanted to give you a quick update on our readiness for Riverside.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T18:00:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Perfect timing. The board meets tomorrow and Riverside is on the agenda. What's your status?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T18:00:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "We're locked in on all our subcontractors. Miller Electric, ClimaTech HVAC, all confirmed and ready to commit once we get your approval.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-15T18:00:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Good. And you're still confident on the timeline? Eighteen months to occupancy?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T18:00:29Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Yes. We've built buffer time into the schedule. Even if we hit weather delays or supply hiccups, we'll make the deadline.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T18:00:37Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "That's what I need to hear. The board is nervous about timeline risk. Too many projects in this market are running 6-12 months over.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-15T18:00:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I understand. We've completed our last eight projects on time or early. Our track record speaks for itself.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T18:00:53Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Which is why you're our top choice. Between you and me, the board is leaning heavily in your direction.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T18:01:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "That's great to hear. We're really excited about this project. It's exactly the kind of work we excel at.",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-15T18:01:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "One question came up in our finance committee - the value engineering options. Can you walk me through those again?",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T18:01:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Sure. The base bid is 12.8 million. We can hit your 12 million target by switching the facade from aluminum panels to fiber cement.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-15T18:01:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "And there's no quality compromise?",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-15T18:01:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "None. Fiber cement has a 50-year warranty, same performance specs. The only difference is aesthetics - aluminum has a more premium look.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-15T18:01:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Honestly, I think the fiber cement looks great in the samples you showed me. And 800k savings is significant.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T18:01:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "It gives you budget flexibility for interior finishes or landscaping. Better to invest where tenants will actually notice.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-15T18:01:52Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Smart thinking. Alright James, I'm going to recommend we move forward with you. Expect to hear from me Friday afternoon.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T18:02:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Thank you Patricia. We won't let you down. This is going to be a great partnership.",
+      "duration_seconds": 6.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_patricia_t3",
+      "user_id": "user_patricia_006",
+      "user_label": "Patricia"
+    }
+  ],
+  "environment": {
+    "location": "office",
+    "background_sounds": "quiet office, phone call quality",
+    "recording_quality": "high"
+  }
+}

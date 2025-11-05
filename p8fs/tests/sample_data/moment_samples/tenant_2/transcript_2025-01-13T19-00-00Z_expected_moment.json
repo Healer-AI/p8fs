@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T19:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:00 PM UTC"
+  },
+  "name": "Band Rehearsal - New Song Arrangement",
+  "content": "Band rehearsal with Maya (vocals/piano), Devon (drums), and Riley (bass) working on new song arrangement. Established structure: piano and vocals start, drums enter at pre-chorus, bass doubling piano subtly from beginning. Iterative refinement: Devon adjusted timing on fill to be less rushed and more laid back. Riley dropped bass line down an octave on chorus for more weight and impact. Second full run-through achieved desired energy. Team decided to record scratch track while momentum is strong. Collaborative music-making with clear artistic direction from Maya and responsive adjustments from band members.",
+  "summary": "Band rehearsal: arranged new song, refined drum timing and bass octave, achieved strong take, planning scratch recording",
+  "category": "creative",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-13/band_rehearsal.wav",
+  "resource_timestamp": "2025-01-13T19:00:00Z",
+  "resource_ends_timestamp": "2025-01-13T19:10:15Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["collaborative", "creative", "energized", "focused"],
+  "topic_tags": ["band-rehearsal", "arrangement", "music-production", "collaboration", "album-preparation"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    },
+    "fp_devon_t2": {
+      "fingerprint_id": "fp_devon_t2",
+      "user_id": "user_devon_002",
+      "user_label": "Devon"
+    },
+    "fp_riley_t2": {
+      "fingerprint_id": "fp_riley_t2",
+      "user_id": "user_riley_003",
+      "user_label": "Riley"
+    }
+  },
+  "location": "rehearsal_studio",
+  "background_sounds": "instruments playing, drum hits, bass notes, amplifier hum",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.25,
+    "word_count": 312,
+    "speaker_count": 3,
+    "activity_type": "rehearsal",
+    "creative_domain": "music"
+  }
+}

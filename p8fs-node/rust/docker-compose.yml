@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  p8fs-node:
+    build: .
+    container_name: p8fs-node-api
+    ports:
+      - "3000:3000"
+    environment:
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+      - EMBEDDING_DIMENSIONS=384
+      - RUST_LOG=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    
+  # Optional: Add a simple test service
+  test:
+    image: python:3.11-slim
+    volumes:
+      - ./test_embeddings.py:/test_embeddings.py
+    command: >
+      sh -c "
+        pip install requests &&
+        sleep 30 &&
+        python /test_embeddings.py
+      "
+    depends_on:
+      - p8fs-node
+    profiles:
+      - test

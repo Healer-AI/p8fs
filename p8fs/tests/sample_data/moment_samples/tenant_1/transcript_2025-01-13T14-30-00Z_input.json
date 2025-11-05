@@ -1,0 +1,111 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T14:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "02:30 PM UTC"
+  },
+  "transcript_id": "t1_20250113_143000",
+  "duration_seconds": 598,
+  "start_timestamp": "2025-01-13T14:30:00Z",
+  "end_timestamp": "2025-01-13T14:39:58Z",
+  "source_uri": "s3://p8fs-tenant1/recordings/2025-01-13/afternoon_planning.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T14:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Okay, so I need to think through this rate limiting architecture. Let me just talk through it out loud.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T14:30:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "The main issue is we need per-user rate limits, but also global rate limits. Two different scopes.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-13T14:30:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "I'm thinking Redis with a sliding window algorithm. That gives us the most accurate rate limiting without the memory overhead of fixed windows.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T14:30:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "So the key structure would be... user ID as the key, timestamp as the sorted set member, and we'd use ZREMRANGEBYSCORE to clean up old entries.",
+      "duration_seconds": 9.5
+    },
+    {
+      "timestamp": "2025-01-13T14:30:33Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "That should work. But what about the global limit? Maybe a separate key... global:requests with the same structure.",
+      "duration_seconds": 7.3
+    },
+    {
+      "timestamp": "2025-01-13T14:30:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Hmm, actually that could get expensive. We'd be doing two Redis calls per request. Not great for latency.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T14:30:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Maybe we batch the global limit checks? Only check global every... tenth request or something? No, that's too sloppy.",
+      "duration_seconds": 7.9
+    },
+    {
+      "timestamp": "2025-01-13T14:30:57Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Wait, I could use Lua scripts. Redis executes those atomically. One script that checks both limits in a single call.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T14:31:05Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Yeah, that's it. The Lua script would take user ID, check user limit, check global limit, add entry if allowed, return true or false.",
+      "duration_seconds": 8.1
+    },
+    {
+      "timestamp": "2025-01-13T14:31:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Okay let me sketch this out. I need to handle the case where Redis is down too. Probably fail open or we'll take down the whole API.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T14:31:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Circuit breaker pattern. If Redis is timing out, we bypass rate limiting for, say, 30 seconds, then try again.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T14:31:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Alright, I think I've got the design. Let me write this up and share it with the team before I start implementing.",
+      "duration_seconds": 6.5
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_alex_t1",
+      "user_id": "user_alex_001",
+      "user_label": "Alex"
+    }
+  ],
+  "environment": {
+    "location": "home_office",
+    "background_sounds": "quiet, occasional bird chirping outside",
+    "recording_quality": "high"
+  }
+}

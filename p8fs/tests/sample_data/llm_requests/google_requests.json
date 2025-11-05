@@ -1,0 +1,77 @@
+{
+  "basic_chat": {
+    "contents": [
+      {
+        "role": "user",
+        "parts": [{"text": "Hello, how are you?"}]
+      }
+    ],
+    "generationConfig": {
+      "temperature": 0.7,
+      "maxOutputTokens": 100
+    }
+  },
+  "system_instruction": {
+    "system_instruction": {
+      "parts": [{"text": "You are a helpful assistant that provides concise answers."}]
+    },
+    "contents": [
+      {
+        "role": "user", 
+        "parts": [{"text": "What is artificial intelligence?"}]
+      }
+    ],
+    "generationConfig": {
+      "maxOutputTokens": 200
+    }
+  },
+  "function_call": {
+    "contents": [
+      {
+        "role": "user",
+        "parts": [{"text": "Calculate the area of a circle with radius 5"}]
+      }
+    ],
+    "tools": [
+      {
+        "function_declarations": [
+          {
+            "name": "calculate_area",
+            "description": "Calculate the area of a geometric shape",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "shape": {"type": "string", "description": "Type of shape"},
+                "radius": {"type": "number", "description": "Radius for circles"}
+              },
+              "required": ["shape"]
+            }
+          }
+        ]
+      }
+    ],
+    "generationConfig": {
+      "maxOutputTokens": 150
+    }
+  },
+  "conversation": {
+    "contents": [
+      {
+        "role": "user",
+        "parts": [{"text": "Tell me about renewable energy"}]
+      },
+      {
+        "role": "model",
+        "parts": [{"text": "Renewable energy comes from natural sources that are constantly replenished, such as solar, wind, and hydroelectric power."}]
+      },
+      {
+        "role": "user", 
+        "parts": [{"text": "What are the main benefits?"}]
+      }
+    ],
+    "generationConfig": {
+      "temperature": 0.5,
+      "maxOutputTokens": 300
+    }
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T19:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:30 PM UTC"
+  },
+  "transcript_id": "t3_20250113_193000",
+  "duration_seconds": 595,
+  "start_timestamp": "2025-01-13T19:30:00Z",
+  "end_timestamp": "2025-01-13T19:39:55Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-13/client_dinner.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T19:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Thanks for meeting me for dinner, Patricia. I know you're busy with the Riverside project prep.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T19:30:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "Of course! I wanted to discuss the bid before the board meeting next week. Walk me through your thinking.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T19:30:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "So we came in at 12.8 million, but we've identified value engineering options that bring it down to exactly 12 million.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T19:30:21Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "The board set 12 million as the cap. What are we giving up to hit that number?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T19:30:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Primarily facade materials. We spec'd aluminum panels originally. The VE option uses fiber cement which looks nearly identical but saves 600k.",
+      "duration_seconds": 8.8
+    },
+    {
+      "timestamp": "2025-01-13T19:30:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "And the performance? I don't want to compromise on building longevity.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-13T19:30:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Fiber cement has a 50-year warranty. It's proven technology. The only difference is aluminum would've given you that premium look.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T19:30:49Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "I can live with that. What's the timeline looking like?",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-13T19:30:53Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Eighteen months from groundbreaking to certificate of occupancy. That's assuming we start by April.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T19:31:00Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "April works. We need tenants moving in by fall of next year. Can you guarantee that timeline?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-13T19:31:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "I can guarantee we'll do everything in our power. But you know construction - weather, supply chain issues, inspections. We build buffer time in.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T19:31:15Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "I appreciate the honesty. Too many contractors promise the moon and then blame delays on acts of God.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T19:31:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Not my style. I'd rather under-promise and over-deliver. We've got a track record of finishing on time or early.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T19:31:29Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "That's why we want to work with you. Okay, I'll recommend your bid to the board. Expect a decision by Friday.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T19:31:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Thank you Patricia. We're ready to hit the ground running as soon as we get the green light.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T19:31:42Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Patricia",
+      "text": "I have no doubt. Now, let's order. I'm starving and I hear the salmon here is excellent.",
+      "duration_seconds": 5.4
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_patricia_t3",
+      "user_id": "user_patricia_006",
+      "user_label": "Patricia"
+    }
+  ],
+  "environment": {
+    "location": "restaurant",
+    "background_sounds": "restaurant ambiance, clinking dishes, background conversations, soft music",
+    "recording_quality": "medium"
+  }
+}

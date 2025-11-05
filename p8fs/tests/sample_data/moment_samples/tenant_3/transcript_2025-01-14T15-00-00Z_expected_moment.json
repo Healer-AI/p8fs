@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T15:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "03:00 PM UTC"
+  },
+  "name": "Q4 Financial Review with CFO",
+  "content": "James and CFO Karen reviewing Q4 financials ahead of board meeting. Revenue grew 18% YoY to $47.2M with margins compressed from 13.5% to 12.8% due to steel and lumber cost increases. Three legacy fixed-price contracts absorbing $400K in lost margin, completing Q1-Q2. Cash position strong at $3.2M with 40% credit line utilization and healthy 52-day payables. Identified collection issue: Westfield Properties 90 days overdue on $180K (retail plaza project). James committed to direct CEO contact for resolution. Positive outlook: $62M backlog for 2025, potential $12.8M Riverside addition. Strategic decision: invest in project manager and senior estimator hires to support growth trajectory.",
+  "summary": "Q4 review: 18% revenue growth, margin compression from materials, strong backlog, collection issue, hiring for growth",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-14/budget_review.wav",
+  "resource_timestamp": "2025-01-14T15:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T15:10:19Z",
+  "moment_type": "meeting",
+  "emotion_tags": ["analytical", "strategic", "confident", "forward-looking"],
+  "topic_tags": ["financial-review", "budgeting", "business-planning", "hiring", "growth-strategy"],
+  "present_persons": {
+    "fp_james_t3": {
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    "fp_karen_t3": {
+      "fingerprint_id": "fp_karen_t3",
+      "user_id": "user_karen_007",
+      "user_label": "Karen"
+    }
+  },
+  "location": "office",
+  "background_sounds": "quiet office, papers rustling, calculator clicking",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.32,
+    "word_count": 342,
+    "speaker_count": 2,
+    "meeting_type": "financial_review",
+    "business_metrics": true
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T15:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "03:30 PM UTC"
+  },
+  "name": "Lyric Writing - Track Nine 'Echoes'",
+  "content": "Maya writing lyrics for track nine, working title 'Echoes', exploring theme of persistent memories and inability to let go. Developed opening line through iteration: 'Your voice still lingers in empty rooms, like smoke that won't dissolve.' Identified hook: 'chasing echoes'. Created contrasting second verse using concrete details rather than metaphors: coffee cups, playlists, deleted phone numbers remembered by heart. Bridge addressed emotional core: acknowledgment of being stuck and questioning desire to move on. Self-aware about emotional heaviness but committed to honesty. Tested lyrics against melody successfully. Established foundational structure for further development.",
+  "summary": "Lyric writing: developed 'Echoes' theme of persistent memories, created concrete imagery, honest emotional vulnerability",
+  "category": "creative",
+  "uri": "s3://p8fs-tenant2/recordings/2025-01-13/lyric_writing.wav",
+  "resource_timestamp": "2025-01-13T15:30:00Z",
+  "resource_ends_timestamp": "2025-01-13T15:39:49Z",
+  "moment_type": "observation",
+  "emotion_tags": ["creative", "melancholic", "introspective", "vulnerable"],
+  "topic_tags": ["songwriting", "lyrics", "creative-process", "emotional-expression", "iteration"],
+  "present_persons": {
+    "fp_maya_t2": {
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  },
+  "location": "home_studio",
+  "background_sounds": "quiet, pen on paper, occasional piano note",
+  "metadata": {
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.82,
+    "word_count": 267,
+    "speaker_count": 1,
+    "activity_type": "lyric_writing",
+    "emotional_depth": "high"
+  }
+}

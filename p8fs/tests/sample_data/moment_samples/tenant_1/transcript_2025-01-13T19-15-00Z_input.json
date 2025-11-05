@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T19:15:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:15 PM UTC"
+  },
+  "transcript_id": "t1_20250113_191500",
+  "duration_seconds": 625,
+  "start_timestamp": "2025-01-13T19:15:00Z",
+  "end_timestamp": "2025-01-13T19:25:25Z",
+  "source_uri": "s3://p8fs-tenant1/recordings/2025-01-13/evening_catchup.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T19:15:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Hey! Good to see you. How was your day?",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-13T19:15:04Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Oh man, exhausting. We had this client presentation that just dragged on forever. Like three hours.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-13T19:15:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Ouch. Did it go well at least?",
+      "duration_seconds": 2.4
+    },
+    {
+      "timestamp": "2025-01-13T19:15:13Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Yeah, actually. They signed off on the proposal, so that's good. Just wish it didn't take three hours to get there.",
+      "duration_seconds": 6.1
+    },
+    {
+      "timestamp": "2025-01-13T19:15:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Hey, a win is a win! My day was pretty good. Finally figured out that rate limiting thing I was stuck on.",
+      "duration_seconds": 5.7
+    },
+    {
+      "timestamp": "2025-01-13T19:15:26Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Nice! The Redis thing you were talking about this morning?",
+      "duration_seconds": 3.1
+    },
+    {
+      "timestamp": "2025-01-13T19:15:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Yeah, exactly. Lua scripts were the key. Anyway, enough about work. What do you want to do for dinner?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T19:15:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "I don't know, I'm pretty tired. Maybe just order something? Thai food?",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-13T19:15:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Thai sounds perfect. The usual place?",
+      "duration_seconds": 2.5
+    },
+    {
+      "timestamp": "2025-01-13T19:15:44Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Yeah, let's do it. Oh, did you see that Emma posted about her trip? The photos look amazing.",
+      "duration_seconds": 5.3
+    },
+    {
+      "timestamp": "2025-01-13T19:15:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "I did! She's in Iceland right now, right? Those northern lights shots were incredible.",
+      "duration_seconds": 4.9
+    },
+    {
+      "timestamp": "2025-01-13T19:15:55Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Yeah. Makes me want to plan a trip. We haven't gone anywhere in like a year.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-13T19:16:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "True. Maybe we should look at doing something in spring? Like April or May?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-13T19:16:05Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "I'd be down. Maybe somewhere warm? I'm so over winter at this point.",
+      "duration_seconds": 4.3
+    },
+    {
+      "timestamp": "2025-01-13T19:16:10Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Portugal? Spain? We could do Barcelona, that'd be fun.",
+      "duration_seconds": 3.7
+    },
+    {
+      "timestamp": "2025-01-13T19:16:14Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Oh I love that idea. Let me check my work calendar this week and we can start looking at dates.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-13T19:16:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Alex",
+      "text": "Sounds good. Alright, I'm gonna order the food. Pad thai for you?",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-13T19:16:24Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Casey",
+      "text": "Yes please. And spring rolls!",
+      "duration_seconds": 2.1
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_alex_t1",
+      "user_id": "user_alex_001",
+      "user_label": "Alex"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_casey_t1",
+      "user_id": "user_casey_004",
+      "user_label": "Casey"
+    }
+  ],
+  "environment": {
+    "location": "37.7749,-122.4194",
+    "background_sounds": "home ambient, occasional door closing",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-14T07:00:00Z",
+    "recording_date": "Tuesday, January 14, 2025",
+    "recording_time": "07:00 AM UTC"
+  },
+  "transcript_id": "t5_20250114_070000",
+  "duration_seconds": 609,
+  "start_timestamp": "2025-01-14T07:00:00Z",
+  "end_timestamp": "2025-01-14T07:10:09Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-14/prebreathe_protocol.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-14T07:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Good morning, Torres and Kim. Ready for prebreathe protocol? Let's get you suited up for today's EVA.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T07:00:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Morning, Commander. I slept well, feeling good. Ready to get outside.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T07:00:14Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Same here. I've been visualizing the procedure all night. Let's do this.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T07:00:20Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Good mindset. First things first - oxygen masks on. We need one hour of pure O2 breathing before depressurization.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T07:00:29Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Mask on. Flow rate feels good. This always makes me a little lightheaded at first.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T07:00:36Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "My mask is secure. I've got good flow. Timer started?",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T07:00:42Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Timer's running. You've got 60 minutes starting now. This purges nitrogen from your blood, prevents decompression sickness.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T07:00:51Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "I know the science, but it still feels weird breathing pure oxygen. Like I'm hyperaware of every breath.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T07:00:59Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "That's normal. Just relax into it. While you breathe, I'll start the suit checkout. Torres, your EMU is number 3012.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T07:01:09Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "And I'm in 3008. We verified all the systems last night, but let's run through it again.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T07:01:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Absolutely. Checking 3012 first. Battery power showing 100 percent charge. That's good for eight hours.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T07:01:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Oxygen tanks at full pressure - 850 PSI. Water cooling system reservoir full. Communications check pending.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T07:01:34Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "All nominal so far. What about the primary life support system backpack?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T07:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "PLSS showing green across the board. CO2 scrubber cartridge fresh, installed yesterday. Fan motor tested operational.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T07:01:49Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "How's the thermal control? Last EVA, Jenkins reported his suit ran warm.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-14T07:01:55Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "We recalibrated both units after that incident. Temperature control set to automatic, should maintain 18 degrees Celsius.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T07:02:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Now checking 3008. Battery at 100 percent. Oxygen pressure 850 PSI. Water reservoir full. All systems match 3012.",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-14T07:02:14Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Commander, quick question - if we need to extend the EVA beyond the planned time, what's our margin?",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T07:02:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "With full consumables, you're good for seven hours absolute maximum. The repair should take 90 minutes. That gives you massive safety buffer.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T07:02:32Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "That's comforting. Not that I want to be out there for seven hours. Two hours max is my preference.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T07:02:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Understood. Alright, helmet comm check. Torres, can you hear me through the mask?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T07:02:47Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Loud and clear, Commander. Five by five.",
+      "duration_seconds": 3.8
+    },
+    {
+      "timestamp": "2025-01-14T07:02:51Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Kim, how's your reception?",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-14T07:02:54Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Crystal clear. No static or interference.",
+      "duration_seconds": 3.4
+    },
+    {
+      "timestamp": "2025-01-14T07:02:58Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Perfect. While we wait out the prebreathe timer, let me walk through the translation path one more time.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T07:03:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Exit the airlock, you'll be facing the Z1 truss. The antenna is 30 meters to starboard. You'll use handrails the entire way.",
+      "duration_seconds": 9.4
+    },
+    {
+      "timestamp": "2025-01-14T07:03:16Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "We move together, tethered at all times. Kim manages the safety tethers, I focus on the path.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T07:03:23Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Every three meters, we leapfrog the tethers. One is always locked before the other releases.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T07:03:30Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Exactly right. Speed is not important. Smooth, methodical movement. No rushing, no shortcuts.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-14T07:03:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Once we reach the antenna, I'll assess the bracket damage. If it's just the bolts, straightforward replacement.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-14T07:03:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "And if the mounting plate itself is compromised, you'll photograph it, document the damage, and we'll decide on next steps.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-14T07:03:55Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "I'll be filming everything with the helmet cam. Ground control will have real-time video for analysis.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-14T07:04:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Good. Now, let's talk about the sun-shadow transition. You'll be in continuous sunlight for the first 30 minutes.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-14T07:04:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Then we enter eclipse. The temperature drop is dramatic - your suits will compensate, but you'll feel the shift.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-14T07:04:20Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Helmet lights on during eclipse. We practiced this in the neutral buoyancy tank.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-14T07:04:26Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "The stars come out during eclipse, right? People say it's beautiful.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-14T07:04:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "It is. But stay focused on the work. You can enjoy the view after the repair is complete.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-14T07:04:40Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Understood. Work first, sightseeing second. How much time left on the prebreathe?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-14T07:04:47Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "You've got 52 minutes remaining. Once that's done, we suit up properly. The whole donning process takes about 30 minutes.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-14T07:04:57Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Engineer Kim",
+      "text": "Then depressurization, and out we go. I'm ready. A little nervous, but ready.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-14T07:05:04Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Nervous is healthy. Overconfident is dangerous. You both have the right attitude for this.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-14T07:05:12Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Lt. Torres",
+      "text": "Thanks, Commander. Your confidence in us means a lot.",
+      "duration_seconds": 4.2
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_torres_t5",
+      "user_id": "user_torres_003",
+      "user_label": "Lt. Torres"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_kim_t5",
+      "user_id": "user_kim_004",
+      "user_label": "Engineer Kim"
+    }
+  ],
+  "environment": {
+    "location": "iss_airlock_module",
+    "background_sounds": "oxygen flow, equipment beeping, suit rustling",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <meta name="p8fs-device-auth" content="{{ json_metadata }}">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            padding: 48px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #000;
+            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+        .qr-container {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 1px solid #e5e5e5;
+        }
+        .qr-code {
+            max-width: 200px;
+            height: auto;
+            filter: contrast(1.2);
+        }
+        .user-code {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            margin: 24px 0;
+            letter-spacing: 3px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Courier New', monospace;
+        }
+        .instructions {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 24px 0;
+        }
+        .step {
+            margin: 8px 0;
+            text-align: left;
+        }
+        .step strong {
+            color: #333;
+            font-weight: 500;
+        }
+        .status {
+            margin: 24px 0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .status.waiting {
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #e5e5e5;
+        }
+        .status.approved {
+            background: #f0f9ff;
+            color: #0369a1;
+            border: 1px solid #e0f2fe;
+        }
+        .status.expired {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fee2e2;
+        }
+        .footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+            color: #999;
+        }
+        .refresh-btn {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 12px;
+            transition: opacity 0.2s;
+        }
+        .refresh-btn:hover {
+            opacity: 0.8;
+        }
+        .countdown {
+            color: #666;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <p class="subtitle">Scan QR code with your mobile device</p>
+        
+        <div class="qr-container">
+            <img src="{{ qr_code_data }}" alt="QR Code for Login" class="qr-code" id="qrCode">
+        </div>
+        
+        <div class="user-code" id="userCode">{{ user_code }}</div>
+        
+        <div class="instructions">
+            <div class="step"><strong>1.</strong> Open the P8FS app on your mobile device</div>
+            <div class="step"><strong>2.</strong> Scan this QR code or enter the code above</div>
+            <div class="step"><strong>3.</strong> Approve the login request on your device</div>
+        </div>
+        
+        <div class="status waiting" id="status">
+            Waiting for mobile approval...
+        </div>
+        
+        <div class="footer">
+            <div>Expires in: <span class="countdown" id="countdown">{{ expires_in }}s</span></div>
+            <button class="refresh-btn" onclick="location.reload()">Refresh Code</button>
+        </div>
+    </div>
+
+    <script>
+        // Polling configuration
+        const deviceCode = '{{ device_code }}';
+        const clientId = '{{ client_id }}';
+        const pollInterval = {{ poll_interval }} * 1000; // Convert to ms
+        let expiresIn = {{ expires_in }};
+        
+        // Countdown timer
+        const countdownElement = document.getElementById('countdown');
+        const statusElement = document.getElementById('status');
+        
+        const countdownTimer = setInterval(() => {
+            expiresIn--;
+            countdownElement.textContent = `${expiresIn}s`;
+            
+            if (expiresIn <= 0) {
+                clearInterval(countdownTimer);
+                statusElement.className = 'status expired';
+                statusElement.textContent = 'QR code expired. Please refresh to get a new code.';
+            }
+        }, 1000);
+        
+        // Polling function
+        async function pollForApproval() {
+            try {
+                const response = await fetch('/oauth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `grant_type=urn:ietf:params:oauth:grant-type:device_code&client_id=${clientId}&device_code=${deviceCode}`
+                });
+                
+                if (response.ok) {
+                    const tokenData = await response.json();
+                    
+                    // Success - approved!
+                    clearInterval(countdownTimer);
+                    clearInterval(pollTimer);
+                    
+                    statusElement.className = 'status approved';
+                    statusElement.textContent = 'Login approved! Redirecting...';
+                    
+                    // Store token
+                    localStorage.setItem('p8fs_access_token', tokenData.access_token);
+                    
+                    // Check if this is part of an OAuth authorization code flow
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirectUri = urlParams.get('redirect_uri');
+                    const state = urlParams.get('state');
+                    const responseType = urlParams.get('response_type');
+                    
+                    if (responseType === 'code' && redirectUri) {
+                        // This is an OAuth authorization code flow
+                        // Store token as cookie for the callback endpoint
+                        document.cookie = `p8fs_access_token=${tokenData.access_token}; path=/; max-age=300`; // 5 min expiry
+                        
+                        // Redirect to callback endpoint with all OAuth parameters
+                        const callbackUrl = `/oauth/callback?${urlParams.toString()}`;
+                        window.location.href = callbackUrl;
+                    } else {
+                        // Simple redirect for non-OAuth flows or device-only flows
+                        const defaultRedirect = redirectUri || '/';
+                        setTimeout(() => {
+                            window.location.href = defaultRedirect;
+                        }, 1000);
+                    }
+                    
+                } else if (response.status === 400) {
+                    const error = await response.json();
+                    
+                    if (error.error === 'authorization_pending') {
+                        // Still waiting - continue polling
+                        return;
+                    } else if (error.error === 'expired_token') {
+                        // Code expired
+                        clearInterval(countdownTimer);
+                        clearInterval(pollTimer);
+                        statusElement.className = 'status expired';
+                        statusElement.textContent = 'QR code expired. Please refresh to get a new code.';
+                    } else if (error.error === 'access_denied') {
+                        // User denied
+                        clearInterval(countdownTimer);
+                        clearInterval(pollTimer);
+                        statusElement.className = 'status expired';
+                        statusElement.textContent = 'Login denied by user. Please refresh to try again.';
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Polling error:', error);
+                // Continue polling on network errors
+            }
+        }
+        
+        // Start polling
+        const pollTimer = setInterval(pollForApproval, pollInterval);
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            clearInterval(countdownTimer);
+            clearInterval(pollTimer);
+        });
+    </script>
+</body>
+</html>

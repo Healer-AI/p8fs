@@ -1,0 +1,118 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T11:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "11:30 AM UTC"
+  },
+  "transcript_id": "t2_20250113_113000",
+  "duration_seconds": 607,
+  "start_timestamp": "2025-01-13T11:30:00Z",
+  "end_timestamp": "2025-01-13T11:40:07Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-13/composition_session.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T11:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, let me try this chord progression again. C minor to E flat, then... no that's not it.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T11:30:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[humming melody] Maybe if I go to A flat instead? That gives it more tension.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T11:30:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[plays piano] Yes! That's the sound I was hearing in my head. C minor, E flat, A flat, back to C minor.",
+      "duration_seconds": 7.9
+    },
+    {
+      "timestamp": "2025-01-13T11:30:22Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Now for the melody. Something melancholic but hopeful. Like... [sings] 'In the quiet of the morning light...'",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T11:30:31Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "That works! Let me record this before I forget it. [plays and sings] 'In the quiet of the morning light, I find pieces of last night...'",
+      "duration_seconds": 9.6
+    },
+    {
+      "timestamp": "2025-01-13T11:30:41Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay what's next? The pre-chorus needs to build. Maybe add strings here? Violins starting soft and crescendoing.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T11:30:49Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I should write this down. Verse: C minor progression, tempo 85 BPM, strings enter at bar 8.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T11:30:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The chorus... that's where I'm stuck. It needs to be bigger, more anthemic. But not cheesy.",
+      "duration_seconds": 6.3
+    },
+    {
+      "timestamp": "2025-01-13T11:31:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Maybe I'm overthinking it. Let me just feel it out. [plays] What if the chorus goes to major? C major instead of minor?",
+      "duration_seconds": 8.1
+    },
+    {
+      "timestamp": "2025-01-13T11:31:12Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[plays piano] Oh that's interesting. The major shift gives it that hopeful lift. Yeah, I like that.",
+      "duration_seconds": 6.7
+    },
+    {
+      "timestamp": "2025-01-13T11:31:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "So verse in minor, chorus in major. Classic but it works. Let me layer in some production ideas.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T11:31:26Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I'm hearing... synth pads underneath, maybe some analog warmth. And definitely live drums, not programmed.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T11:31:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay I've got the skeleton. I'll work on this more tonight. This could be good for the album.",
+      "duration_seconds": 6.1
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  ],
+  "environment": {
+    "location": "home_studio",
+    "background_sounds": "piano notes, occasional humming and singing, chair creaking",
+    "recording_quality": "high"
+  }
+}

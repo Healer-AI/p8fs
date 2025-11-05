@@ -1,0 +1,186 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T17:00:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "05:00 PM UTC"
+  },
+  "transcript_id": "t4_20250115_170000",
+  "duration_seconds": 619,
+  "start_timestamp": "2025-01-15T17:00:00Z",
+  "end_timestamp": "2025-01-15T17:10:19Z",
+  "source_uri": "s3://p8fs-tenant4/recordings/2025-01-15/family_call.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T17:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Hi Mom! Hi Dad! Can you see me okay? The satellite connection's a bit slow up here.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T17:00:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "We can see you! Oh honey, you look so healthy! How's the trip going?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T17:00:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "It's amazing. I had a big storm last night but everything's fine. The tent held up perfectly.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-15T17:00:21Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dad",
+      "text": "A storm? Should you be up there in winter? We're worried about you being alone.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T17:00:27Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Dad, I'm totally safe. I have all the right gear, I'm experienced, and I've got the satellite communicator if anything goes wrong.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T17:00:36Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "I know you're capable, sweetie. We just miss you. And we worry - that's what parents do.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T17:00:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I miss you too. But this trip... it's been so good for me. I needed this break from everything.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T17:00:51Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dad",
+      "text": "Work was that stressful? I thought you liked your job.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T17:00:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "I do like it, but it's been non-stop for months. I haven't had time to think, to just... be. Up here I can breathe.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-15T17:01:06Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "I'm glad you're taking care of yourself. When are you coming home?",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-15T17:01:11Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Three more days up here, then I hike out Sunday morning. I'll be home Sunday evening.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T17:01:18Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dad",
+      "text": "Will you come for dinner? Your mother's making sauerbraten.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-15T17:01:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Definitely! I'll be craving real food after a week of dehydrated meals. Tell her I can't wait.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-15T17:01:31Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "What have you been doing all day up there? Besides surviving storms?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T17:01:36Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Hiking, taking photos, watching wildlife. I saw a whole herd of chamois! And the sunrise yesterday was incredible.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-15T17:01:45Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dad",
+      "text": "That sounds wonderful. I'm proud of you for doing this. Takes courage to go solo.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T17:01:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Thanks Dad. That means a lot. I'm finding out I'm tougher than I thought.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T17:01:59Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "We always knew you were tough. Alright, we'll let you go. Save your battery. Call us tomorrow?",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T17:02:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Lena",
+      "text": "Will do. Love you both!",
+      "duration_seconds": 2.4
+    },
+    {
+      "timestamp": "2025-01-15T17:02:09Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Mom",
+      "text": "Love you sweetie! Be safe!",
+      "duration_seconds": 2.6
+    },
+    {
+      "timestamp": "2025-01-15T17:02:12Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Dad",
+      "text": "See you Sunday!",
+      "duration_seconds": 1.8
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_lena_t4",
+      "user_id": "user_lena_001",
+      "user_label": "Lena"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_mom_t4",
+      "user_id": "user_mom_004",
+      "user_label": "Mom"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_dad_t4",
+      "user_id": "user_dad_005",
+      "user_label": "Dad"
+    }
+  ],
+  "environment": {
+    "location": "46.5500,8.7000",
+    "background_sounds": "tent interior, wind outside, occasional satellite connection static",
+    "recording_quality": "medium"
+  }
+}

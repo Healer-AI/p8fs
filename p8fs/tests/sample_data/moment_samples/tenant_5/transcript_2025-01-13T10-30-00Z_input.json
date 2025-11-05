@@ -1,0 +1,257 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T10:30:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "10:30 AM UTC"
+  },
+  "transcript_id": "t5_20250113_103000",
+  "duration_seconds": 598,
+  "start_timestamp": "2025-01-13T10:30:00Z",
+  "end_timestamp": "2025-01-13T10:39:58Z",
+  "source_uri": "s3://p8fs-tenant5/recordings/2025-01-13/protein_crystal_growth.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T10:30:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Alright, beginning protein crystal growth experiment session. Dr. Novak, we're ready when you are.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T10:30:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Perfect timing. Let me get the microscope positioned. This batch has been growing for 72 hours in microgravity.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T10:30:15Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "The clarity difference compared to Earth-grown samples is remarkable. I can see the lattice structure so clearly.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T10:30:23Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "That's exactly what we're hoping for. Without gravity-induced convection, the proteins arrange themselves more uniformly.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T10:30:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Are we documenting with the high-resolution camera for this observation period?",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T10:30:38Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Yes, capturing at 4K every 30 seconds. Ground control wants time-lapse footage for the pharmaceutical partner.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T10:30:46Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Understood. Now, we need to prepare the next sample tray. The insulin variant for the diabetes research consortium?",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T10:30:54Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Correct. That one's particularly important. If we can grow better crystals, they can determine the exact molecular structure.",
+      "duration_seconds": 8.6
+    },
+    {
+      "timestamp": "2025-01-13T10:31:03Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Which could lead to more effective treatments. It's fascinating how our work up here translates to helping people on Earth.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T10:31:11Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Exactly. I never get tired of that aspect. Okay, I'm going to retrieve the new sample vials from the cold storage.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T10:31:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'll prep the growth chamber. Temperature needs to be 4 degrees Celsius, correct?",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-13T10:31:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Yes, and we need to maintain that precisely. Even one degree variation can affect crystal quality.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T10:31:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Setting the thermal controller now. It's stabilizing... holding at 4.0 degrees. Looking good.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T10:31:40Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Excellent. I've got the vials. The protein solution looks clear, no precipitation. That's a good sign.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T10:31:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Before we load them, let me check the chamber seals. We can't afford any contamination on this batch.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T10:31:55Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Good thinking. The pharmaceutical company is counting on pristine samples.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-13T10:32:01Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Seals are intact. Chamber is clean. We're ready to load. Passing you the loading tool.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T10:32:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Thanks. Inserting vial one... secure. Vial two... secure. All six vials loaded successfully.",
+      "duration_seconds": 9.2
+    },
+    {
+      "timestamp": "2025-01-13T10:32:18Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Closing the chamber door. Engaging the lock mechanism. Pressure seal confirmed.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T10:32:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Perfect. Now we initiate the growth protocol. Setting the timer for 96 hours.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T10:32:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "Four days should give us excellent crystal formation. Are we doing daily observations or just at the end?",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T10:32:40Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Daily observations. I want to track the growth rate and make sure there's no unexpected nucleation.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T10:32:48Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'll add it to the schedule. Same time tomorrow work for you?",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-13T10:32:53Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Yes, 1030 hours is perfect. Keeps us consistent. Now let me photograph the current batch for the data packet to ground.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T10:33:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'll hold the lighting panel. You focus on getting the clearest shots possible.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-13T10:33:08Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Good idea. The crystals reflect light beautifully when properly illuminated. Okay, capturing now.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-13T10:33:16Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "You know, when I signed up for this mission, I didn't expect to become a lab technician. But this work is genuinely rewarding.",
+      "duration_seconds": 8.4
+    },
+    {
+      "timestamp": "2025-01-13T10:33:25Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "You're a natural. Most astronauts struggle with the precision required, but you've got steady hands and good instincts.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T10:33:34Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I appreciate that. It helps knowing that each of these experiments could lead to real medical breakthroughs.",
+      "duration_seconds": 7.4
+    },
+    {
+      "timestamp": "2025-01-13T10:33:42Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "That's the dream. Alright, I've got all the images I need. Let me compile the observation log for transmission.",
+      "duration_seconds": 7.6
+    },
+    {
+      "timestamp": "2025-01-13T10:33:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Commander Chen",
+      "text": "I'll clean up the workspace and secure the equipment. We've got EVA prep at 1400, so we need to stay on schedule.",
+      "duration_seconds": 8.2
+    },
+    {
+      "timestamp": "2025-01-13T10:33:58Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Dr. Novak",
+      "text": "Right, the antenna repair. Good luck with that. I'll finalize this data and have it ready for the next communication window.",
+      "duration_seconds": 8.0
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_chen_t5",
+      "user_id": "user_chen_001",
+      "user_label": "Commander Chen"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_novak_t5",
+      "user_id": "user_novak_002",
+      "user_label": "Dr. Novak"
+    }
+  ],
+  "environment": {
+    "location": "iss_destiny_lab",
+    "background_sounds": "equipment humming, camera shutter clicks, gentle air circulation",
+    "recording_quality": "high"
+  }
+}

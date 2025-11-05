@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-13T07:00:00Z",
+    "recording_date": "Monday, January 13, 2025",
+    "recording_time": "07:00 AM UTC"
+  },
+  "transcript_id": "t3_20250113_070000",
+  "duration_seconds": 618,
+  "start_timestamp": "2025-01-13T07:00:00Z",
+  "end_timestamp": "2025-01-13T07:10:18Z",
+  "source_uri": "s3://p8fs-tenant3/recordings/2025-01-13/site_safety_walkthrough.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-13T07:00:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Morning team! Let's do our Monday safety walkthrough before the crews arrive. Hard hats on, everyone.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T07:00:07Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "James, we've got the new scaffolding up on the east side. Inspected it Friday afternoon.",
+      "duration_seconds": 5.1
+    },
+    {
+      "timestamp": "2025-01-13T07:00:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Good. Let me see the inspection tags. Everything needs to be documented.",
+      "duration_seconds": 4.6
+    },
+    {
+      "timestamp": "2025-01-13T07:00:18Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "All tagged. We're also adding the guardrails today before anyone works at height.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-13T07:00:23Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Perfect. That's exactly the kind of proactive thinking I want to see. What about the electrical rough-in on level three?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T07:00:30Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Elena",
+      "text": "We had to cordon off the northwest corner. Found some issues with the conduit runs. Electrician's coming at 8 AM to fix it.",
+      "duration_seconds": 7.2
+    },
+    {
+      "timestamp": "2025-01-13T07:00:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Okay, make sure that area stays blocked until it's resolved. Put up barrier tape and signage. No one goes in there.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T07:00:45Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Elena",
+      "text": "Already done. We've got three cones and caution tape up.",
+      "duration_seconds": 3.6
+    },
+    {
+      "timestamp": "2025-01-13T07:00:49Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Excellent. Tony, what's the status on the crane certification? That was supposed to be renewed last week.",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-13T07:00:56Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "Inspector came Thursday. We're all good for another six months. Paperwork's in the site office.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-13T07:01:02Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Great. Listen, I know it's tedious but this documentation keeps us out of trouble. OSHA doesn't care about excuses.",
+      "duration_seconds": 7.1
+    },
+    {
+      "timestamp": "2025-01-13T07:01:09Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Elena",
+      "text": "We get it boss. Better to be over-documented than under-documented.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-13T07:01:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Exactly. Now, weather forecast shows rain tomorrow afternoon. We need to have tarps ready for the open sections.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-13T07:01:21Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "I'll make sure we have enough tarps on site this morning. Should we schedule the concrete pour for Wednesday instead?",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-13T07:01:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Yeah, push it to Wednesday morning if the weather looks clearer. I'd rather delay a day than have quality issues.",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-13T07:01:35Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Elena",
+      "text": "I'll coordinate with the concrete supplier. They're usually pretty flexible.",
+      "duration_seconds": 4.2
+    },
+    {
+      "timestamp": "2025-01-13T07:01:40Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Perfect. Alright, any other safety concerns I should know about before we start the week?",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-13T07:01:46Z",
+      "speaker_id": "speaker_1",
+      "speaker_label": "Tony",
+      "text": "All good from my end. Crews know the protocols.",
+      "duration_seconds": 3.2
+    },
+    {
+      "timestamp": "2025-01-13T07:01:49Z",
+      "speaker_id": "speaker_2",
+      "speaker_label": "Elena",
+      "text": "Same here. We're ready to go.",
+      "duration_seconds": 2.4
+    },
+    {
+      "timestamp": "2025-01-13T07:01:52Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "James",
+      "text": "Excellent work everyone. Let's have a safe and productive week. Remember, if you see something unsafe, stop work immediately.",
+      "duration_seconds": 7.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_james_t3",
+      "user_id": "user_james_001",
+      "user_label": "James"
+    },
+    {
+      "speaker_id": "speaker_1",
+      "fingerprint_id": "fp_tony_t3",
+      "user_id": "user_tony_002",
+      "user_label": "Tony"
+    },
+    {
+      "speaker_id": "speaker_2",
+      "fingerprint_id": "fp_elena_t3",
+      "user_id": "user_elena_003",
+      "user_label": "Elena"
+    }
+  ],
+  "environment": {
+    "location": "construction_site",
+    "background_sounds": "distant traffic, wind, equipment beeping, footsteps on gravel",
+    "recording_quality": "medium"
+  }
+}

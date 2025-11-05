@@ -1,0 +1,146 @@
+{
+  "metadata": {
+    "real_world_timestamp": "2025-01-15T16:45:00Z",
+    "recording_date": "Wednesday, January 15, 2025",
+    "recording_time": "04:45 PM UTC"
+  },
+  "transcript_id": "t2_20250115_164500",
+  "duration_seconds": 603,
+  "start_timestamp": "2025-01-15T16:45:00Z",
+  "end_timestamp": "2025-01-15T16:55:03Z",
+  "source_uri": "s3://p8fs-tenant2/recordings/2025-01-15/mixing_session.wav",
+  "segments": [
+    {
+      "timestamp": "2025-01-15T16:45:00Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay track six, the bridge. Let me solo these vocals and really listen to the tone.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T16:45:06Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[music plays] Hmm, there's something harsh in the high end. Maybe around 3k? Let me sweep for it.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T16:45:13Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "There it is. A notch at 3.2k should smooth that out. [adjusts] Much better.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T16:45:19Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Now let me bring in the strings. They need to swell here without overwhelming the vocal.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T16:45:25Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[music plays] Too loud. Let me duck them down and add a sidechain to the vocal. Just subtle.",
+      "duration_seconds": 6.8
+    },
+    {
+      "timestamp": "2025-01-15T16:45:32Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Yes, that's the pocket. The strings breathe with the vocal now instead of fighting it.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T16:45:38Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "The drums on this bridge though... they're too busy. This needs to be sparse, intimate.",
+      "duration_seconds": 5.8
+    },
+    {
+      "timestamp": "2025-01-15T16:45:44Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Let me mute the kick and snare, keep just the hi-hat and maybe a light ride cymbal.",
+      "duration_seconds": 5.2
+    },
+    {
+      "timestamp": "2025-01-15T16:45:50Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[music plays] Oh that's it. That's the vibe. Stripped back, vulnerable.",
+      "duration_seconds": 5.6
+    },
+    {
+      "timestamp": "2025-01-15T16:45:56Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "When the full drums come back in for the final chorus, it'll hit so much harder now.",
+      "duration_seconds": 4.8
+    },
+    {
+      "timestamp": "2025-01-15T16:46:01Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Reverb check. Let me A-B the plate reverb versus the hall reverb on the vocal.",
+      "duration_seconds": 5.4
+    },
+    {
+      "timestamp": "2025-01-15T16:46:07Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[switches between reverbs] Plate is too bright. Hall is too washy. Maybe blend them?",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T16:46:14Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Actually, what if I use a short plate, like 1.2 seconds, and layer a subtle room underneath?",
+      "duration_seconds": 6.6
+    },
+    {
+      "timestamp": "2025-01-15T16:46:21Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[makes adjustments] Perfect. It sits in the mix without being obvious. Natural but present.",
+      "duration_seconds": 6.4
+    },
+    {
+      "timestamp": "2025-01-15T16:46:28Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "Okay, let me listen to this bridge in context. Playing from the second chorus through the bridge...",
+      "duration_seconds": 6.2
+    },
+    {
+      "timestamp": "2025-01-15T16:46:35Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "[music plays for extended period] Yes! The dynamics are working. It builds and releases exactly how I wanted.",
+      "duration_seconds": 7.8
+    },
+    {
+      "timestamp": "2025-01-15T16:46:43Z",
+      "speaker_id": "speaker_0",
+      "speaker_label": "Maya",
+      "text": "I'm calling this bridge done. Let me bounce it and move on to track seven.",
+      "duration_seconds": 4.6
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "speaker_0",
+      "fingerprint_id": "fp_maya_t2",
+      "user_id": "user_maya_001",
+      "user_label": "Maya"
+    }
+  ],
+  "environment": {
+    "location": "home_studio",
+    "background_sounds": "music playback, mouse clicks, keyboard typing, equipment hum",
+    "recording_quality": "high"
+  }
+}

@@ -1,0 +1,123 @@
+services:
+  # ollama:
+  #   # e.g. pull the embedding model after startup
+  #   # docker compose exec ollama ollama pull bge-m3
+  #   image: ollama/ollama
+  #   container_name: ollama-service
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+
+  # minio:
+  #   image: quay.io/minio/minio
+  #   container_name: minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9090:9090" # MinIO Console
+  #   environment:
+  #     MINIO_ROOT_USER: p8fs
+  #     MINIO_ROOT_PASSWORD: p8fs
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9090"
+
+  # TiDB - Single container with unistore (local storage)
+  # Can be commented out if too cumbersome for testing
+  # remove this with docker compose down tidb
+  # and you can connect to the cluster with
+  # kc port-forward svc/fresh-cluster-tidb -n tikv-cluster 4000:4000
+  tidb:
+    image: pingcap/tidb:v8.5.0
+    container_name: p8fs-tidb
+    environment:
+      # P8FS TiDB connection settings
+      P8FS_TIDB_HOST: localhost
+      P8FS_TIDB_PORT: 4000
+      P8FS_TIDB_USER: root
+      P8FS_TIDB_PASSWORD: ""
+      P8FS_TIDB_DATABASE: public
+      # Computed TiDB connection string
+      P8FS_TIDB_CONNECTION_STRING: "mysql://root@localhost:4000/public"
+    ports:
+      - "4000:4000"
+      - "10080:10080" # Status port
+    command: --store=unistore --path=/data
+    volumes:
+      - tidb_data:/data
+
+  # SeaweedFS - Single container server mode
+  # Can be commented out if too cumbersome for testing
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: p8fs-seaweedfs
+    ports:
+      - "9333:9333" # Master
+      - "8080:8080" # Volume
+      - "8888:8888" # Filer
+    volumes:
+      - seaweedfs_data:/data
+    command: server -dir=/data
+
+  # PostgreSQL for testing SQL provider - EXACT copy from source
+  postgres:
+    image: percolationlabs/postgres-base:16
+    container_name: percolate
+    platform: linux/amd64
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+      # P8FS PostgreSQL connection settings
+      P8FS_PG_HOST: localhost
+      P8FS_PG_PORT: 5438
+      P8FS_PG_USER: postgres
+      P8FS_PG_PASSWORD: postgres
+      P8FS_PG_DATABASE: app
+      # Computed PostgreSQL connection string
+      P8FS_PG_CONNECTION_STRING: "postgresql://postgres:postgres@localhost:5438/app"
+    command: postgres -c shared_preload_libraries='age'
+    ports:
+      - "5438:5432"
+    volumes:
+      - percolate_data:/var/lib/postgresql/percolate
+      - ./extensions/sql:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", 'PGPASSWORD=postgres psql -U postgres -d app -c "SELECT 1" && exit 0 || exit 1' ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  # # NATS for message queuing
+  # nats:
+  #   image: nats:alpine
+  #   container_name: p8fs-nats
+  #   ports:
+  #     - "4222:4222"
+  #     - "8222:8222"  # HTTP monitoring
+  #   command: --js --http_port 8222
+
+volumes:
+  # ollama_data:
+  # minio_data:
+  tidb_data:
+  seaweedfs_data:
+  percolate_data:
+    # Testing commands:
+    # Start core services only:
+    # docker compose up postgres nats -d
+    #
+    # Start with TiDB/TiKV stack:
+    # docker compose up postgres nats pd tikv tidb -d
+    #
+    # Start with SeaweedFS (if not cumbersome):
+    # docker compose up postgres nats seaweedfs-master seaweedfs-volume -d
+    #
+    # Check service health:
+    # docker compose ps
+    # docker logs p8fs-postgres
+    # docker logs p8fs-tikv
+    #
+    # Connect to databases for testing:
+    # psql -h localhost -p 5432 -U p8fs -d p8fs_test
+    # mysql -h localhost -P 4000 -u root p8fs_test
