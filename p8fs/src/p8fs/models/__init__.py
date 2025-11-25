@@ -28,6 +28,9 @@ from .p8 import (
     User,
 )
 
+# System agent
+from .system_agent import SystemAgent
+
 # Engram models are now in p8.py
 
 
@@ -58,6 +61,8 @@ __all__ = [
     "Files",
     "Error",
     "Job",
+    # System agent
+    "SystemAgent",
     # Engram and Moment models are now exported from p8.py
 ]
 

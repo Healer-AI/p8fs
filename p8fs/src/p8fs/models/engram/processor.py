@@ -1,4 +1,4 @@
-"""Engram processor for handling Kubernetes-like documents."""
+"""Engram processor for handling engram YAML/JSON documents."""
 
 import json
 from datetime import datetime, timezone
@@ -9,377 +9,541 @@ import yaml
 from p8fs_cluster.logging import get_logger
 
 from p8fs.repository import TenantRepository
-from p8fs.models.p8 import Resources
-
-from .models import EngramDocument  
-from p8fs.models.p8 import Engram, Moment
+from p8fs.models.p8 import Resources, Moment, InlineEdge
 
 logger = get_logger(__name__)
 
 
 class EngramProcessor:
-    """Processes Engram documents with upserts, patches, and associations."""
-    
-    def __init__(self, repo: TenantRepository):
+    """
+    Processes engram YAML/JSON documents into Resources with graph edges and optional Moments.
+
+    EngramProcessor handles the complete lifecycle of engram ingestion:
+    - Parses YAML/JSON engram documents
+    - Creates/updates Resources with deterministic IDs
+    - Processes graph edges to build knowledge graph
+    - Automatically creates lightweight nodes for referenced entities (ensure_nodes=True)
+    - Adds bidirectional edges (e.g., managed_by + inv-managed_by)
+    - Attaches Moments with temporal boundaries and emotion/topic tags
+
+    Entity Type Format (dst_entity_type):
+    ------------------------------------
+    Format: [table:]category[/subcategory]
+
+    Examples:
+      - "person/supervisor" → resources table, category="person/supervisor"
+      - "resource:project/technical" → resources table, category="project/technical"
+      - "moments:reflection" → moments table, category="reflection"
+      - "files:image/screenshot" → files table, category="image/screenshot"
+
+    When ensure_nodes=True, referenced entities are automatically created with:
+      - Minimal content (placeholder that will be enriched later)
+      - Proper category from dst_entity_type
+      - Reverse edge back to source (inv-<rel_type>)
+
+    Example Engram YAML:
+    -------------------
+    ```yaml
+    kind: engram
+    name: Project Planning Meeting
+    category: meeting
+    content: |
+      Discussed Q4 roadmap and API redesign priorities.
+      Sarah will lead the technical specification work.
+    summary: Q4 planning session with engineering leadership
+    resource_timestamp: "2024-11-15T10:00:00Z"
+
+    graph_edges:
+      - dst: Sarah Chen
+        rel_type: attended_by
+        weight: 1.0
+        properties:
+          dst_entity_type: person/supervisor
+          confidence: 1.0
+          role: "Tech Lead"
+
+      - dst: API Redesign Project
+        rel_type: discusses
+        weight: 0.9
+        properties:
+          dst_entity_type: project/technical
+          confidence: 0.95
+          context: "Technical approach and timeline"
+
+      - dst: Q4 Roadmap
+        rel_type: references
+        weight: 0.8
+        properties:
+          dst_entity_type: resource:planning/roadmap
+          confidence: 0.9
+
+    moments:
+      - name: Sarah's Technical Proposal
+        moment_type: insight
+        content: "Sarah proposed using event-driven architecture"
+        emotion_tags: ["confident", "enthusiastic"]
+        topic_tags: ["architecture", "api-design"]
+    ```
+
+    What Happens During Processing:
+    -------------------------------
+    1. Creates "Project Planning Meeting" resource
+    2. Ensures "Sarah Chen" resource exists:
+       - Category: person/supervisor
+       - Content: Lightweight placeholder
+       - Adds reverse edge: inv-attended_by → Project Planning Meeting
+    3. Ensures "API Redesign Project" exists:
+       - Category: project/technical
+       - Adds reverse edge: inv-discusses → Project Planning Meeting
+    4. Ensures "Q4 Roadmap" exists:
+       - Table: resources (explicit)
+       - Category: planning/roadmap
+       - Adds reverse edge: inv-references → Project Planning Meeting
+    5. Creates moment "Sarah's Technical Proposal" linked to meeting
+
+    Usage:
+    ------
+    ```python
+    from p8fs.models.engram.processor import EngramProcessor
+    from p8fs.repository.TenantRepository import TenantRepository
+    from p8fs.models.p8 import Resources
+
+    # Initialize with node creation enabled (default)
+    processor = EngramProcessor(repo, ensure_nodes=True)
+
+    # Process engram from YAML
+    result = await processor.process(
+        content=yaml_content,
+        content_type="application/x-yaml",
+        tenant_id="tenant-123"
+    )
+
+    # Result contains:
+    # {
+    #   "resource_id": "uuid-...",
+    #   "moment_ids": ["uuid-1", "uuid-2"],
+    #   "chunks_created": 1,
+    #   "embeddings_generated": 0
+    # }
+
+    # Disable automatic node creation for testing
+    processor = EngramProcessor(repo, ensure_nodes=False)
+    ```
+
+    Node Creation Behavior:
+    ----------------------
+    - ensure_nodes=True (default): Automatically creates lightweight nodes
+    - ensure_nodes=False: Only creates edges, nodes must exist beforehand
+    - Upsert-safe: Won't duplicate if node already exists
+    - Reverse edges: Always created when add_reverse_edge=True
+    - Multi-table: Supports resources, moments, files, custom schemas
+
+    See Also:
+    ---------
+    - InlineEdge model: /p8fs/models/p8.py
+    - REM design doc: /p8fs/docs/REM/design.md
+    - Engram template: /p8fs/docs/REM/scenarios/scenario-01/ENGRAM_TEMPLATE.md
+    """
+
+    def __init__(self, repo: TenantRepository, ensure_nodes: bool = True):
+        """
+        Initialize engram processor.
+
+        Args:
+            repo: TenantRepository for storing entities
+            ensure_nodes: If True, automatically creates lightweight entities for
+                nodes referenced in graph_paths that don't exist yet. Creates
+                bidirectional edges (e.g., managed_by + inv-managed-by). Nodes
+                will be "filled in" with richer content when actual entities are created.
+        """
         self.repo = repo
-    
-    async def process(self, content: str, content_type: str, tenant_id: str, session_id: UUID | None = None) -> dict[str, Any]:
-        """Process content as potential Engram document."""
+        self.ensure_nodes = ensure_nodes
+
+    async def process(
+        self,
+        content: str,
+        content_type: str,
+        tenant_id: str,
+        session_id: UUID | None = None
+    ) -> dict[str, Any]:
+        """Process content as engram document."""
         try:
-            # Parse content
             if content_type == "application/x-yaml":
                 data = yaml.safe_load(content)
             else:
                 data = json.loads(content)
-            
-            # Validate as Engram
-            try:
-                doc = EngramDocument.model_validate(data)
-                logger.info(f"Parsed document kind: {doc.kind}, p8Kind: {doc.p8Kind}")
-                if doc.is_engram():
-                    logger.info("Document identified as engram, processing...")
-                    return await self._process_engram(doc, tenant_id, session_id)
-                else:
-                    logger.info("Document is not an engram, storing as resource...")
-            except Exception as e:
-                logger.warning(f"Failed to parse as engram document: {e}")
-                pass
-            
-            # Not an Engram, store as regular resource
-            return await self._store_as_resource(data, tenant_id, session_id)
-            
+
+            if not isinstance(data, dict):
+                raise ValueError("Engram content must be a dictionary")
+
+            kind = data.get("kind") or data.get("p8Kind")
+            if kind != "engram":
+                raise ValueError(f"Expected kind='engram', got: {kind}")
+
+            return await self._process_engram(data, tenant_id, session_id)
+
         except Exception as e:
-            logger.error(f"Error processing content: {e}")
+            logger.error(f"Error processing engram content: {e}")
             raise
-    
-    async def _process_engram(self, doc: EngramDocument, tenant_id: str, session_id: UUID | None) -> dict[str, Any]:
-        """Process validated Engram document."""
-        # Store Engram if it has a summary
-        engram_id = None
-        if doc.metadata.summary:
-            engram_id = await self._store_engram(doc, tenant_id, session_id)
-        
-        # Process operations
-        results = {
-            "engram_id": str(engram_id) if engram_id else None,
-            "upserts": 0,
-            "patches": 0,
-            "associations": 0
+
+    async def _process_engram(
+        self,
+        data: dict[str, Any],
+        tenant_id: str,
+        session_id: UUID | None
+    ) -> dict[str, Any]:
+        """Process validated engram document into Resource with optional Moments.
+
+        CRITICAL: Implements JSON merge behavior - updates existing engrams instead
+        of replacing them. Graph edges, metadata, and arrays are merged.
+        """
+        engram_name = data.get("name", "Untitled Engram")
+        resource_id = uuid5(NAMESPACE_DNS, f"{tenant_id}:engram:{engram_name}")
+
+        logger.info(f"Upserting engram '{engram_name}' with ID {resource_id}")
+
+        # Check if engram already exists
+        existing = None
+        action = "created"
+        try:
+            existing = await self.repo.get_by_id(str(resource_id))
+            action = "merged"
+        except Exception:
+            # Doesn't exist, will create new
+            pass
+
+        if existing:
+            # Merge with existing resource
+            resource_data = await self._merge_engram(existing, data, tenant_id, session_id)
+        else:
+            # Create new resource
+            resource_data = await self._create_engram(data, tenant_id, session_id, resource_id)
+
+        resource = Resources.model_validate(resource_data)
+        await self.repo.upsert(resource)
+
+        result = {
+            "action": action,
+            "resource_id": str(resource_id),
+            "moment_ids": [],
+            "chunks_created": 1,
+            "embeddings_generated": 0
         }
-        
-        # Process upserts
-        if doc.spec.upserts:
-            results["upserts"] = await self._process_upserts(
-                doc.spec.upserts, 
-                tenant_id, 
-                session_id
+
+        moments_data = data.get("moments", [])
+        if moments_data:
+            moment_ids = await self._process_moments(
+                moments_data,
+                tenant_id,
+                session_id,
+                resource_id,
+                engram_name
             )
-        
-        # Process patches
-        if doc.spec.patches:
-            results["patches"] = await self._process_patches(
-                doc.spec.patches, 
-                tenant_id, 
-                session_id
-            )
-        
-        # Process associations (ensure nodes exist first)
-        if doc.spec.associations:
-            # Ensure graph nodes exist for entities before creating associations
-            await self._ensure_graph_nodes(tenant_id)
-            results["associations"] = await self._process_associations(
-                doc.spec.associations, 
-                tenant_id, 
-                session_id
-            )
-        
-        return results
-    
-    async def _store_engram(self, doc: EngramDocument, tenant_id: str, session_id: UUID | None) -> UUID:
-        """Store Engram entity."""
-        engram = Engram(
-            id=uuid4(),
-            tenant_id=tenant_id,
-            name=doc.metadata.name,
-            summary=doc.metadata.summary,
-            content=json.dumps(doc.model_dump(), default=str),  # Convert dict to JSON string, handling datetime
-            uri=doc.metadata.uri or "engram://processed", 
-            processed_at=datetime.now(timezone.utc),
-            operation_count={
-                "upserts": len(doc.spec.upserts or []),
-                "patches": len(doc.spec.patches or []),
-                "associations": len(doc.spec.associations or [])
-            }
-        )
-        
-        # Use create_resource method which expects proper Engram data
-        engram_dict = engram.model_dump()
-        await self.repo.create_resource(engram_dict)
-        
-        return engram.id
-    
-    async def _process_upserts(self, upserts: list[dict[str, Any]], tenant_id: str, session_id: UUID | None) -> int:
-        """Process upsert operations."""
-        count = 0
-        
-        for entity in upserts:
-            entity_type = entity.get("entityType", "resource")
-            
-            if entity_type == "moment" or entity_type == "models.Moment":
-                # Create moment with full specification support
-                # Generate UUID from string ID to ensure uniqueness
-                entity_id = entity.get("id", str(uuid4()))
-                if not entity_id.count('-') == 4:  # Not already a UUID
-                    entity_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:{entity_id}"))
-                
-                moment_data = {
-                    "id": entity_id,
-                    "tenant_id": entity.get("tenant_id") or tenant_id,
-                    "name": entity.get("name", "Untitled Moment"),  # Default name required
-                    "content": entity.get("content", ""),
-                    "summary": entity.get("summary"),
-                    "uri": entity.get("uri", "moment://processed"),  # URI is required
-                    "metadata": entity.get("metadata", {})
-                }
-                
-                # Handle timestamp fields (support multiple formats)
-                if entity.get("resource_timestamp"):
-                    moment_data["resource_timestamp"] = entity.get("resource_timestamp")
-                    
-                if entity.get("resource_ends_timestamp"):
-                    moment_data["resource_ends_timestamp"] = entity.get("resource_ends_timestamp")
-                
-                # Additional moment-specific fields from specification
-                if entity.get("present_persons"):
-                    moment_data["present_persons"] = entity.get("present_persons")
-                
-                if entity.get("location"):
-                    moment_data["location"] = entity.get("location")
-                    
-                if entity.get("background_sounds"):
-                    moment_data["background_sounds"] = entity.get("background_sounds")
-                    
-                if entity.get("moment_type"):
-                    moment_data["moment_type"] = entity.get("moment_type")
-                    
-                if entity.get("emotion_tags"):
-                    moment_data["emotion_tags"] = entity.get("emotion_tags")
-                    
-                if entity.get("topic_tags"):
-                    moment_data["topic_tags"] = entity.get("topic_tags")
-                
-                await self.repo.create_moment(moment_data)
-            else:
-                # Create resource
-                await self.repo.create_resource({
-                    "id": entity.get("id", str(uuid4())),
-                    "tenant_id": tenant_id,
-                    "session_id": str(session_id) if session_id else None,
-                    "content": json.dumps(entity),
-                    "content_type": "application/json",
-                    "metadata": entity.get("metadata")
-                })
-            
-            count += 1
-        
-        return count
-    
-    async def _process_patches(self, patches: list[dict[str, Any]], tenant_id: str, session_id: UUID | None) -> int:
-        """Process patch operations to update existing entities."""
-        count = 0
-        
-        for patch in patches:
-            entity_id = patch.get("id") or patch.get("entityId")
-            fields_to_update = patch.get("fields") or patch.get("updates", {})
-            
-            if not entity_id or not fields_to_update:
-                logger.warning(f"Invalid patch operation: missing id or fields")
-                continue
-            
-            try:
-                # Try to find the entity as a resource first
-                existing_resource = await self.repo.get_resource(entity_id)
-                if existing_resource:
-                    # Update the resource
-                    updated_content = existing_resource.get("content", {})
-                    if isinstance(updated_content, str):
-                        try:
-                            updated_content = json.loads(updated_content)
-                        except json.JSONDecodeError:
-                            updated_content = {"content": updated_content}
-                    
-                    # Merge fields
-                    for key, value in fields_to_update.items():
-                        if key == "metadata" and isinstance(value, dict):
-                            # Merge metadata
-                            if "metadata" not in updated_content:
-                                updated_content["metadata"] = {}
-                            updated_content["metadata"].update(value)
-                        else:
-                            updated_content[key] = value
-                    
-                    await self.repo.update_resource(entity_id, {
-                        "content": json.dumps(updated_content,default=str),
-                        "metadata": updated_content.get("metadata")
-                    })
-                    count += 1
-                    continue
-                
-                # Try to find as a moment
-                existing_moment = await self.repo.get_moment(entity_id)
-                if existing_moment:
-                    update_data = {}
-                    for key, value in fields_to_update.items():
-                        if key == "metadata" and isinstance(value, dict):
-                            # Merge metadata
-                            existing_metadata = existing_moment.get("metadata", {})
-                            existing_metadata.update(value)
-                            update_data["metadata"] = existing_metadata
-                        else:
-                            update_data[key] = value
-                    
-                    await self.repo.update_moment(entity_id, update_data)
-                    count += 1
-                    continue
-                
-                logger.warning(f"Entity {entity_id} not found for patch operation")
-                
-            except Exception as e:
-                logger.error(f"Error processing patch for entity {entity_id}: {e}")
-        
-        return count
-    
-    async def _process_associations(self, associations: list[dict[str, Any]], tenant_id: str, session_id: UUID | None) -> int:
-        """Process association operations to create entity relationships."""
-        count = 0
-        
-        for assoc in associations:
-            # Handle both dict and model objects
-            if hasattr(assoc, 'model_dump'):
-                assoc_data = assoc.model_dump()
-            else:
-                assoc_data = assoc
-            
-            # Extract association details - support both spec formats
-            from_type = assoc_data.get("from_type") or assoc_data.get("fromType")
-            from_id = assoc_data.get("from_id") or assoc_data.get("fromEntityId") 
-            to_type = assoc_data.get("to_type") or assoc_data.get("toType")
-            to_id = assoc_data.get("to_id") or assoc_data.get("toEntityId")
-            relationship = assoc_data.get("relationship") or assoc_data.get("relationType")
-            metadata = assoc_data.get("metadata", {})
-            
-            # Normalize entity types to graph node labels
-            def normalize_entity_type(entity_type):
-                if not entity_type:
-                    return "resource"
-                # Convert models.Moment -> moments, models.Engram -> engrams, etc.
-                if entity_type.startswith("models."):
-                    base_type = entity_type.replace("models.", "").lower()
-                    # Convert singular to plural for table names
-                    if base_type == "moment":
-                        return "moments"
-                    elif base_type == "engram":
-                        return "engrams" 
-                    elif base_type == "user":
-                        return "users"
-                    else:
-                        return base_type + "s"  # Simple pluralization
-                return entity_type.lower()
-            
-            from_type = normalize_entity_type(from_type)
-            to_type = normalize_entity_type(to_type)
-            
-            if not all([from_id, to_id, relationship]):
-                logger.warning(f"Invalid association: missing required fields")
-                continue
-            
-            try:
-                # Convert string IDs to UUIDs if needed
-                if from_id and not from_id.count('-') == 4:
-                    from_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:{from_id}"))
-                if to_id and not to_id.count('-') == 4:
-                    to_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:{to_id}"))
-                
-                # Create graph association
-                association_id = str(uuid4())
-                result = await self.repo.create_association({
-                    "id": association_id,
-                    "tenant_id": tenant_id,
-                    "session_id": str(session_id) if session_id else None,
-                    "from_entity_type": from_type or "resource",
-                    "from_entity_id": from_id,
-                    "to_entity_type": to_type or "resource", 
-                    "to_entity_id": to_id,
-                    "relationship_type": relationship,
-                    "metadata": metadata
-                })
-                
-                if result is not None:
-                    count += 1
-                
-            except Exception as e:
-                logger.error(f"Error creating association {from_id} -> {to_id}: {e}")
-        
-        return count
-    
-    async def _sync_table_to_graph(self, table_name: str):
-        """Sync a specific table to graph database."""
-        try:
-            from p8fs.services import PostgresGraphProvider
-            
-            # Initialize graph provider
-            graph = PostgresGraphProvider(self.repo.engram_repo.provider)
-            
-            # Sync the specific table
-            result = graph.ensure_nodes([table_name])
-            nodes_created = result.get(table_name, 0)
-            
-            if nodes_created > 0:
-                logger.info(f"Synced {nodes_created} {table_name} nodes to graph")
-            
-        except Exception as e:
-            logger.error(f"Failed to sync {table_name} to graph: {e}")
-    
-    async def _ensure_graph_nodes(self, tenant_id: str):
-        """Final sync to ensure all entities have corresponding graph nodes."""
-        try:
-            # Final sync for any remaining entities
-            await self._sync_table_to_graph('engrams')
-            await self._sync_table_to_graph('moments')
-            logger.info("Final graph nodes synchronization completed")
-            
-        except Exception as e:
-            logger.error(f"Failed to ensure graph nodes: {e}")
-    
-    async def _store_as_resource(self, data: dict[str, Any], tenant_id: str, session_id: UUID | None) -> dict[str, Any]:
-        """Store non-Engram content as regular resource."""
-        resource_id = uuid4()
-        
-        await self.repo.create_resource({
+            result["moment_ids"] = [str(m_id) for m_id in moment_ids]
+
+        return result
+
+    async def _create_engram(
+        self,
+        data: dict[str, Any],
+        tenant_id: str,
+        session_id: UUID | None,
+        resource_id: UUID
+    ) -> dict[str, Any]:
+        """Create new engram resource."""
+        engram_name = data.get("name", "Untitled Engram")
+        graph_paths = []
+
+        if data.get("graph_edges"):
+            for edge_data in data["graph_edges"]:
+                edge = InlineEdge.model_validate(edge_data)
+                graph_paths.append(edge.model_dump())
+
+                # Ensure target nodes exist if enabled
+                if self.ensure_nodes:
+                    await self._ensure_node_exists(edge, tenant_id, source_name=engram_name)
+
+        resource_data = {
             "id": str(resource_id),
             "tenant_id": tenant_id,
-            "session_id": str(session_id) if session_id else None,
-            "content": json.dumps(data),
-            "content_type": "application/json"
-        })
-        
-        return {"resource_id": str(resource_id)}
+            "name": engram_name,
+            "category": data.get("category", "engram"),
+            "content": data.get("content"),
+            "summary": data.get("summary"),
+            "uri": data.get("uri"),
+            "metadata": data.get("metadata", {}),
+            "graph_paths": graph_paths,
+            "resource_timestamp": data.get("resource_timestamp")
+        }
+
+        if session_id:
+            resource_data["session_id"] = str(session_id)
+
+        return resource_data
+
+    async def _merge_engram(
+        self,
+        existing: dict[str, Any],
+        new_data: dict[str, Any],
+        tenant_id: str,
+        session_id: UUID | None
+    ) -> dict[str, Any]:
+        """Merge new engram data with existing resource using JSON merge semantics.
+
+        CRITICAL merge behavior:
+        - Graph edges: Merge by dst key (add new, keep existing)
+        - Metadata: Deep merge (new keys added, existing updated)
+        - Arrays: Combine and deduplicate
+        - Content/summary: Update if provided, preserve if not
+        - Timestamps: Preserve original if not provided
+        """
+        merged = dict(existing)
+
+        if new_data.get("name") is not None:
+            merged["name"] = new_data["name"]
+
+        if new_data.get("category") is not None:
+            merged["category"] = new_data["category"]
+
+        if new_data.get("content") is not None:
+            merged["content"] = new_data["content"]
+
+        if new_data.get("summary") is not None:
+            merged["summary"] = new_data["summary"]
+
+        if new_data.get("uri") is not None:
+            merged["uri"] = new_data["uri"]
+
+        if new_data.get("resource_timestamp") is not None:
+            merged["resource_timestamp"] = new_data["resource_timestamp"]
+
+        merged_metadata = self._deep_merge_dict(
+            existing.get("metadata", {}),
+            new_data.get("metadata", {})
+        )
+        merged["metadata"] = merged_metadata
+
+        existing_edges = existing.get("graph_paths", [])
+        new_edges = []
+        if new_data.get("graph_edges"):
+            for edge_data in new_data["graph_edges"]:
+                edge = InlineEdge.model_validate(edge_data)
+                new_edges.append(edge.model_dump())
+
+        merged_edges = self._merge_graph_edges(existing_edges, new_edges)
+        merged["graph_paths"] = merged_edges
+
+        logger.debug(
+            f"Merged engram: {len(existing_edges)} existing edges + "
+            f"{len(new_edges)} new edges = {len(merged_edges)} total edges"
+        )
+
+        return merged
+
+    def _merge_graph_edges(
+        self,
+        existing_edges: list[dict],
+        new_edges: list[dict]
+    ) -> list[dict]:
+        """Merge graph edges by dst key.
+
+        If an edge with the same dst exists, update it with new properties.
+        Otherwise, add the new edge.
+        """
+        edge_map = {}
+
+        for edge in existing_edges:
+            dst = edge.get("dst")
+            if dst:
+                edge_map[dst] = edge
+
+        for edge in new_edges:
+            dst = edge.get("dst")
+            if dst:
+                if dst in edge_map:
+                    existing_edge = edge_map[dst]
+                    existing_edge["rel_type"] = edge.get("rel_type", existing_edge.get("rel_type"))
+                    existing_edge["weight"] = edge.get("weight", existing_edge.get("weight"))
+
+                    existing_props = existing_edge.get("properties", {})
+                    new_props = edge.get("properties", {})
+                    existing_props.update(new_props)
+                    existing_edge["properties"] = existing_props
+
+                    existing_edge["created_at"] = edge.get("created_at", existing_edge.get("created_at"))
+                else:
+                    edge_map[dst] = edge
+
+        return list(edge_map.values())
+
+    def _deep_merge_dict(self, base: dict, update: dict) -> dict:
+        """Deep merge two dictionaries.
+
+        For nested dicts, recursively merges keys.
+        For other types, update value overwrites base value.
+        """
+        merged = dict(base)
+        for key, value in update.items():
+            if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+                merged[key] = self._deep_merge_dict(merged[key], value)
+            else:
+                merged[key] = value
+        return merged
+
+    async def _process_moments(
+        self,
+        moments_data: list[dict[str, Any]],
+        tenant_id: str,
+        session_id: UUID | None,
+        parent_resource_id: UUID,
+        parent_resource_name: str
+    ) -> list[UUID]:
+        """Process attached moments and link them to parent engram.
+
+        Moments are also upserted with deterministic IDs based on name.
+        """
+        moment_ids = []
+
+        for moment_data in moments_data:
+            moment_name = moment_data.get("name", f"moment-{len(moment_ids)}")
+            moment_id = uuid5(NAMESPACE_DNS, f"{tenant_id}:moment:{parent_resource_name}:{moment_name}")
+
+            # Create moment repository
+            from p8fs.repository import TenantRepository
+            moment_repo = TenantRepository(Moment, tenant_id)
+
+            graph_paths = []
+            if moment_data.get("graph_edges"):
+                for edge_data in moment_data["graph_edges"]:
+                    edge = InlineEdge.model_validate(edge_data)
+                    graph_paths.append(edge.model_dump())
+
+            parent_edge = InlineEdge(
+                dst=parent_resource_name,
+                rel_type="part_of",
+                weight=1.0,
+                properties={
+                    "dst_name": parent_resource_name,
+                    "dst_id": str(parent_resource_id),
+                    "dst_entity_type": "resource/engram",
+                    "match_type": "parent_child",
+                    "confidence": 1.0
+                }
+            )
+            graph_paths.append(parent_edge.model_dump())
+
+            moment_dict = {
+                "id": str(moment_id),
+                "tenant_id": tenant_id,
+                "name": moment_data.get("name") or moment_name,
+                "content": moment_data.get("content"),
+                "summary": moment_data.get("summary"),
+                "category": moment_data.get("category"),
+                "uri": moment_data.get("uri"),
+                "resource_timestamp": moment_data.get("resource_timestamp"),
+                "resource_ends_timestamp": moment_data.get("resource_ends_timestamp"),
+                "moment_type": moment_data.get("moment_type"),
+                "emotion_tags": moment_data.get("emotion_tags", []),
+                "topic_tags": moment_data.get("topic_tags", []),
+                "present_persons": moment_data.get("present_persons", []),
+                "speakers": moment_data.get("speakers"),
+                "location": moment_data.get("location"),
+                "background_sounds": moment_data.get("background_sounds"),
+                "metadata": moment_data.get("metadata", {}),
+                "graph_paths": graph_paths
+            }
+
+            if session_id:
+                moment_dict["session_id"] = str(session_id)
+
+            moment = Moment.model_validate(moment_dict)
+            await moment_repo.upsert(moment)
+
+            moment_ids.append(moment_id)
+            logger.debug(f"Upserted moment '{moment_name}' with {len(graph_paths)} graph edges")
+
+        return moment_ids
+
+    async def _ensure_node_exists(
+        self,
+        edge: InlineEdge,
+        tenant_id: str,
+        source_name: str
+    ) -> None:
+        """
+        Ensure target node exists for the given edge.
+
+        If the target node doesn't exist, creates a lightweight entity with:
+        - Minimal content (to be enriched later)
+        - Reverse edge back to source (e.g., inv-managed-by)
+        - Proper category from dst_entity_type
+
+        Args:
+            edge: InlineEdge defining the relationship
+            tenant_id: Tenant ID
+            source_name: Name of source entity (for reverse edge)
+        """
+        try:
+            # Parse entity type to determine target table
+            table_name, _ = edge.parse_entity_type()
+
+            # Normalize table name (resource -> resources)
+            if table_name == "resource":
+                table_name = "resources"
+
+            # Create lightweight node data with reverse edge
+            node_data = edge.create_node_data(
+                tenant_id=tenant_id,
+                add_reverse_edge=True,
+                source_name=source_name
+            )
+
+            # Upsert the node (creates if doesn't exist, updates if exists)
+            if table_name == "resources":
+                node = Resources.model_validate(node_data)
+                await self.repo.upsert(node)
+                logger.debug(
+                    f"Ensured node exists: {edge.dst} (category: {node.category}, "
+                    f"reverse edge: inv-{edge.rel_type} → {source_name})"
+                )
+            elif table_name == "moments":
+                # Import moment repository when needed
+                from p8fs.repository.MomentRepository import MomentRepository
+                moment_repo = MomentRepository(self.repo.provider, tenant_id)
+                node = Moment.model_validate(node_data)
+                await moment_repo.upsert(node)
+                logger.debug(
+                    f"Ensured moment node exists: {edge.dst} (type: {node.moment_type}, "
+                    f"reverse edge: inv-{edge.rel_type} → {source_name})"
+                )
+            else:
+                logger.warning(
+                    f"Unsupported table for node creation: {table_name}. "
+                    f"Skipping node creation for {edge.dst}"
+                )
+
+        except Exception as e:
+            logger.warning(f"Failed to ensure node exists for {edge.dst}: {e}")
+            # Don't fail the entire engram processing if node creation fails
 
 
-# CLI interface for testing
+# ===== CLI Interface =====
+
 if __name__ == "__main__":
     import asyncio
     import sys
     from pathlib import Path
-    
+
     import typer
     from p8fs_cluster.config.settings import config
     from p8fs.repository.TenantRepository import TenantRepository
-    from p8fs.providers import get_provider
-    from p8fs.models.p8 import Engram, Moment
-    
+
+def main():
+    """Engram processor CLI entry point."""
+    import typer
+
     app = typer.Typer(help="Engram processor CLI")
-    
+
     @app.command()
     def process_file(
         file_path: str = typer.Argument(help="Path to JSON/YAML engram file"),
@@ -389,125 +553,45 @@ if __name__ == "__main__":
         """Process an engram file and store in database."""
         async def run():
             try:
-                # Create a multi-model repository wrapper  
-                class MultiModelRepo:
-                    def __init__(self, tenant_id):
-                        self.tenant_id = tenant_id
-                        # Initialize repositories for different models (let them create their own providers)
-                        self.engram_repo = TenantRepository(Engram, tenant_id)
-                        self.moment_repo = TenantRepository(Moment, tenant_id)
-                    
-                    # Delegate methods to appropriate repositories
-                    async def create_resource(self, data):
-                        # Create engram entity for resources
-                        engram = Engram(**data)
-                        return await self.engram_repo.upsert(engram)
-                    
-                    async def create_moment(self, data):
-                        moment = Moment(**data)
-                        return await self.moment_repo.upsert(moment)
-                    
-                    async def create_association(self, data):
-                        # Create graph edge using PostgresGraphProvider
-                        try:
-                            from p8fs.services import PostgresGraphProvider, GraphAssociation
-                            
-                            # Initialize graph provider
-                            graph = PostgresGraphProvider(self.engram_repo.provider)
-                            
-                            # Create association model
-                            association = GraphAssociation(
-                                from_entity_id=data.get("from_entity_id"),
-                                to_entity_id=data.get("to_entity_id"),
-                                relationship_type=data.get("relationship_type"),
-                                from_entity_type=data.get("from_entity_type"),
-                                to_entity_type=data.get("to_entity_type"),
-                                metadata=data.get("metadata"),
-                                tenant_id=data.get("tenant_id")
-                            )
-                            
-                            # Create the association
-                            result = graph.create_association(association)
-                            return result
-                                
-                        except Exception as e:
-                            logger.error(f"Database error creating graph association: {e}", exc_info=True)
-                            logger.debug(f"Association data: {data}")
-                            # Don't return None for database errors - let them propagate
-                            raise RuntimeError(f"Database error creating graph association: {e}") from e
-                    
-                    async def get_resource(self, entity_id):
-                        try:
-                            return await self.engram_repo.get_by_id(entity_id)
-                        except Exception as e:
-                            logger.error(f"Database error getting resource {entity_id}: {e}", exc_info=True)
-                            # Don't return None for database errors - let them propagate
-                            raise RuntimeError(f"Database error retrieving resource: {e}") from e
-                    
-                    async def get_moment(self, entity_id):
-                        try:
-                            return await self.moment_repo.get_by_id(entity_id)
-                        except Exception as e:
-                            logger.warning(f"Failed to get moment {entity_id}: {e}")
-                            return None
-                    
-                    async def update_resource(self, entity_id, data):
-                        return await self.engram_repo.update_by_id(entity_id, data)
-                    
-                    async def update_moment(self, entity_id, data):
-                        return await self.moment_repo.update_by_id(entity_id, data)
-                
-                repo = MultiModelRepo(tenant_id)
-                
-                # Initialize processor
+                repo = TenantRepository(Resources, tenant_id)
                 processor = EngramProcessor(repo)
-                
-                # Read file
+
                 path = Path(file_path)
                 if not path.exists():
                     typer.echo(f"File not found: {file_path}", err=True)
                     raise typer.Exit(1)
-                
+
                 content = path.read_text()
                 content_type = "application/x-yaml" if path.suffix.lower() in ['.yaml', '.yml'] else "application/json"
-                
+
                 typer.echo(f"Processing {content_type} file: {file_path}")
                 typer.echo(f"Tenant ID: {tenant_id}")
-                
+
                 if verbose:
                     typer.echo("File content:")
                     typer.echo(content)
                     typer.echo("-" * 50)
-                
-                # Process file
+
                 result = await processor.process(content, content_type, tenant_id)
-                
-                # Display results
-                typer.echo("✅ Processing completed successfully!")
-                typer.echo(f"Results: {result}")
-                
-                if result.get("engram_id"):
-                    typer.echo(f"📄 Engram stored with ID: {result['engram_id']}")
-                
-                if result.get("upserts", 0) > 0:
-                    typer.echo(f"➕ Created {result['upserts']} entities")
-                
-                if result.get("patches", 0) > 0:
-                    typer.echo(f"🔄 Applied {result['patches']} patches")
-                
-                if result.get("associations", 0) > 0:
-                    typer.echo(f"🔗 Created {result['associations']} associations")
-                
-                if result.get("resource_id"):
-                    typer.echo(f"📦 Generic resource stored with ID: {result['resource_id']}")
-                
+
+                typer.echo(f"✅ Processing completed successfully!")
+                typer.echo(f"📄 Resource ID: {result['resource_id']}")
+
+                if result.get("moment_ids"):
+                    typer.echo(f"⏰ Created {len(result['moment_ids'])} moments")
+                    if verbose:
+                        for moment_id in result['moment_ids']:
+                            typer.echo(f"  - {moment_id}")
+
+                typer.echo(f"📦 Chunks created: {result['chunks_created']}")
+
             except Exception as e:
                 typer.echo(f"❌ Error: {e}", err=True)
                 if verbose:
                     import traceback
                     traceback.print_exc()
                 raise typer.Exit(1)
-        
+
         asyncio.run(run())
-    
+
     app()

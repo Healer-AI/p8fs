@@ -106,7 +106,7 @@ class BaseProxy:
         """Initialize the base proxy."""
         super().__init__(*args, **kwargs)
         self._session: aiohttp.ClientSession | None = None
-        logger.info("Initialized BaseProxy")
+        logger.debug("Initialized BaseProxy")
 
     async def _ensure_session(self):
         """Ensure aiohttp session is initialized."""

@@ -1,6 +1,7 @@
 """Centralized logging setup using Loguru."""
 
 import sys
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -20,7 +21,7 @@ def setup_logging(
     format_template: str | None = None
 ) -> None:
     """Setup centralized logging configuration for P8FS.
-    
+
     Args:
         level: Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         log_file: Path to log file. If None, logs to stdout only
@@ -31,6 +32,14 @@ def setup_logging(
         colorize: Enable colored output
         format_template: Custom format template
     """
+    # Suppress Pydantic V2 deprecation warnings from inspect module
+    warnings.filterwarnings(
+        "ignore",
+        category=DeprecationWarning,
+        message=".*Pydantic.*",
+        module="inspect"
+    )
+
     # Remove default handler
     logger.remove()
     
@@ -39,21 +48,35 @@ def setup_logging(
     diagnose = diagnose if diagnose is not None else config.is_development
     colorize = colorize if colorize is not None else config.is_development
     
-    # Development format (colorized, detailed)
+    # Level emoji mapping
+    level_emoji = {
+        "CRITICAL": "🚨",
+        "ERROR": "🚨",
+        "WARNING": "⚠️",
+        "INFO": "",
+        "DEBUG": "",
+        "TRACE": ""
+    }
+
+    # Development format (colorized, detailed with emoji)
     dev_format = (
         "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
-        "<level>{level: <8}</level> | "
+        "<level>{extra[emoji]}{level: <8}</level> | "
         "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
         "<level>{message}</level>"
     )
-    
-    # Production format (plain, structured)
+
+    # Production format (plain, structured with emoji)
     prod_format = (
-        "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} | {message}"
+        "{time:YYYY-MM-DD HH:mm:ss.SSS} | {extra[emoji]}{level: <8} | {name}:{function}:{line} | {message}"
     )
     
     format_template = format_template or (dev_format if config.is_development else prod_format)
-    
+
+    # Custom patcher to inject emoji based on level
+    def patcher(record):
+        record["extra"]["emoji"] = level_emoji.get(record["level"].name, "")
+
     # Console handler
     logger.add(
         sys.stderr,
@@ -62,9 +85,9 @@ def setup_logging(
         colorize=colorize,
         diagnose=diagnose,
         enqueue=True,  # Thread-safe logging
-        catch=True     # Catch exceptions in logging
+        catch=True      # Catch exceptions in logging
     )
-    
+
     # File handler (if specified)
     if log_file:
         logger.add(
@@ -86,8 +109,8 @@ def setup_logging(
         "environment": config.environment,
         "tenant": config.default_tenant_id,
     }
-    
-    logger.configure(extra=logger_context)
+
+    logger.configure(extra=logger_context, patcher=patcher)
     
     # Log startup info
     logger.info(

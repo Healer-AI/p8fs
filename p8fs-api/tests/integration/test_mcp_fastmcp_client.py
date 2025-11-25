@@ -65,7 +65,7 @@ async def test_oauth_device_flow(base_url, jwt_token):
     async with httpx.AsyncClient() as client:
         # Step 1: Request device code
         resp = await client.post(
-            f"{base_url}/oauth/device_authorization",
+            f"{base_url}/api/v1/oauth/device_authorization",
             data={"client_id": "test-client", "scope": "mcp:access"},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
@@ -81,7 +81,7 @@ async def test_oauth_device_flow(base_url, jwt_token):
 
         # Step 2: Approve device with JWT token
         resp = await client.post(
-            f"{base_url}/oauth/device/approve",
+            f"{base_url}/api/v1/oauth/device/approve",
             json={
                 "user_code": user_code,
                 "approved": True,
@@ -96,7 +96,7 @@ async def test_oauth_device_flow(base_url, jwt_token):
         await asyncio.sleep(1)  # Wait for approval to propagate
 
         resp = await client.post(
-            f"{base_url}/oauth/token",
+            f"{base_url}/api/v1/oauth/token",
             data={
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 "client_id": "test-client",

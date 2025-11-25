@@ -1,0 +1,196 @@
+kind: engram
+name: "Thursday User Testing Review"
+category: "meeting"
+summary: "Review of user testing session results for new onboarding flow, identifying friction points in signup process and validating design decisions"
+resource_timestamp: "2024-11-14T10:00:00Z"
+uri: "meeting://user-research/2024-11-14"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 45
+    location: "Design Studio"
+    meeting_type: "research_review"
+content: |
+  User testing review session with Jamie and the UX research team to analyze results from
+  yesterday's usability testing of the new onboarding flow.
+
+  Jamie Lee (Designer) presented findings from 8 user testing sessions. The new flow performed
+  well overall, with 6 out of 8 users completing signup successfully on first attempt. However,
+  two friction points were identified that need addressing before launch.
+
+  Key findings:
+  - Overall completion rate: 75% (6/8 users)
+  - Average signup time reduced from 4.5 minutes to 2.3 minutes (48% improvement)
+  - Friction point 1: Email verification step confused 3 users
+  - Friction point 2: Password requirements unclear for 2 users
+  - Positive feedback on visual design and progressive disclosure approach
+
+  Research team (led by Maria Rodriguez) recommended two quick fixes:
+  1. Add inline helper text for email verification
+  2. Show real-time password strength indicator
+
+  Decision: Implement both fixes before Friday deployment. Kevin Park (Frontend) can complete
+  both changes in ~2 hours. This validates Wednesday's design decisions while addressing
+  real user feedback.
+
+  This research validates the A/B testing strategy discussed Monday and confirms the onboarding
+  flow is ready for launch with minor tweaks.
+
+graph_edges:
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "validates"
+    weight: 0.9
+    properties:
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      confidence: 1.0
+      context: "User testing validates design decisions"
+
+  - dst: "Monday Afternoon Design Review"
+    rel_type: "follows_up"
+    weight: 0.7
+    properties:
+      dst_entity_type: "resource/meeting"
+      match_type: "temporal_reference"
+      confidence: 0.9
+      context: "Testing the designs approved Monday"
+
+  - dst: "A/B Testing Strategy"
+    rel_type: "validates"
+    weight: 0.75
+    properties:
+      dst_entity_type: "concept/methodology"
+      match_type: "contextual_reference"
+      confidence: 0.85
+
+moments:
+  - name: "User Testing Results Presentation"
+    content: "Jamie presented results from 8 user testing sessions. 75% completion rate with 48% reduction in signup time. Overall positive validation of new design approach."
+    summary: "User testing shows 75% success rate, 48% faster signup"
+    resource_timestamp: "2024-11-14T10:05:00Z"
+    resource_ends_timestamp: "2024-11-14T10:25:00Z"
+    moment_type: "presentation"
+    emotion_tags: ["validated", "satisfied", "analytical"]
+    topic_tags: ["user-testing", "onboarding-flow", "usability-research"]
+    present_persons:
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, presented findings"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+      - id: "Maria Rodriguez"
+        name: "Maria Rodriguez"
+        comment: "UX Researcher, led testing"
+    speakers:
+      - text: "Six out of eight users completed signup on first try. Average time dropped from 4.5 minutes to 2.3 minutes"
+        speaker_identifier: "Jamie Lee"
+        timestamp: "2024-11-14T10:08:00Z"
+        emotion: "satisfied"
+      - text: "That's a 48% improvement in signup time. Excellent validation of the progressive disclosure approach"
+        speaker_identifier: "Maria Rodriguez"
+        timestamp: "2024-11-14T10:09:30Z"
+        emotion: "analytical"
+    graph_edges:
+      - dst: "Jamie Lee"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Designer"
+          participation_level: "presenter"
+
+      - dst: "Maria Rodriguez"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "UX Researcher"
+
+      - dst: "Sarah Chen"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Product Manager"
+
+  - name: "Friction Points Discussion"
+    content: "Team identified two specific friction points: email verification confused 3 users, password requirements unclear for 2 users. Maria recommended inline helper text and real-time password strength indicator."
+    summary: "Two friction points identified with recommended solutions"
+    resource_timestamp: "2024-11-14T10:25:00Z"
+    resource_ends_timestamp: "2024-11-14T10:40:00Z"
+    moment_type: "problem_solving"
+    emotion_tags: ["focused", "solution-oriented", "pragmatic"]
+    topic_tags: ["friction-points", "usability-issues", "design-improvements"]
+    present_persons:
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer"
+      - id: "Maria Rodriguez"
+        name: "Maria Rodriguez"
+        comment: "UX Researcher, proposed solutions"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    speakers:
+      - text: "Three users were confused by the email verification step - they didn't realize they needed to check their inbox"
+        speaker_identifier: "Maria Rodriguez"
+        timestamp: "2024-11-14T10:27:00Z"
+        emotion: "analytical"
+      - text: "We can add inline helper text: 'Check your inbox for verification email.' That should solve it"
+        speaker_identifier: "Jamie Lee"
+        timestamp: "2024-11-14T10:28:30Z"
+        emotion: "solution-oriented"
+    metadata:
+      friction_points: 2
+      affected_users: 5
+      proposed_solutions: ["inline_helper_text", "password_strength_indicator"]
+    graph_edges:
+      - dst: "Maria Rodriguez"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "UX Researcher"
+
+  - name: "Implementation Decision"
+    content: "Sarah approved both quick fixes. Kevin Park can implement inline helper text and password strength indicator in approximately 2 hours. Changes to be deployed Friday with rest of onboarding flow."
+    summary: "Approved UX improvements for Friday deployment"
+    resource_timestamp: "2024-11-14T10:40:00Z"
+    resource_ends_timestamp: "2024-11-14T10:45:00Z"
+    moment_type: "decision"
+    emotion_tags: ["decisive", "efficient", "focused"]
+    topic_tags: ["implementation-plan", "friday-deployment", "quick-fixes"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, made decision"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer"
+    metadata:
+      decision_type: "scope_addition"
+      implementation_time: "2 hours"
+      deployment_date: "2024-11-15"
+      assigned_to: "Kevin Park"
+    graph_edges:
+      - dst: "Kevin Park"
+        rel_type: "assigns_work_to"
+        weight: 0.9
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "implicit_reference"
+          context: "Kevin assigned to implement fixes"
+
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "decides"
+        weight: 0.85
+        properties:
+          dst_entity_type: "project/design"
+          match_type: "explicit_reference"

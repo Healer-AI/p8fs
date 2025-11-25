@@ -1,0 +1,544 @@
+# REM Example Data Export: Project Alpha Team Activity
+# Tenant: demo-tenant-001
+# Generated: 2025-11-15
+
+tenant_id: demo-tenant-001
+time_period:
+  start: 2025-11-01
+  end: 2025-11-14
+  duration_days: 14
+
+statistics:
+  total_resources: 8
+  unique_people: 3
+  unique_projects: 1
+  unique_technical_concepts: 12
+  expected_moments: 4-5
+  expected_affinity_edges: 15-20
+
+# ============================================
+# RESOURCES (Initial Data)
+# ============================================
+
+resources:
+  - id: 0e1df50c-7948-4837-a257-5980024f23b8
+    name: "Project Alpha Kickoff Meeting Notes"
+    category: meeting_notes
+    timestamp: 2025-11-01T12:18:32Z
+    content: |
+      Met with Sarah and Mike to discuss Project Alpha. Key goals: migrate database
+      to TiDB, improve API performance by 50%, complete by Q1. Sarah will lead backend,
+      Mike handles DevOps. Discussed technical approach and timeline.
+    related_entities:
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: project-alpha
+        entity_type: project
+      - entity_id: tidb
+        entity_type: technology
+      - entity_id: api-performance
+        entity_type: concept
+
+  - id: 0b4b6d7d-f267-44d4-b22b-2dc7f6b7a721
+    name: "TiDB Migration Technical Specification"
+    category: technical_spec
+    timestamp: 2025-11-02T12:18:32Z
+    content: |
+      Technical specification for migrating from PostgreSQL to TiDB. Architecture:
+      dual-write phase for 2 weeks, validation phase 1 week, read migration 2 weeks.
+      Key challenges: vector index migration, JSONB to JSON conversion, query
+      performance tuning. Team: Sarah Chen (backend), Mike Johnson (infrastructure).
+    related_entities:
+      - entity_id: tidb
+        entity_type: technology
+      - entity_id: postgresql
+        entity_type: technology
+      - entity_id: database-migration
+        entity_type: concept
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+
+  - id: 29d6d793-86c6-4d31-8b73-378e7187bca4
+    name: "Daily Standup Voice Memo - Jan 18"
+    category: voice_memo
+    timestamp: 2025-11-03T12:18:32Z
+    content: |
+      Quick standup update. Working on TiDB migration scripts today. Sarah is
+      finishing the dual-write implementation. Mike set up the TiDB staging cluster.
+      Blocked on getting production credentials. Need to sync with Emily about timeline.
+    related_entities:
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: emily-santos
+        entity_type: person
+      - entity_id: tidb
+        entity_type: technology
+      - entity_id: standup
+        entity_type: meeting_type
+
+  - id: 52b7d233-3fff-4a38-991a-0d38d7a08a7d
+    name: "Code Review - Database Migration Module"
+    category: code_review
+    timestamp: 2025-11-05T12:18:32Z
+    content: |
+      Reviewed Sarah's database migration code. Excellent work on the dual-write
+      pattern. Left comments about error handling in the TiDB connector. Suggested
+      adding retry logic for transient failures. Mike approved the infrastructure
+      changes. Ready to merge after addressing comments.
+    related_entities:
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: database-migration
+        entity_type: concept
+      - entity_id: tidb
+        entity_type: technology
+
+  - id: 4fdc4672-2e4a-4603-a5de-ada4d3c1a1a4
+    name: "Project Alpha Status Update - Week 1"
+    category: project_update
+    timestamp: 2025-11-07T12:18:32Z
+    content: |
+      Great progress on Project Alpha this week. Sarah completed dual-write
+      implementation, Mike deployed TiDB to staging. On track for Q1 delivery.
+      Next week: start validation phase, performance testing. Emily confirmed
+      budget approved for production cluster.
+    related_entities:
+      - entity_id: project-alpha
+        entity_type: project
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: emily-santos
+        entity_type: person
+
+  - id: 5c01ddb5-6177-49c6-b856-bf37af519221
+    name: "API Performance Optimization Proposal"
+    category: technical_proposal
+    timestamp: 2025-11-08T12:18:32Z
+    content: |
+      Proposal for API performance improvements. Current bottlenecks: N+1 queries,
+      lack of caching, inefficient JSON serialization. Solutions: implement query
+      batching, add Redis caching layer, use protobuf for internal services.
+      Expected 50-70% performance improvement. Needs review from Sarah and
+      architecture team.
+    related_entities:
+      - entity_id: api-performance
+        entity_type: concept
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: redis
+        entity_type: technology
+      - entity_id: optimization
+        entity_type: concept
+
+  - id: b6718a53-054f-4ef1-a226-6950b59c41bd
+    name: "Team Chat - Performance Testing Results"
+    category: chat_log
+    timestamp: 2025-11-10T12:18:32Z
+    content: |
+      Ran performance tests on TiDB migration. Results look good! Query latency
+      down 30%, write throughput up 40%. Sarah's optimization work paid off.
+      Mike identified one issue with connection pooling that we need to fix.
+      Overall very promising. Team celebrating with lunch tomorrow.
+    related_entities:
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: tidb
+        entity_type: technology
+      - entity_id: performance
+        entity_type: concept
+
+  - id: d4e724cc-1971-46cd-8b89-5c8f2ec346ef
+    name: "TiDB Operations Runbook"
+    category: documentation
+    timestamp: 2025-11-12T12:18:32Z
+    content: |
+      Operations runbook for TiDB cluster management. Covers: backup procedures,
+      failover processes, monitoring setup, performance tuning. Written by Mike
+      with input from Sarah. Critical for production readiness. Includes scripts
+      for common tasks and troubleshooting guide.
+    related_entities:
+      - entity_id: tidb
+        entity_type: technology
+      - entity_id: mike-johnson
+        entity_type: person
+      - entity_id: sarah-chen
+        entity_type: person
+      - entity_id: operations
+        entity_type: concept
+
+# ============================================
+# EXPECTED MOMENTS (After First-Order Dreaming)
+# ============================================
+
+expected_moments:
+  - name: "Project Kickoff Meeting"
+    type: meeting
+    start_time: 2025-11-01T09:00:00Z
+    end_time: 2025-11-01T10:00:00Z
+    present_persons:
+      - name: "Sarah Chen"
+        role: "Tech Lead"
+      - name: "Mike Johnson"
+        role: "DevOps Engineer"
+    speakers:
+      - name: "Sarah Chen"
+        speaking_time: 1200  # seconds
+      - name: "Mike Johnson"
+        speaking_time: 900
+    emotion_tags:
+      - excited
+      - focused
+      - motivated
+    topic_tags:
+      - project-alpha
+      - tidb
+      - planning
+      - kickoff
+    summary: "Team kickoff meeting for Project Alpha database migration to TiDB"
+    source_resources:
+      - "Project Alpha Kickoff Meeting Notes"
+
+  - name: "Development Sprint - TiDB Migration"
+    type: coding
+    start_time: 2025-11-02T08:00:00Z
+    end_time: 2025-11-05T18:00:00Z
+    present_persons:
+      - name: "Sarah Chen"
+        role: "Backend Developer"
+    emotion_tags:
+      - productive
+      - focused
+      - challenged
+    topic_tags:
+      - tidb
+      - database-migration
+      - implementation
+      - dual-write
+    summary: "Intense development period implementing TiDB migration with dual-write pattern"
+    source_resources:
+      - "TiDB Migration Technical Specification"
+      - "Daily Standup Voice Memo - Jan 18"
+
+  - name: "Code Review Session"
+    type: meeting
+    start_time: 2025-11-05T14:00:00Z
+    end_time: 2025-11-05T15:00:00Z
+    present_persons:
+      - name: "Sarah Chen"
+        role: "Author"
+      - name: "Mike Johnson"
+        role: "Reviewer"
+    speakers:
+      - name: "Mike Johnson"
+        speaking_time: 1800
+      - name: "Sarah Chen"
+        speaking_time: 1200
+    emotion_tags:
+      - collaborative
+      - constructive
+      - professional
+    topic_tags:
+      - code-review
+      - tidb
+      - quality
+      - feedback
+    summary: "Code review session for database migration module with constructive feedback"
+    source_resources:
+      - "Code Review - Database Migration Module"
+
+  - name: "Team Celebration - Performance Win"
+    type: conversation
+    start_time: 2025-11-10T12:00:00Z
+    end_time: 2025-11-10T12:30:00Z
+    present_persons:
+      - name: "Sarah Chen"
+        role: "Backend Developer"
+      - name: "Mike Johnson"
+        role: "DevOps Engineer"
+    speakers:
+      - name: "Sarah Chen"
+        speaking_time: 900
+      - name: "Mike Johnson"
+        speaking_time: 900
+    emotion_tags:
+      - happy
+      - proud
+      - relieved
+      - accomplished
+    topic_tags:
+      - performance
+      - success
+      - team
+      - celebration
+    summary: "Team celebrating successful performance test results showing significant improvements"
+    source_resources:
+      - "Team Chat - Performance Testing Results"
+
+# ============================================
+# EXPECTED AFFINITY EDGES (After Second-Order Dreaming)
+# ============================================
+
+expected_affinity_edges:
+  # Semantic similarity edges
+  - from: "TiDB Migration Technical Specification"
+    to: "Code Review - Database Migration Module"
+    relationship_type: complementary
+    similarity_score: 0.87
+    reason: "Both discuss dual-write pattern and TiDB migration implementation"
+    connecting_concepts:
+      - dual-write
+      - tidb
+      - migration
+
+  - from: "TiDB Migration Technical Specification"
+    to: "TiDB Operations Runbook"
+    relationship_type: sequential
+    similarity_score: 0.75
+    reason: "Specification followed by operational documentation"
+    connecting_concepts:
+      - tidb
+      - infrastructure
+      - production
+
+  - from: "Code Review - Database Migration Module"
+    to: "TiDB Operations Runbook"
+    relationship_type: prerequisite
+    similarity_score: 0.68
+    reason: "Code review ensures quality before operational deployment"
+    connecting_concepts:
+      - tidb
+      - quality
+      - operations
+
+  - from: "Project Alpha Kickoff Meeting Notes"
+    to: "Project Alpha Status Update - Week 1"
+    relationship_type: temporal
+    similarity_score: 0.82
+    reason: "Kickoff goals tracked in week 1 status update"
+    connecting_concepts:
+      - project-alpha
+      - goals
+      - timeline
+
+  - from: "API Performance Optimization Proposal"
+    to: "Team Chat - Performance Testing Results"
+    relationship_type: proposal_to_result
+    similarity_score: 0.71
+    reason: "Proposal validated by actual performance test results"
+    connecting_concepts:
+      - performance
+      - optimization
+      - results
+
+  # Entity-based edges
+  - from: "Project Alpha Kickoff Meeting Notes"
+    to: "TiDB Migration Technical Specification"
+    via_entity: sarah-chen
+    relationship_type: entity_connection
+    reason: "Both documents involve Sarah Chen"
+
+  - from: "Daily Standup Voice Memo - Jan 18"
+    to: "Code Review - Database Migration Module"
+    via_entity: tidb
+    relationship_type: entity_connection
+    reason: "Both discuss TiDB implementation"
+
+  # Additional semantic edges discovered
+  - from: "Daily Standup Voice Memo - Jan 18"
+    to: "Project Alpha Status Update - Week 1"
+    relationship_type: status_update
+    similarity_score: 0.64
+    reason: "Daily status feeds into weekly summary"
+
+# ============================================
+# REM QUERY EXAMPLES AND RESULTS
+# ============================================
+
+rem_query_examples:
+  - query_name: "Find all TiDB-related resources"
+    query_type: SQL
+    parameters:
+      table_name: resources
+      where_clause: "related_entities::text LIKE '%tidb%'"
+    expected_results:
+      count: 6
+      resources:
+        - "Project Alpha Kickoff Meeting Notes"
+        - "TiDB Migration Technical Specification"
+        - "Daily Standup Voice Memo - Jan 18"
+        - "Code Review - Database Migration Module"
+        - "Team Chat - Performance Testing Results"
+        - "TiDB Operations Runbook"
+
+  - query_name: "Lookup Sarah Chen"
+    query_type: LOOKUP
+    parameters:
+      key: sarah-chen
+    expected_results:
+      count: 7
+      entity_type: person
+      role: "Tech Lead / Backend Developer"
+      resources_mentioning:
+        - "Project Alpha Kickoff Meeting Notes"
+        - "TiDB Migration Technical Specification"
+        - "Daily Standup Voice Memo - Jan 18"
+        - "Code Review - Database Migration Module"
+        - "Project Alpha Status Update - Week 1"
+        - "API Performance Optimization Proposal"
+        - "TiDB Operations Runbook"
+
+  - query_name: "Semantic search for database migration"
+    query_type: SEARCH
+    parameters:
+      table_name: resources
+      query_text: "database migration tidb postgresql"
+      limit: 5
+    expected_results:
+      count: 5
+      ranked_by_similarity:
+        - resource: "TiDB Migration Technical Specification"
+          similarity: 0.95
+        - resource: "Code Review - Database Migration Module"
+          similarity: 0.88
+        - resource: "TiDB Operations Runbook"
+          similarity: 0.76
+        - resource: "Project Alpha Kickoff Meeting Notes"
+          similarity: 0.71
+        - resource: "Daily Standup Voice Memo - Jan 18"
+          similarity: 0.65
+
+  - query_name: "Find resources related to API performance"
+    query_type: SQL
+    parameters:
+      table_name: resources
+      where_clause: "related_entities::text LIKE '%api-performance%'"
+    expected_results:
+      count: 2
+      resources:
+        - "Project Alpha Kickoff Meeting Notes"
+        - "API Performance Optimization Proposal"
+
+# ============================================
+# QUALITY ASSESSMENT
+# ============================================
+
+quality_metrics:
+  entity_extraction:
+    total_entities: 18
+    unique_entities: 15
+    avg_entities_per_resource: 4.25
+    entity_consistency: high
+    normalization_quality: good  # lowercase-hyphenated format
+
+  entity_coverage:
+    sarah_chen: 7/8  # 87.5%
+    mike_johnson: 7/8  # 87.5%
+    tidb: 6/8  # 75%
+    project_alpha: 3/8  # 37.5%
+    emily_santos: 2/8  # 25%
+
+  semantic_relationships:
+    expected_affinity_edges: 15-20
+    high_similarity_pairs: 5  # >0.8 similarity
+    medium_similarity_pairs: 8  # 0.6-0.8 similarity
+    entity_based_connections: 12
+
+  temporal_coverage:
+    time_span_days: 14
+    resource_distribution: good  # spread across period
+    activity_clusters: 2  # kickoff phase, testing phase
+    gaps: minimal
+
+  expected_moments:
+    count: 4-5
+    types:
+      - meeting: 2
+      - coding: 1
+      - conversation: 1
+    temporal_boundaries: valid
+    person_extraction: complete
+    emotion_diversity: high
+    topic_diversity: high
+
+# ============================================
+# GRAPH ANALYSIS
+# ============================================
+
+graph_statistics:
+  nodes:
+    resources: 8
+    people: 3
+    projects: 1
+    technologies: 5
+    concepts: 7
+    total: 24
+
+  edges_before_dreaming:
+    resource_to_entity: 35  # from related_entities
+    total: 35
+
+  edges_after_first_order_dreaming:
+    resource_to_entity: 35
+    moment_to_resource: 8
+    moment_to_person: 12
+    total: 55
+
+  edges_after_second_order_dreaming:
+    resource_to_entity: 35
+    moment_to_resource: 8
+    moment_to_person: 12
+    resource_to_resource: 18  # affinity edges
+    total: 73
+
+  graph_metrics:
+    avg_degree_before: 1.46
+    avg_degree_after: 3.04
+    connectivity_improvement: 108%
+    isolated_nodes_before: 0
+    isolated_nodes_after: 0
+    diameter: 4  # max hops between any two nodes
+    clustering_coefficient: 0.42  # moderate clustering
+
+# ============================================
+# INSIGHTS
+# ============================================
+
+insights:
+  team_dynamics:
+    - Sarah and Mike are primary collaborators (7/8 co-occurrences)
+    - Emily is external stakeholder (2/8 appearances)
+    - Strong backend-devops partnership visible
+
+  project_evolution:
+    - Clear progression: planning → implementation → testing → documentation
+    - Technical decisions tracked through specifications and code reviews
+    - Success celebration indicates positive team morale
+
+  knowledge_patterns:
+    - TiDB is central technical focus (75% of documents)
+    - Database migration is well-documented across multiple artifacts
+    - Performance optimization emerges as secondary theme
+
+  communication_channels:
+    - Mix of formal (meetings, specs) and informal (chat, voice memos)
+    - Documentation created for operational sustainability
+    - Code review process demonstrates quality focus
+
+rem_utility_demonstrated:
+    - Entity lookup enables instant "Who is X?" queries
+    - Semantic search finds related content without keyword matching
+    - Graph traversal discovers indirect connections
+    - Temporal queries track project progression
+    - Affinity edges surface relevant context automatically

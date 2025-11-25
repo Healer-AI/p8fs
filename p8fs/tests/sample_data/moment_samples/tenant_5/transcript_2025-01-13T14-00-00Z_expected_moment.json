@@ -1,39 +1,5 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T14:00:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "02:00 PM UTC"
-  },
-  "name": "EVA Preparation Briefing - Antenna Repair Mission",
-  "content": "Commander Chen leading EVA briefing for spacewalk mission to repair S-band antenna loose mounting bracket on Z1 truss segment. Crew assignments: Lieutenant Torres (primary repair), Flight Engineer Kim (tether management, documentation). Detailed timeline established: 0700 oxygen prebreathe protocol, 0800 depressurization, 0845 airlock exit, 30-meter translation along starboard handrails, 45-minute repair window, 1030 return. Technical procedures reviewed: four-bolt bracket removal with hardware containment preventing orbital debris, helmet cam documentation, replacement parts pre-staged. Backup plan authorized: full antenna removal for internal assessment if damage exceeds expectations (extending EVA to two hours within seven-hour suit capacity). Environmental challenges addressed: extreme temperature variation (±120°C to -150°C during sun/eclipse transition), 30-minute sunlight followed by 15-minute shadow period requiring helmet light usage. Communication protocol: UHF primary with Commander as CAPCOM, S-band ground backup, abort-on-comm-loss safety rule. Evening suit integrity checks scheduled (4.3 PSI, 30 minutes, zero leak tolerance). Crew demonstrated professional readiness balanced with healthy respect for spacewalk risks. Additional tasking: solar array panel 2B photography during return translation. Team confidence high with comprehensive preparation.",
-  "summary": "EVA briefing: antenna repair mission planned, timeline set, safety protocols reviewed, crew ready for spacewalk",
-  "category": "space",
-  "uri": "s3://p8fs-tenant5/recordings/2025-01-13/eva_prep_briefing.wav",
-  "resource_timestamp": "2025-01-13T14:00:00Z",
-  "resource_ends_timestamp": "2025-01-13T14:10:05Z",
-  "moment_type": "meeting",
-  "emotion_tags": ["focused", "professional", "prepared", "confident"],
-  "topic_tags": ["eva-planning", "spacewalk-prep", "safety-protocols", "mission-briefing", "team-coordination"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
-    },
-    "fp_torres_t5": {
-      "fingerprint_id": "fp_torres_t5",
-      "user_id": "user_torres_003",
-      "user_label": "Lt. Torres"
-    },
-    "fp_kim_t5": {
-      "fingerprint_id": "fp_kim_t5",
-      "user_id": "user_kim_004",
-      "user_label": "Engineer Kim"
-    }
-  },
-  "location": "iss_unity_module",
-  "background_sounds": "ventilation system, equipment beeping, papers rustling",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 10.08,
     "word_count": 328,
@@ -41,5 +7,45 @@
     "activity_type": "mission_briefing",
     "mission_day": 87,
     "eva_planned": true
-  }
+  },
+  "name": "EVA Preparation Briefing - Antenna Repair Mission",
+  "content": "Commander Chen leading EVA briefing for spacewalk mission to repair S-band antenna loose mounting bracket on Z1 truss segment. Crew assignments: Lieutenant Torres (primary repair), Flight Engineer Kim (tether management, documentation). Detailed timeline established: 0700 oxygen prebreathe protocol, 0800 depressurization, 0845 airlock exit, 30-meter translation along starboard handrails, 45-minute repair window, 1030 return. Technical procedures reviewed: four-bolt bracket removal with hardware containment preventing orbital debris, helmet cam documentation, replacement parts pre-staged. Backup plan authorized: full antenna removal for internal assessment if damage exceeds expectations (extending EVA to two hours within seven-hour suit capacity). Environmental challenges addressed: extreme temperature variation (\u00b1120\u00b0C to -150\u00b0C during sun/eclipse transition), 30-minute sunlight followed by 15-minute shadow period requiring helmet light usage. Communication protocol: UHF primary with Commander as CAPCOM, S-band ground backup, abort-on-comm-loss safety rule. Evening suit integrity checks scheduled (4.3 PSI, 30 minutes, zero leak tolerance). Crew demonstrated professional readiness balanced with healthy respect for spacewalk risks. Additional tasking: solar array panel 2B photography during return translation. Team confidence high with comprehensive preparation.",
+  "summary": "EVA briefing: antenna repair mission planned, timeline set, safety protocols reviewed, crew ready for spacewalk",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-13/eva_prep_briefing.wav",
+  "resource_timestamp": "2025-01-13T14:00:00Z",
+  "resource_ends_timestamp": "2025-01-13T14:10:05Z",
+  "moment_type": "meeting",
+  "emotion_tags": [
+    "focused",
+    "professional",
+    "prepared",
+    "confident"
+  ],
+  "topic_tags": [
+    "eva-planning",
+    "spacewalk-prep",
+    "safety-protocols",
+    "mission-briefing",
+    "team-coordination"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
+    },
+    {
+      "id": "fp_torres_t5",
+      "name": "Lt. Torres",
+      "comment": "User ID: user_torres_003"
+    },
+    {
+      "id": "fp_kim_t5",
+      "name": "Engineer Kim",
+      "comment": "User ID: user_kim_004"
+    }
+  ],
+  "location": "iss_unity_module",
+  "background_sounds": "ventilation system, equipment beeping, papers rustling"
 }

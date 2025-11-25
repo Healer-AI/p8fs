@@ -1,4 +1,7 @@
-<frozen runpy>:128: RuntimeWarning: 'p8fs.models.p8' found in sys.modules after import of package 'p8fs.models', but prior to execution of 'p8fs.models.p8'; this may result in unpredictable behaviour
+-- P8FS Full Postgres Migration Script
+-- Generated from Python models with proper JSONB types
+
+-- Agent Model
 CREATE TABLE IF NOT EXISTS public.agents (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -27,7 +30,7 @@ DROP TRIGGER IF EXISTS update_agents_updated_at ON public.agents;
 CREATE TRIGGER update_agents_updated_at 
     BEFORE UPDATE ON public.agents
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -37,9 +40,9 @@ CREATE TABLE IF NOT EXISTS embeddings.agents_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.agents(id) ON DELETE CASCADE,
@@ -51,8 +54,9 @@ CREATE INDEX IF NOT EXISTS idx_agents_embeddings_vector_l2 ON embeddings.agents_
 CREATE INDEX IF NOT EXISTS idx_agents_embeddings_vector_ip ON embeddings.agents_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_agents_embeddings_entity_field ON embeddings.agents_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_agents_embeddings_provider ON embeddings.agents_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_agents_embeddings_field_provider ON embeddings.agents_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_agents_embeddings_field_provider ON embeddings.agents_embeddings (field_name, embedding_provider);
 
+-- ApiProxy Model
 CREATE TABLE IF NOT EXISTS public.api_proxies (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -75,65 +79,9 @@ DROP TRIGGER IF EXISTS update_api_proxies_updated_at ON public.api_proxies;
 CREATE TRIGGER update_api_proxies_updated_at 
     BEFORE UPDATE ON public.api_proxies
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TABLE IF NOT EXISTS public.engrams (
-    id UUID PRIMARY KEY NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    name TEXT NOT NULL,
-    category TEXT,
-    content TEXT NOT NULL,
-    summary TEXT,
-    ordinal BIGINT,
-    uri TEXT,
-    metadata JSONB,
-    graph_paths JSONB,
-    resource_timestamp TIMESTAMPTZ,
-    userid TEXT,
-    processed_at TIMESTAMPTZ,
-    operation_count JSONB,
-    tenant_id TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_engrams_metadata_gin ON engrams USING GIN (metadata);
-CREATE INDEX IF NOT EXISTS idx_engrams_graph_paths_gin ON engrams USING GIN (graph_paths);
-CREATE INDEX IF NOT EXISTS idx_engrams_operation_count_gin ON engrams USING GIN (operation_count);
-
--- Register entity for graph integration
-SELECT * FROM p8.register_entities('engrams', 'id', false, 'p8graph');
-
--- Create trigger for automatic updated_at timestamp
-DROP TRIGGER IF EXISTS update_engrams_updated_at ON public.engrams;
-CREATE TRIGGER update_engrams_updated_at 
-    BEFORE UPDATE ON public.engrams
-    FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
-
--- Create embeddings schema if it doesn't exist
-CREATE SCHEMA IF NOT EXISTS embeddings;
-
-CREATE TABLE IF NOT EXISTS embeddings.engrams_embeddings (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    entity_id UUID NOT NULL,
-    field_name VARCHAR(255) NOT NULL,
-    embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
-    tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (entity_id) REFERENCES public.engrams(id) ON DELETE CASCADE,
-    UNIQUE(entity_id, field_name, tenant_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_vector_cosine ON embeddings.engrams_embeddings USING ivfflat (embedding_vector vector_cosine_ops);
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_vector_l2 ON embeddings.engrams_embeddings USING ivfflat (embedding_vector vector_l2_ops);
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_vector_ip ON embeddings.engrams_embeddings USING ivfflat (embedding_vector vector_ip_ops);
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_entity_field ON embeddings.engrams_embeddings (entity_id, field_name);
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_provider ON embeddings.engrams_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_engrams_embeddings_field_provider ON embeddings.engrams_embeddings (field_name, embedding_provider);;
-
+-- Error Model
 CREATE TABLE IF NOT EXISTS public.errors (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -158,30 +106,9 @@ DROP TRIGGER IF EXISTS update_errors_updated_at ON public.errors;
 CREATE TRIGGER update_errors_updated_at 
     BEFORE UPDATE ON public.errors
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TABLE IF NOT EXISTS public.file_attributes (
-    id UUID PRIMARY KEY NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    file_id TEXT NOT NULL,
-    model TEXT NOT NULL,
-    attributes JSONB NOT NULL,
-    tenant_id TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_file_attributes_attributes_gin ON file_attributes USING GIN (attributes);
-
--- Register entity for graph integration
-SELECT * FROM p8.register_entities('file_attributes', 'id', false, 'p8graph');
-
--- Create trigger for automatic updated_at timestamp
-DROP TRIGGER IF EXISTS update_file_attributes_updated_at ON public.file_attributes;
-CREATE TRIGGER update_file_attributes_updated_at 
-    BEFORE UPDATE ON public.file_attributes
-    FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
-
+-- Files Model
 CREATE TABLE IF NOT EXISTS public.files (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -194,6 +121,8 @@ CREATE TABLE IF NOT EXISTS public.files (
     metadata JSONB,
     parsing_metadata JSONB,
     derived_attributes JSONB,
+    model_pipeline_run_at TIMESTAMPTZ,
+    encryption_key_owner TEXT,
     tenant_id TEXT NOT NULL
 );
 
@@ -209,8 +138,9 @@ DROP TRIGGER IF EXISTS update_files_updated_at ON public.files;
 CREATE TRIGGER update_files_updated_at 
     BEFORE UPDATE ON public.files
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
+-- Function Model
 CREATE TABLE IF NOT EXISTS public.functions (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -239,8 +169,9 @@ DROP TRIGGER IF EXISTS update_functions_updated_at ON public.functions;
 CREATE TRIGGER update_functions_updated_at 
     BEFORE UPDATE ON public.functions
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
+-- Job Model
 CREATE TABLE IF NOT EXISTS public.jobs (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -279,31 +210,9 @@ DROP TRIGGER IF EXISTS update_jobs_updated_at ON public.jobs;
 CREATE TRIGGER update_jobs_updated_at 
     BEFORE UPDATE ON public.jobs
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TABLE IF NOT EXISTS public.kv_storage (
-    id UUID PRIMARY KEY NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    key TEXT NOT NULL,
-    value JSONB NOT NULL,
-    expires_at TIMESTAMPTZ,
-    tenant_id TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_kv_storage_value_gin ON kv_storage USING GIN (value);
-
--- Ensure business key is unique per tenant
-ALTER TABLE public.kv_storage DROP CONSTRAINT IF EXISTS kv_storage_key_tenant_id_key;
-ALTER TABLE public.kv_storage ADD CONSTRAINT kv_storage_key_tenant_id_key UNIQUE (key, tenant_id);
-
--- Create trigger for automatic updated_at timestamp
-DROP TRIGGER IF EXISTS update_kv_storage_updated_at ON public.kv_storage;
-CREATE TRIGGER update_kv_storage_updated_at 
-    BEFORE UPDATE ON public.kv_storage
-    FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
-
+-- LanguageModelApi Model
 CREATE TABLE IF NOT EXISTS public.language_model_apis (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -329,8 +238,9 @@ DROP TRIGGER IF EXISTS update_language_model_apis_updated_at ON public.language_
 CREATE TRIGGER update_language_model_apis_updated_at 
     BEFORE UPDATE ON public.language_model_apis
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
+-- Moment Model
 CREATE TABLE IF NOT EXISTS public.moments (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -367,15 +277,19 @@ CREATE INDEX IF NOT EXISTS idx_moments_images_gin ON moments USING GIN (images);
 CREATE INDEX IF NOT EXISTS idx_moments_speakers_gin ON moments USING GIN (speakers);
 CREATE INDEX IF NOT EXISTS idx_moments_key_emotions_gin ON moments USING GIN (key_emotions);
 
+-- Ensure business key is unique per tenant
+ALTER TABLE public.moments DROP CONSTRAINT IF EXISTS moments_name_tenant_id_key;
+ALTER TABLE public.moments ADD CONSTRAINT moments_name_tenant_id_key UNIQUE (name, tenant_id);
+
 -- Register entity for graph integration
-SELECT * FROM p8.register_entities('moments', 'id', false, 'p8graph');
+SELECT * FROM p8.register_entities('moments', 'name', false, 'p8graph');
 
 -- Create trigger for automatic updated_at timestamp
 DROP TRIGGER IF EXISTS update_moments_updated_at ON public.moments;
 CREATE TRIGGER update_moments_updated_at 
     BEFORE UPDATE ON public.moments
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -385,9 +299,9 @@ CREATE TABLE IF NOT EXISTS embeddings.moments_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.moments(id) ON DELETE CASCADE,
@@ -399,27 +313,9 @@ CREATE INDEX IF NOT EXISTS idx_moments_embeddings_vector_l2 ON embeddings.moment
 CREATE INDEX IF NOT EXISTS idx_moments_embeddings_vector_ip ON embeddings.moments_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_moments_embeddings_entity_field ON embeddings.moments_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_moments_embeddings_provider ON embeddings.moments_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_moments_embeddings_field_provider ON embeddings.moments_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_field_provider ON embeddings.moments_embeddings (field_name, embedding_provider);
 
-CREATE TABLE IF NOT EXISTS public.presentpersons (
-    fingerprint_id TEXT NOT NULL,
-    user_id TEXT,
-    user_label TEXT,
-    tenant_id TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Register entity for graph integration
-SELECT * FROM p8.register_entities('presentpersons', 'name', false, 'p8graph');
-
--- Create trigger for automatic updated_at timestamp
-DROP TRIGGER IF EXISTS update_presentpersons_updated_at ON public.presentpersons;
-CREATE TRIGGER update_presentpersons_updated_at 
-    BEFORE UPDATE ON public.presentpersons
-    FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
-
+-- Project Model
 CREATE TABLE IF NOT EXISTS public.projects (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -447,7 +343,7 @@ DROP TRIGGER IF EXISTS update_projects_updated_at ON public.projects;
 CREATE TRIGGER update_projects_updated_at 
     BEFORE UPDATE ON public.projects
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -457,9 +353,9 @@ CREATE TABLE IF NOT EXISTS embeddings.projects_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.projects(id) ON DELETE CASCADE,
@@ -471,8 +367,9 @@ CREATE INDEX IF NOT EXISTS idx_projects_embeddings_vector_l2 ON embeddings.proje
 CREATE INDEX IF NOT EXISTS idx_projects_embeddings_vector_ip ON embeddings.projects_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_projects_embeddings_entity_field ON embeddings.projects_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_projects_embeddings_provider ON embeddings.projects_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_projects_embeddings_field_provider ON embeddings.projects_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_projects_embeddings_field_provider ON embeddings.projects_embeddings (field_name, embedding_provider);
 
+-- Resources Model
 CREATE TABLE IF NOT EXISTS public.resources (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -493,15 +390,19 @@ CREATE TABLE IF NOT EXISTS public.resources (
 CREATE INDEX IF NOT EXISTS idx_resources_metadata_gin ON resources USING GIN (metadata);
 CREATE INDEX IF NOT EXISTS idx_resources_graph_paths_gin ON resources USING GIN (graph_paths);
 
+-- Ensure business key is unique per tenant
+ALTER TABLE public.resources DROP CONSTRAINT IF EXISTS resources_name_tenant_id_key;
+ALTER TABLE public.resources ADD CONSTRAINT resources_name_tenant_id_key UNIQUE (name, tenant_id);
+
 -- Register entity for graph integration
-SELECT * FROM p8.register_entities('resources', 'id', false, 'p8graph');
+SELECT * FROM p8.register_entities('resources', 'name', false, 'p8graph');
 
 -- Create trigger for automatic updated_at timestamp
 DROP TRIGGER IF EXISTS update_resources_updated_at ON public.resources;
 CREATE TRIGGER update_resources_updated_at 
     BEFORE UPDATE ON public.resources
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -511,9 +412,9 @@ CREATE TABLE IF NOT EXISTS embeddings.resources_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.resources(id) ON DELETE CASCADE,
@@ -525,8 +426,9 @@ CREATE INDEX IF NOT EXISTS idx_resources_embeddings_vector_l2 ON embeddings.reso
 CREATE INDEX IF NOT EXISTS idx_resources_embeddings_vector_ip ON embeddings.resources_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_resources_embeddings_entity_field ON embeddings.resources_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_resources_embeddings_provider ON embeddings.resources_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_resources_embeddings_field_provider ON embeddings.resources_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_resources_embeddings_field_provider ON embeddings.resources_embeddings (field_name, embedding_provider);
 
+-- Session Model
 CREATE TABLE IF NOT EXISTS public.sessions (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -559,7 +461,7 @@ DROP TRIGGER IF EXISTS update_sessions_updated_at ON public.sessions;
 CREATE TRIGGER update_sessions_updated_at 
     BEFORE UPDATE ON public.sessions
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -569,9 +471,9 @@ CREATE TABLE IF NOT EXISTS embeddings.sessions_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.sessions(id) ON DELETE CASCADE,
@@ -583,8 +485,9 @@ CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_vector_l2 ON embeddings.sessi
 CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_vector_ip ON embeddings.sessions_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_entity_field ON embeddings.sessions_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_provider ON embeddings.sessions_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_field_provider ON embeddings.sessions_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_sessions_embeddings_field_provider ON embeddings.sessions_embeddings (field_name, embedding_provider);
 
+-- Task Model
 CREATE TABLE IF NOT EXISTS public.tasks (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -611,7 +514,7 @@ DROP TRIGGER IF EXISTS update_tasks_updated_at ON public.tasks;
 CREATE TRIGGER update_tasks_updated_at 
     BEFORE UPDATE ON public.tasks
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -621,9 +524,9 @@ CREATE TABLE IF NOT EXISTS embeddings.tasks_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.tasks(id) ON DELETE CASCADE,
@@ -635,8 +538,9 @@ CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_vector_l2 ON embeddings.tasks_em
 CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_vector_ip ON embeddings.tasks_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_entity_field ON embeddings.tasks_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_provider ON embeddings.tasks_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_field_provider ON embeddings.tasks_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_tasks_embeddings_field_provider ON embeddings.tasks_embeddings (field_name, embedding_provider);
 
+-- Tenant Model
 CREATE TABLE IF NOT EXISTS public.tenants (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -647,11 +551,14 @@ CREATE TABLE IF NOT EXISTS public.tenants (
     device_ids JSONB,
     storage_bucket TEXT,
     metadata JSONB,
-    active BOOLEAN
+    active BOOLEAN,
+    security_policy JSONB,
+    encryption_wait_time_days BIGINT
 );
 
 CREATE INDEX IF NOT EXISTS idx_tenants_device_ids_gin ON tenants USING GIN (device_ids);
 CREATE INDEX IF NOT EXISTS idx_tenants_metadata_gin ON tenants USING GIN (metadata);
+CREATE INDEX IF NOT EXISTS idx_tenants_security_policy_gin ON tenants USING GIN (security_policy);
 
 -- Register entity for graph integration
 SELECT * FROM p8.register_entities('tenants', 'id', false, 'p8graph');
@@ -661,8 +568,9 @@ DROP TRIGGER IF EXISTS update_tenants_updated_at ON public.tenants;
 CREATE TRIGGER update_tenants_updated_at 
     BEFORE UPDATE ON public.tenants
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
+-- TokenUsage Model
 CREATE TABLE IF NOT EXISTS public.token_usage (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -684,8 +592,9 @@ DROP TRIGGER IF EXISTS update_token_usage_updated_at ON public.token_usage;
 CREATE TRIGGER update_token_usage_updated_at 
     BEFORE UPDATE ON public.token_usage
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
+-- User Model
 CREATE TABLE IF NOT EXISTS public.users (
     id UUID PRIMARY KEY NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -730,7 +639,7 @@ DROP TRIGGER IF EXISTS update_users_updated_at ON public.users;
 CREATE TRIGGER update_users_updated_at 
     BEFORE UPDATE ON public.users
     FOR EACH ROW 
-    EXECUTE FUNCTION update_updated_at_column();;
+    EXECUTE FUNCTION update_updated_at_column();
 
 -- Create embeddings schema if it doesn't exist
 CREATE SCHEMA IF NOT EXISTS embeddings;
@@ -740,9 +649,9 @@ CREATE TABLE IF NOT EXISTS embeddings.users_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.users(id) ON DELETE CASCADE,
@@ -754,4 +663,28 @@ CREATE INDEX IF NOT EXISTS idx_users_embeddings_vector_l2 ON embeddings.users_em
 CREATE INDEX IF NOT EXISTS idx_users_embeddings_vector_ip ON embeddings.users_embeddings USING ivfflat (embedding_vector vector_ip_ops);
 CREATE INDEX IF NOT EXISTS idx_users_embeddings_entity_field ON embeddings.users_embeddings (entity_id, field_name);
 CREATE INDEX IF NOT EXISTS idx_users_embeddings_provider ON embeddings.users_embeddings (embedding_provider);
-CREATE INDEX IF NOT EXISTS idx_users_embeddings_field_provider ON embeddings.users_embeddings (field_name, embedding_provider);;
+CREATE INDEX IF NOT EXISTS idx_users_embeddings_field_provider ON embeddings.users_embeddings (field_name, embedding_provider);
+
+-- KVStorage Model
+CREATE TABLE IF NOT EXISTS public.kv_storage (
+    id UUID PRIMARY KEY NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    key TEXT NOT NULL,
+    value JSONB NOT NULL,
+    expires_at TIMESTAMPTZ,
+    tenant_id TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_kv_storage_value_gin ON kv_storage USING GIN (value);
+
+-- Ensure business key is unique per tenant
+ALTER TABLE public.kv_storage DROP CONSTRAINT IF EXISTS kv_storage_key_tenant_id_key;
+ALTER TABLE public.kv_storage ADD CONSTRAINT kv_storage_key_tenant_id_key UNIQUE (key, tenant_id);
+
+-- Create trigger for automatic updated_at timestamp
+DROP TRIGGER IF EXISTS update_kv_storage_updated_at ON public.kv_storage;
+CREATE TRIGGER update_kv_storage_updated_at 
+    BEFORE UPDATE ON public.kv_storage
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();

@@ -6,7 +6,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, Query, HTTPException
 from pydantic import BaseModel
 
-from p8fs.models.engram.models import Moment
+from p8fs.models.p8 import Moment
 from p8fs_api.middleware import User, get_current_user
 from p8fs_api.models.responses import ErrorResponse
 

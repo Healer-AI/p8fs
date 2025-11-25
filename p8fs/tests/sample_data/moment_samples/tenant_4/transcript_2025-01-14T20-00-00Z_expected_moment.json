@@ -1,8 +1,12 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T20:00:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "08:00 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.12,
+    "word_count": 261,
+    "speaker_count": 1,
+    "activity_type": "storm_shelter",
+    "elevation_meters": 1847,
+    "extreme_conditions": true
   },
   "name": "Storm Night - Tent Resilience",
   "content": "Lena weathering intense alpine storm inside tent at 8 PM. Heavy snow and howling wind conditions, tent holding strong with poles flexing and recovering from gusts. Extra guy lines proving effective. Experiencing primal connection to ancestral shelter-seeking behavior - high-tech tent providing same fundamental protection as ancient caves. Hyper-vigilant awareness of every sound and movement, prepared for potential equipment failure though none occurring. Emergency gear organized within reach (headlamp, batteries, repair kit). Finding meditative quality in complete present-moment focus: only immediate concern is maintaining warmth and dryness. Complete disconnection from modern world demands (work, social media, news). Accepting nature's authority over storm duration and intensity. Planning to read then sleep, viewing storm noise as potential sleep aid. Calm resilience in face of harsh conditions.",
@@ -12,24 +16,26 @@
   "resource_timestamp": "2025-01-14T20:00:00Z",
   "resource_ends_timestamp": "2025-01-14T20:10:07Z",
   "moment_type": "observation",
-  "emotion_tags": ["calm", "hyper-aware", "resilient", "meditative"],
-  "topic_tags": ["storm", "survival", "resilience", "mindfulness", "wilderness-experience"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
+  "emotion_tags": [
+    "calm",
+    "hyper-aware",
+    "resilient",
+    "meditative"
+  ],
+  "topic_tags": [
+    "storm",
+    "survival",
+    "resilience",
+    "mindfulness",
+    "wilderness-experience"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
     }
-  },
+  ],
   "location": "46.5500,8.7000",
-  "background_sounds": "intense wind, snow pelting tent, fabric snapping, poles creaking",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.12,
-    "word_count": 261,
-    "speaker_count": 1,
-    "activity_type": "storm_shelter",
-    "elevation_meters": 1847,
-    "extreme_conditions": true
-  }
+  "background_sounds": "intense wind, snow pelting tent, fabric snapping, poles creaking"
 }

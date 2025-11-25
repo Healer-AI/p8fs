@@ -175,7 +175,7 @@ class TestDreamingWorkerBatchProcessing:
         assert isinstance(batch_context, BatchCallingContext)
         assert batch_context.tenant_id == tenant_id
         assert batch_context.save_job is True
-        assert batch_context.model == "gpt-4-turbo-preview"
+        assert batch_context.model == "gpt-4.1"
 
     async def test_check_completions_integration(self, dreaming_worker, mock_dreaming_repository, mock_memory_proxy):
         """Test completion checking workflow integration."""

@@ -1,0 +1,267 @@
+kind: engram
+name: "Friday Afternoon Company All-Hands"
+category: "meeting"
+summary: "Company-wide all-hands meeting where leadership announces Q4 goals and Vitality app launch timeline, energizing the entire team for the final push to November 30"
+resource_timestamp: "2024-11-15T14:00:00Z"
+uri: "meeting://all-hands/2024-11-15"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 45
+    location: "Main Conference Room"
+    meeting_type: "all_hands"
+    attendees_count: 42
+content: |
+  Quarterly all-hands meeting with the entire company. David (CEO) led the session,
+  with updates from Sarah (Product), Mike (Engineering), and Marketing leadership.
+
+  David opened with company vision and Q4 priorities:
+  - Vitality app launch November 30 is the company's top priority
+  - Investor demo November 28 will determine next funding round
+  - Q4 revenue target: 40% growth from Q3
+  - Team has grown from 32 to 42 people since Q3
+
+  Sarah Chen presented product update:
+  - New onboarding flow launches today to staging (2pm deployment happening concurrently)
+  - User testing showed 48% reduction in signup time
+  - A/B testing to begin Monday after production deployment
+  - Onboarding improvements will be centerpiece of investor demo
+
+  Mike Johnson provided engineering update:
+  - API rate limiting issue from early week fully resolved
+  - Infrastructure scaled to handle 10x current user load
+  - Database migration completing this weekend
+  - DevOps team has staging and production environments ready
+  - On-call rotation Nov 25-30 to ensure launch stability
+
+  Marketing team announced pre-launch campaign:
+  - Email campaign begins Nov 25 (5 days before launch)
+  - Social media push starts Nov 27
+  - PR outreach to tech media scheduled for launch day
+  - Target: 10,000 signups in first week
+
+  The energy in the room was palpable. After Monday's technical blocker and Wednesday's
+  tight timeline from the CEO meeting, the whole company now understands what's at stake.
+  Everyone leaving energized and focused on the November 30 goal.
+
+  Cross-functional collaboration highlighted:
+  - Engineering resolved technical blockers quickly
+  - Design and Research validated user experience improvements
+  - Product coordinated timeline across all teams
+  - DevOps ensured infrastructure readiness
+  - Marketing prepared for launch amplification
+
+graph_edges:
+  - dst: "Launch Timeline"
+    rel_type: "announces"
+    weight: 1.0
+    properties:
+      dst_entity_type: "project/planning"
+      match_type: "explicit_reference"
+      confidence: 1.0
+      context: "Company-wide announcement of Nov 30 launch"
+
+  - dst: "Investor Demo"
+    rel_type: "discusses"
+    weight: 0.9
+    properties:
+      dst_entity_type: "concept/business-event"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "celebrates"
+    weight: 0.85
+    properties:
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      context: "Announced as centerpiece of demo and launch"
+
+  - dst: "Q4 Roadmap"
+    rel_type: "updates"
+    weight: 0.8
+    properties:
+      dst_entity_type: "project/planning"
+      match_type: "explicit_reference"
+
+  - dst: "Vitality App"
+    rel_type: "focuses_on"
+    weight: 1.0
+    properties:
+      dst_entity_type: "project/product"
+      match_type: "explicit_reference"
+
+moments:
+  - name: "CEO Vision and Priorities"
+    content: "David outlined Q4 priorities with Vitality launch as top goal. Emphasized investor demo importance for funding. Announced team growth from 32 to 42 people."
+    summary: "CEO sets Q4 priorities: Vitality launch, investor demo, 40% growth"
+    resource_timestamp: "2024-11-15T14:02:00Z"
+    resource_ends_timestamp: "2024-11-15T14:15:00Z"
+    moment_type: "presentation"
+    emotion_tags: ["inspiring", "focused", "strategic"]
+    topic_tags: ["company-vision", "q4-goals", "growth-metrics"]
+    present_persons:
+      - id: "David"
+        name: "David"
+        comment: "CEO, presented vision"
+      - id: "All Company"
+        name: "All Company"
+        comment: "42 employees attending"
+    speakers:
+      - text: "November 30 launch of Vitality is our top priority. Everything else supports this goal"
+        speaker_identifier: "David"
+        timestamp: "2024-11-15T14:05:00Z"
+        emotion: "decisive"
+      - text: "The investor demo on the 28th will determine our next funding round. We need to nail this"
+        speaker_identifier: "David"
+        timestamp: "2024-11-15T14:07:30Z"
+        emotion: "serious"
+    metadata:
+      company_size: 42
+      q4_growth_target: "40%"
+      top_priority: "Vitality app launch"
+    graph_edges:
+      - dst: "David"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/executive"
+          role: "CEO"
+          participation_level: "primary_presenter"
+
+      - dst: "Launch Timeline"
+        rel_type: "announces"
+        weight: 1.0
+        properties:
+          dst_entity_type: "project/planning"
+
+      - dst: "Vitality App"
+        rel_type: "discusses"
+        weight: 1.0
+        properties:
+          dst_entity_type: "project/product"
+
+  - name: "Product Update - Onboarding Success"
+    content: "Sarah presented new onboarding flow achievements: 48% faster signup, launching to staging today, user testing validation. Highlighted as investor demo centerpiece."
+    summary: "Product update celebrates onboarding flow success"
+    resource_timestamp: "2024-11-15T14:15:00Z"
+    resource_ends_timestamp: "2024-11-15T14:25:00Z"
+    moment_type: "presentation"
+    emotion_tags: ["proud", "accomplished", "validated"]
+    topic_tags: ["product-update", "onboarding-flow", "user-testing-results"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, presented update"
+      - id: "All Company"
+        name: "All Company"
+        comment: "Audience"
+    speakers:
+      - text: "User testing showed we reduced signup time by 48%. That's going from 4.5 minutes to 2.3 minutes"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-15T14:18:00Z"
+        emotion: "proud"
+      - text: "This new onboarding flow will be the centerpiece of our investor demo"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-15T14:21:00Z"
+        emotion: "confident"
+    metadata:
+      signup_time_improvement: "48%"
+      deployment_status: "launching to staging today"
+    graph_edges:
+      - dst: "Sarah Chen"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "Product Manager"
+          participation_level: "presenter"
+
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "celebrates"
+        weight: 0.95
+        properties:
+          dst_entity_type: "project/design"
+
+      - dst: "Thursday User Testing Review"
+        rel_type: "references"
+        weight: 0.75
+        properties:
+          dst_entity_type: "resource/meeting"
+          context: "Cited user testing results"
+
+  - name: "Engineering Update - Technical Readiness"
+    content: "Mike reported API blocker resolution, infrastructure scaling (10x capacity), database migration progress, and on-call rotation for launch stability."
+    summary: "Engineering update confirms technical readiness for launch"
+    resource_timestamp: "2024-11-15T14:25:00Z"
+    resource_ends_timestamp: "2024-11-15T14:35:00Z"
+    moment_type: "presentation"
+    emotion_tags: ["confident", "prepared", "technical"]
+    topic_tags: ["engineering-update", "infrastructure", "technical-readiness"]
+    present_persons:
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead, presented update"
+      - id: "All Company"
+        name: "All Company"
+        comment: "Audience"
+    speakers:
+      - text: "We resolved the API rate limiting issue early this week and scaled infrastructure to handle 10x our current load"
+        speaker_identifier: "Mike Johnson"
+        timestamp: "2024-11-15T14:27:00Z"
+        emotion: "confident"
+      - text: "We have on-call rotation from Nov 25-30 to ensure launch stability. The team is ready"
+        speaker_identifier: "Mike Johnson"
+        timestamp: "2024-11-15T14:32:00Z"
+        emotion: "prepared"
+    metadata:
+      infrastructure_scaling: "10x current capacity"
+      on_call_period: "2024-11-25 to 2024-11-30"
+    graph_edges:
+      - dst: "Mike Johnson"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "Tech Lead"
+          participation_level: "presenter"
+
+      - dst: "API Rate Limiting Issue"
+        rel_type: "reports_resolution"
+        weight: 0.9
+        properties:
+          dst_entity_type: "concept/technical-issue"
+          context: "Confirmed resolution to entire company"
+
+      - dst: "Deployment Pipeline"
+        rel_type: "discusses"
+        weight: 0.85
+        properties:
+          dst_entity_type: "concept/infrastructure"
+
+  - name: "Company Energized"
+    content: "Meeting concluded with entire company aligned on November 30 goal. Energy and focus palpable across all teams. Cross-functional collaboration highlighted as key success factor."
+    summary: "Company energized and aligned for final launch push"
+    resource_timestamp: "2024-11-15T14:40:00Z"
+    resource_ends_timestamp: "2024-11-15T14:45:00Z"
+    moment_type: "reflection"
+    emotion_tags: ["energized", "unified", "motivated"]
+    topic_tags: ["team-alignment", "company-culture", "cross-functional-collaboration"]
+    present_persons:
+      - id: "All Company"
+        name: "All Company"
+        comment: "Entire team"
+    metadata:
+      team_morale: "high"
+      alignment_level: "strong"
+      collaboration_quality: "excellent"
+    graph_edges:
+      - dst: "Launch Timeline"
+        rel_type: "commits_to"
+        weight: 0.95
+        properties:
+          dst_entity_type: "project/planning"
+          context: "Entire company committed to Nov 30 launch"

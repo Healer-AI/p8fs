@@ -1,39 +1,5 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T07:00:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "07:00 AM UTC"
-  },
-  "name": "EVA Prebreathe Protocol - Final Preparation",
-  "content": "Commander Chen supervising Torres and Kim's EVA preparation with oxygen prebreathe protocol initiation for nitrogen purge (60-minute pure O2 breathing preventing decompression sickness). Comprehensive EMU spacesuit checkout: unit 3012 (Torres) and 3008 (Kim) both showing optimal status - 100% battery charge (8-hour capacity), 850 PSI oxygen pressure, full water cooling reservoirs, operational PLSS systems with fresh CO2 scrubber cartridges, recalibrated thermal control (18°C automatic maintenance). Seven-hour absolute maximum consumable margin providing substantial safety buffer beyond 90-minute planned repair duration. Communications verified five-by-five clarity. Detailed translation path review: 30-meter starboard movement along Z1 truss handrails with three-meter tether leapfrog protocol ensuring continuous safety attachment. Environmental briefing reinforced: 30-minute continuous sunlight followed by eclipse transition with dramatic temperature variation and helmet light requirement. Crew emotional state balanced: Torres and Kim expressing appropriate nervousness (healthy respect) combined with preparation confidence and visualization readiness. Commander Chen providing steady leadership with emphasis on methodical movement over speed, work priority over sightseeing, proper safety attitude validation. Timeline confirmed: 52 minutes remaining prebreathe, 30-minute suit donning process, then depressurization and airlock exit. Mutual respect and confidence expressed between commander and EVA crew.",
-  "summary": "EVA prep: oxygen prebreathe started, suits checked nominal, procedures reviewed, crew confident and appropriately cautious",
-  "category": "space",
-  "uri": "s3://p8fs-tenant5/recordings/2025-01-14/prebreathe_protocol.wav",
-  "resource_timestamp": "2025-01-14T07:00:00Z",
-  "resource_ends_timestamp": "2025-01-14T07:10:09Z",
-  "moment_type": "meeting",
-  "emotion_tags": ["focused", "nervous", "confident", "prepared", "supportive"],
-  "topic_tags": ["eva-preparation", "safety-protocols", "equipment-checkout", "prebreathe-procedure", "team-coordination"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
-    },
-    "fp_torres_t5": {
-      "fingerprint_id": "fp_torres_t5",
-      "user_id": "user_torres_003",
-      "user_label": "Lt. Torres"
-    },
-    "fp_kim_t5": {
-      "fingerprint_id": "fp_kim_t5",
-      "user_id": "user_kim_004",
-      "user_label": "Engineer Kim"
-    }
-  },
-  "location": "iss_airlock_module",
-  "background_sounds": "oxygen flow, equipment beeping, suit rustling",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 10.15,
     "word_count": 318,
@@ -41,5 +7,46 @@
     "activity_type": "eva_preparation",
     "mission_day": 88,
     "prebreathe_protocol": true
-  }
+  },
+  "name": "EVA Prebreathe Protocol - Final Preparation",
+  "content": "Commander Chen supervising Torres and Kim's EVA preparation with oxygen prebreathe protocol initiation for nitrogen purge (60-minute pure O2 breathing preventing decompression sickness). Comprehensive EMU spacesuit checkout: unit 3012 (Torres) and 3008 (Kim) both showing optimal status - 100% battery charge (8-hour capacity), 850 PSI oxygen pressure, full water cooling reservoirs, operational PLSS systems with fresh CO2 scrubber cartridges, recalibrated thermal control (18\u00b0C automatic maintenance). Seven-hour absolute maximum consumable margin providing substantial safety buffer beyond 90-minute planned repair duration. Communications verified five-by-five clarity. Detailed translation path review: 30-meter starboard movement along Z1 truss handrails with three-meter tether leapfrog protocol ensuring continuous safety attachment. Environmental briefing reinforced: 30-minute continuous sunlight followed by eclipse transition with dramatic temperature variation and helmet light requirement. Crew emotional state balanced: Torres and Kim expressing appropriate nervousness (healthy respect) combined with preparation confidence and visualization readiness. Commander Chen providing steady leadership with emphasis on methodical movement over speed, work priority over sightseeing, proper safety attitude validation. Timeline confirmed: 52 minutes remaining prebreathe, 30-minute suit donning process, then depressurization and airlock exit. Mutual respect and confidence expressed between commander and EVA crew.",
+  "summary": "EVA prep: oxygen prebreathe started, suits checked nominal, procedures reviewed, crew confident and appropriately cautious",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-14/prebreathe_protocol.wav",
+  "resource_timestamp": "2025-01-14T07:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T07:10:09Z",
+  "moment_type": "meeting",
+  "emotion_tags": [
+    "focused",
+    "nervous",
+    "confident",
+    "prepared",
+    "supportive"
+  ],
+  "topic_tags": [
+    "eva-preparation",
+    "safety-protocols",
+    "equipment-checkout",
+    "prebreathe-procedure",
+    "team-coordination"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
+    },
+    {
+      "id": "fp_torres_t5",
+      "name": "Lt. Torres",
+      "comment": "User ID: user_torres_003"
+    },
+    {
+      "id": "fp_kim_t5",
+      "name": "Engineer Kim",
+      "comment": "User ID: user_kim_004"
+    }
+  ],
+  "location": "iss_airlock_module",
+  "background_sounds": "oxygen flow, equipment beeping, suit rustling"
 }

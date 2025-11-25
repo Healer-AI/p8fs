@@ -1,0 +1,213 @@
+kind: engram
+name: "Monday Afternoon Design Review"
+category: "meeting"
+summary: "Design review session for new onboarding flow with Jamie and Kevin, discussing A/B testing strategy and approving designs with minor tweaks"
+resource_timestamp: "2024-11-11T14:00:00Z"
+uri: "meeting://design-review/2024-11-11-onboarding"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 60
+    location: "Design Studio"
+    meeting_type: "design_review"
+content: |
+  Design review session for the new onboarding flow that Jamie presented in this morning's standup.
+
+  Jamie Lee (Designer) walked through the complete user journey for the new onboarding experience.
+  The redesign focuses on reducing friction in the signup process and improving first-time user
+  activation rates.
+
+  Kevin Park (Frontend Engineer) asked clarifying questions about mobile responsiveness and
+  animation timing. Jamie showed interactive prototypes demonstrating the flow on different
+  screen sizes.
+
+  Sarah Chen (Product Manager) suggested we implement A/B testing to validate the new design
+  against the current flow. The team agreed to run a two-week test with 50/50 traffic split.
+
+  Key decisions:
+  - Approved designs with minor tweaks to button placement
+  - A/B test strategy: 50/50 split for 2 weeks starting next Monday
+  - Kevin to begin implementation tomorrow
+  - Target completion: Friday this week for staging deployment
+
+  This design is critical for the Q4 roadmap and November 30 launch timeline.
+
+graph_edges:
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "discusses"
+    weight: 1.0
+    properties:
+      dst_name: "Onboarding Flow Redesign"
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "A/B Testing Strategy"
+    rel_type: "discusses"
+    weight: 0.85
+    properties:
+      dst_name: "A/B Testing Strategy"
+      dst_entity_type: "concept/methodology"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Q4 Roadmap"
+    rel_type: "relates_to"
+    weight: 0.7
+    properties:
+      dst_name: "Q4 Roadmap"
+      dst_entity_type: "project/planning"
+      match_type: "contextual_reference"
+      confidence: 0.9
+
+  - dst: "Monday Morning Team Standup"
+    rel_type: "follows"
+    weight: 0.8
+    properties:
+      dst_name: "Monday Morning Team Standup"
+      dst_entity_type: "resource/meeting"
+      match_type: "temporal_reference"
+      confidence: 1.0
+      context: "Design review scheduled during morning standup"
+
+moments:
+  - name: "Design Walkthrough"
+    content: "Jamie presented the complete onboarding flow redesign, showing interactive prototypes and explaining design decisions for reducing signup friction."
+    summary: "Complete walkthrough of new onboarding UX design"
+    resource_timestamp: "2024-11-11T14:05:00Z"
+    resource_ends_timestamp: "2024-11-11T14:30:00Z"
+    moment_type: "presentation"
+    emotion_tags: ["excited", "proud", "collaborative"]
+    topic_tags: ["onboarding-flow", "ux-design", "user-activation"]
+    present_persons:
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, presented designs"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+      - id: "Kevin Park"
+        name: "Kevin Park"
+        comment: "Frontend Engineer"
+    speakers:
+      - text: "The new flow reduces signup steps from 7 to 4, which should significantly improve our activation rates"
+        speaker_identifier: "Jamie Lee"
+        timestamp: "2024-11-11T14:08:00Z"
+        emotion: "confident"
+      - text: "I love the progressive disclosure approach - it feels much less overwhelming"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-11T14:12:00Z"
+        emotion: "enthusiastic"
+    graph_edges:
+      - dst: "Jamie Lee"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Jamie Lee"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Designer"
+          participation_level: "presenter"
+      - dst: "Kevin Park"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Kevin Park"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Frontend Engineer"
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "discusses"
+        weight: 1.0
+        properties:
+          dst_name: "Onboarding Flow Redesign"
+          dst_entity_type: "project/design"
+          match_type: "explicit_reference"
+
+  - name: "Technical Discussion"
+    content: "Kevin asked about mobile responsiveness and animation performance. Jamie demonstrated responsive behavior across different screen sizes and explained animation timing choices."
+    summary: "Technical implementation questions and responsive design demo"
+    resource_timestamp: "2024-11-11T14:30:00Z"
+    resource_ends_timestamp: "2024-11-11T14:45:00Z"
+    moment_type: "discussion"
+    emotion_tags: ["analytical", "detailed", "collaborative"]
+    topic_tags: ["mobile-responsiveness", "frontend-implementation", "animations"]
+    present_persons:
+      - id: "Kevin Park"
+        name: "Kevin Park"
+        comment: "Frontend Engineer, asking questions"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, providing answers"
+    speakers:
+      - text: "How do the animations perform on lower-end Android devices?"
+        speaker_identifier: "Kevin Park"
+        timestamp: "2024-11-11T14:32:00Z"
+        emotion: "analytical"
+      - text: "We kept them lightweight - just CSS transitions, no heavy JavaScript animations"
+        speaker_identifier: "Jamie Lee"
+        timestamp: "2024-11-11T14:33:00Z"
+        emotion: "reassuring"
+    graph_edges:
+      - dst: "Kevin Park"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Kevin Park"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Frontend Engineer"
+
+  - name: "A/B Testing Decision"
+    content: "Sarah proposed A/B testing strategy to validate new design. Team agreed on 50/50 traffic split for two weeks. Decision made to proceed with implementation."
+    summary: "A/B testing strategy approved, implementation greenlit"
+    resource_timestamp: "2024-11-11T14:45:00Z"
+    resource_ends_timestamp: "2024-11-11T15:00:00Z"
+    moment_type: "decision"
+    emotion_tags: ["decisive", "strategic", "confident"]
+    topic_tags: ["ab-testing", "validation-strategy", "implementation-approval"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, proposed strategy"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, agreed"
+      - id: "Kevin Park"
+        name: "Kevin Park"
+        comment: "Frontend Engineer, will implement"
+    metadata:
+      decision_type: "testing_strategy"
+      impact: "high"
+      stakeholders: ["product", "design", "engineering"]
+      implementation_owner: "Kevin Park"
+      timeline: "Start implementation Tuesday, deploy to staging Friday"
+    graph_edges:
+      - dst: "Sarah Chen"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Sarah Chen"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Product Manager"
+          participation_level: "decision_maker"
+      - dst: "A/B Testing Strategy"
+        rel_type: "discusses"
+        weight: 1.0
+        properties:
+          dst_name: "A/B Testing Strategy"
+          dst_entity_type: "concept/methodology"
+          match_type: "explicit_reference"
+      - dst: "Launch Timeline"
+        rel_type: "relates_to"
+        weight: 0.75
+        properties:
+          dst_name: "Launch Timeline"
+          dst_entity_type: "project/planning"
+          match_type: "contextual_reference"
+          confidence: 0.85
+          context: "Testing must complete before Nov 30 launch"

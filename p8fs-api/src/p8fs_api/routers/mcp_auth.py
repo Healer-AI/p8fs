@@ -34,9 +34,9 @@ discovery layer that MCP clients expect.
 
 Authentication Flow for MCP Clients:
 1. Client calls /api/mcp/auth/login-required to discover OAuth endpoints
-2. Client initiates device flow via /oauth/device_authorization
+2. Client initiates device flow via /api/v1/oauth/device_authorization
 3. User approves via QR code on mobile device
-4. Client polls /oauth/token until approval
+4. Client polls /api/v1/oauth/token until approval
 5. Client uses bearer token for subsequent MCP operations
 """
 
@@ -232,13 +232,13 @@ async def login_required(request: Request) -> MCPLoginInfo:
 
 
 # Removed /auth/qr-login endpoint - MCP clients should use standard OAuth flow:
-# 1. POST /oauth/device_authorization to get device code
-# 2. Direct user to /oauth/device for QR code
-# 3. Poll /oauth/token for completion
+# 1. POST /api/v1/oauth/device_authorization to get device code
+# 2. Direct user to /api/v1/oauth/device for QR code
+# 3. Poll /api/v1/oauth/token for completion
 
 
 
 
 # Removed - duplicate of main OAuth router's discovery endpoint
-# MCP clients should use /oauth/.well-known/openid-configuration directly
+# MCP clients should use /api/v1/oauth/.well-known/openid-configuration directly
 # or /api/mcp/auth/discovery for MCP-namespaced access

@@ -1,0 +1,163 @@
+kind: engram
+name: "Wednesday Afternoon CEO Sync"
+category: "meeting"
+summary: "Quick sync with CEO David about Q4 launch timeline, confirming November 30 launch date and discussing investor demo preparation"
+resource_timestamp: "2024-11-13T16:00:00Z"
+uri: "meeting://ceo-sync/2024-11-13"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 15
+    location: "CEO Office"
+    meeting_type: "executive_sync"
+content: |
+  Brief but critical sync with David (CEO) to confirm launch timeline and investor demo readiness.
+
+  Sarah Chen (Product Manager) provided update on Vitality app launch progress. Onboarding flow
+  is on track for completion by Friday, which gives us two weeks buffer before the November 30 launch.
+
+  David asked specifically about investor demo readiness. The demo is scheduled for November 28,
+  just two days before launch. Sarah confirmed that the staging environment will be ready and the
+  onboarding flow improvements will be the main showcase feature.
+
+  Key outcomes:
+  - November 30 launch date officially confirmed
+  - Investor demo scheduled for Nov 28 (2 days before launch)
+  - Staging environment must be ready by Nov 27
+  - Final Q4 metrics report needed by Monday Nov 18
+
+  This meeting provides critical business context for the technical work happening this week.
+
+graph_edges:
+  - dst: "Launch Timeline"
+    rel_type: "discusses"
+    weight: 1.0
+    properties:
+      dst_entity_type: "project/planning"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Investor Demo"
+    rel_type: "discusses"
+    weight: 0.9
+    properties:
+      dst_entity_type: "concept/business-event"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Q4 Roadmap"
+    rel_type: "relates_to"
+    weight: 0.75
+    properties:
+      dst_entity_type: "project/planning"
+      match_type: "contextual_reference"
+      confidence: 0.9
+
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "discusses"
+    weight: 0.8
+    properties:
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+moments:
+  - name: "Launch Date Confirmation"
+    content: "David confirmed November 30 as the official launch date for Vitality app. This gives the team 17 days from today to complete all remaining work."
+    summary: "Nov 30 launch date officially confirmed by CEO"
+    resource_timestamp: "2024-11-13T16:02:00Z"
+    resource_ends_timestamp: "2024-11-13T16:08:00Z"
+    moment_type: "decision"
+    emotion_tags: ["decisive", "committed", "focused"]
+    topic_tags: ["launch-timeline", "q4-goals", "vitality-app"]
+    present_persons:
+      - id: "David"
+        name: "David"
+        comment: "CEO, made decision"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, confirmed feasibility"
+    speakers:
+      - text: "November 30 is our launch date. That's final. Can we make it?"
+        speaker_identifier: "David"
+        timestamp: "2024-11-13T16:03:00Z"
+        emotion: "decisive"
+      - text: "Yes, we're on track. Onboarding flow completes Friday, which gives us two weeks buffer"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-13T16:04:00Z"
+        emotion: "confident"
+    metadata:
+      decision_type: "strategic_commitment"
+      impact: "critical"
+      stakeholders: ["entire-company"]
+    graph_edges:
+      - dst: "David"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/executive"
+          match_type: "explicit_attendance"
+          role: "CEO"
+          participation_level: "decision_maker"
+
+      - dst: "Sarah Chen"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Product Manager"
+
+      - dst: "Launch Timeline"
+        rel_type: "decides"
+        weight: 1.0
+        properties:
+          dst_entity_type: "project/planning"
+          match_type: "explicit_reference"
+
+  - name: "Investor Demo Discussion"
+    content: "David outlined investor demo plan for November 28. Demo will showcase the new onboarding flow and highlight Q4 growth metrics. Sarah confirmed staging environment readiness."
+    summary: "Investor demo scheduled for Nov 28, two days before launch"
+    resource_timestamp: "2024-11-13T16:08:00Z"
+    resource_ends_timestamp: "2024-11-13T16:14:00Z"
+    moment_type: "planning"
+    emotion_tags: ["strategic", "prepared", "business-focused"]
+    topic_tags: ["investor-demo", "staging-environment", "q4-metrics"]
+    present_persons:
+      - id: "David"
+        name: "David"
+        comment: "CEO, planning demo"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    speakers:
+      - text: "The investors are coming on the 28th. I need the staging environment perfect and the onboarding flow to be the star of the show"
+        speaker_identifier: "David"
+        timestamp: "2024-11-13T16:09:00Z"
+        emotion: "business-focused"
+      - text: "Staging will be ready by the 27th. The new onboarding flow reduces signup time by 40%, which should impress them"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-13T16:10:30Z"
+        emotion: "confident"
+    metadata:
+      demo_date: "2024-11-28"
+      days_until_demo: 15
+      key_features: ["onboarding-flow", "q4-metrics"]
+    graph_edges:
+      - dst: "Investor Demo"
+        rel_type: "discusses"
+        weight: 1.0
+        properties:
+          dst_entity_type: "concept/business-event"
+          match_type: "explicit_reference"
+
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "discusses"
+        weight: 0.9
+        properties:
+          dst_entity_type: "project/design"
+          match_type: "explicit_reference"
+          context: "Main showcase feature for investor demo"

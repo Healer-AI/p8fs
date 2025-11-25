@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T22:30:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "10:30 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.93,
+    "word_count": 289,
+    "speaker_count": 1,
+    "activity_type": "emotional_processing",
+    "mental_health_moment": true
   },
   "name": "Late Night Processing - Album Anxiety",
   "content": "Maya processing anxiety about upcoming album release late at night, unable to sleep. Expressed fears about album not connecting with audience like previous EP, questioning if new work feels too calculated despite analog production choices. Worried about pressure from first full album, label investment, and planned tour. Self-soothed by identifying specific strong tracks ('Morning Light', 'Echoes') and working through anxiety using rational self-talk. Recognized inability to control reception, only ability to create authentic work. Concluded that different from EP is acceptable and represents growth. Resolved to focus on immediate next task (bridge for track six) and practice self-care (chamomile tea, sleep).",
@@ -12,23 +15,26 @@
   "resource_timestamp": "2025-01-14T22:30:00Z",
   "resource_ends_timestamp": "2025-01-14T22:39:56Z",
   "moment_type": "reflection",
-  "emotion_tags": ["anxious", "worried", "self-aware", "resolving"],
-  "topic_tags": ["anxiety", "creative-doubt", "self-talk", "album-pressure", "emotional-processing"],
-  "present_persons": {
-    "fp_maya_t2": {
-      "fingerprint_id": "fp_maya_t2",
-      "user_id": "user_maya_001",
-      "user_label": "Maya"
+  "emotion_tags": [
+    "anxious",
+    "worried",
+    "self-aware",
+    "resolving"
+  ],
+  "topic_tags": [
+    "anxiety",
+    "creative-doubt",
+    "self-talk",
+    "album-pressure",
+    "emotional-processing"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_maya_t2",
+      "name": "Maya",
+      "comment": "User ID: user_maya_001"
     }
-  },
+  ],
   "location": "bedroom",
-  "background_sounds": "quiet nighttime, distant traffic, rustling sheets",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 9.93,
-    "word_count": 289,
-    "speaker_count": 1,
-    "activity_type": "emotional_processing",
-    "mental_health_moment": true
-  }
+  "background_sounds": "quiet nighttime, distant traffic, rustling sheets"
 }

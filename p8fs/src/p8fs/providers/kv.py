@@ -83,45 +83,26 @@ class BaseKVProvider(ABC):
 
 
 class PostgreSQLKVProvider(BaseKVProvider):
-    """PostgreSQL-based KV storage using kv_storage table.
+    """PostgreSQL-based KV storage using AGE graph functions.
 
-    Current Implementation:
-    ----------------------
-    Uses simple table-based storage with `public.kv_storage` table for KV operations.
-    This approach provides:
-    - Simple, reliable storage compatible with all PostgreSQL deployments
-    - Consistent behavior with TiDB table-based storage (local development parity)
-    - No dependency on extension availability
-
-    Future AGE Graph Integration:
-    ----------------------------
-    PostgreSQL AGE extension provides graph-based entity management functions that can
-    be used for more sophisticated KV operations and entity relationships:
-
-    Available AGE Functions (in p8fs/extensions/sql/03_functions.sql):
-    - p8.put_kv(key, value, ttl) - Store KV pairs in graph with TTL
-    - p8.get_kv(key) - Retrieve values from graph with automatic expiry cleanup
-    - p8.scan_kv(prefix, limit) - Scan keys by prefix pattern
-    - p8.add_node(key, label, properties) - Add entity nodes to graph
-    - p8.get_entities(keys) - Retrieve entities by keys from graph index
-
-    These functions are automatically loaded in fresh database installations via
-    docker-entrypoint-initdb.d. They provide:
-    - Graph-based entity relationships using Cypher queries
-    - Automatic expiry cleanup on read
-    - Node-based entity management for complex data structures
-
-    Migration Path:
+    Implementation:
     --------------
-    To switch to AGE graph-based KV storage:
-    1. Ensure AGE functions are loaded (see p8fs/extensions/sql/03_functions.sql)
-    2. Replace direct SQL queries with p8.put_kv/get_kv/scan_kv function calls
-    3. Leverage p8.add_node for entity nodes that need graph relationships
-    4. Use p8.get_entities for graph-based entity retrieval
+    Uses PostgreSQL AGE extension graph functions for KV operations:
+    - p8.put_kv(key, value, ttl_seconds, userid) - Store KV pairs with TTL
+    - p8.get_kv(key, userid) - Retrieve values with automatic expiry cleanup
+    - p8.scan_kv(prefix, limit, userid) - Scan keys by prefix pattern
 
-    The table-based approach remains the recommended default for simplicity and
-    compatibility. AGE functions provide value when graph relationships and advanced
-    entity management are needed.
+    Features:
+    - Graph-based storage using AGE extension (Apache AGE)
+    - Automatic TTL-based expiration on read
+    - Tenant isolation via key prefixing
+    - Support for device authorization flows and entity indexing
+
+    Functions are defined in p8fs/extensions/sql/03_functions.sql and loaded
+    automatically via docker-entrypoint-initdb.d in fresh installations.
+
+    Note: Table-based fallback (kv_storage) is deprecated for PostgreSQL.
+    Use TiDB provider for table-based KV with TiKV fallback.
     """
 
     def __init__(self, provider):
@@ -132,8 +113,15 @@ class PostgreSQLKVProvider(BaseKVProvider):
         """Get database connection from parent provider."""
         return self.provider.connect_sync()
 
-    async def put(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> bool:
-        """Store key-value using kv_storage table."""
+    async def put(self, key: str, value: Any, ttl_seconds: Optional[int] = None, tenant_id: Optional[str] = None) -> bool:
+        """Store key-value using AGE graph p8.put_kv() function.
+
+        Args:
+            key: Storage key (may contain tenant prefix)
+            value: Value to store (will be converted to JSONB)
+            ttl_seconds: Optional TTL in seconds
+            tenant_id: Optional tenant ID (for logging only, key should include tenant prefix)
+        """
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -146,74 +134,78 @@ class PostgreSQLKVProvider(BaseKVProvider):
                         return obj.isoformat()
                     return super().default(obj)
 
+            # Convert value to JSONB format
             if not isinstance(value, dict):
                 value = {"value": value}
 
             json_value = json.dumps(value, cls=DateTimeEncoder, ensure_ascii=False)
 
-            expires_at = None
-            if ttl_seconds:
-                from datetime import datetime, timedelta
-                expires_at = datetime.utcnow() + timedelta(seconds=ttl_seconds)
+            logger.debug(f"PostgreSQL AGE KV: Storing key={key}, ttl={ttl_seconds}")
 
-            logger.debug(f"PostgreSQL KV: Storing key={key}, ttl={ttl_seconds}")
+            # Call p8.put_kv() AGE graph function
+            cursor.execute(
+                "SELECT p8.put_kv(%s, %s::jsonb, %s)",
+                (key, json_value, ttl_seconds)
+            )
 
-            import uuid
-            record_id = str(uuid.uuid4())
-
-            # Use INSERT ... ON CONFLICT for upsert
-            cursor.execute("""
-                INSERT INTO public.kv_storage (id, key, value, expires_at, tenant_id)
-                VALUES (%s, %s, %s, %s, 'system')
-                ON CONFLICT (key, tenant_id)
-                DO UPDATE SET
-                    value = EXCLUDED.value,
-                    expires_at = EXCLUDED.expires_at,
-                    updated_at = NOW()
-            """, (record_id, key, json_value, expires_at))
-
+            result = cursor.fetchone()
             conn.commit()
             cursor.close()
 
-            logger.debug(f"PostgreSQL KV: Stored {key} successfully")
-            return True
+            success = result[0] if result else False
+            if success:
+                logger.debug(f"PostgreSQL AGE KV: Stored {key} successfully")
+            else:
+                logger.warning(f"PostgreSQL AGE KV: Failed to store {key}")
+
+            return success
 
         except Exception as e:
-            logger.error(f"Error storing KV pair {key} in PostgreSQL: {e}")
+            logger.error(f"Error storing KV pair {key} in PostgreSQL AGE: {e}")
             logger.error(f"Value type: {type(value)}, Value repr: {repr(value)}")
             return False
 
     async def get(self, key: str) -> Optional[Any]:
-        """Get value from kv_storage table."""
+        """Get value from AGE graph using p8.get_kv() function.
+
+        Args:
+            key: Storage key (may contain tenant prefix)
+
+        Returns:
+            Stored value or None if not found/expired
+        """
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
 
-            cursor.execute("""
-                SELECT value FROM public.kv_storage
-                WHERE key = %s
-                AND (expires_at IS NULL OR expires_at > NOW())
-                AND tenant_id = 'system'
-            """, (key,))
+            logger.debug(f"PostgreSQL AGE KV: Retrieving key={key}")
+
+            # Call p8.get_kv() AGE graph function
+            cursor.execute("SELECT p8.get_kv(%s)", (key,))
 
             result = cursor.fetchone()
             cursor.close()
 
-            logger.debug(f"PostgreSQL KV: fetchone() returned: {repr(result)}, type: {type(result)}")
+            logger.debug(f"PostgreSQL AGE KV: fetchone() returned: {repr(result)}, type: {type(result)}")
 
-            if result:
-                raw_value = result[0]
-                value = json.loads(raw_value) if isinstance(raw_value, str) else raw_value
-                logger.debug(f"PostgreSQL KV: Retrieved value for {key}")
+            if result and result[0]:
+                value = result[0]
+                # p8.get_kv returns JSONB, convert if needed
+                if isinstance(value, str):
+                    value = json.loads(value)
+
+                logger.debug(f"PostgreSQL AGE KV: Retrieved value for {key}")
+
+                # Unwrap single-value wrapper if present
                 if isinstance(value, dict) and len(value) == 1 and "value" in value:
                     return value["value"]
                 return value
 
-            logger.debug(f"PostgreSQL KV: No result for key {key}")
+            logger.debug(f"PostgreSQL AGE KV: No result for key {key}")
             return None
 
         except Exception as e:
-            logger.error(f"Error getting KV pair {key} from PostgreSQL: {e}")
+            logger.error(f"Error getting KV pair {key} from PostgreSQL AGE: {e}")
             return None
 
     async def delete(self, key: str) -> bool:
@@ -221,27 +213,37 @@ class PostgreSQLKVProvider(BaseKVProvider):
         return True
 
     async def scan(self, prefix: str, limit: int = 100) -> List[Dict[str, Any]]:
-        """Scan keys with prefix in kv_storage table."""
+        """Scan keys with prefix using AGE graph p8.scan_kv() function.
+
+        Args:
+            prefix: Key prefix to scan (may contain tenant prefix)
+            limit: Maximum number of results
+
+        Returns:
+            List of matching key-value pairs
+        """
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
 
-            cursor.execute("""
-                SELECT key, value, created_at, expires_at
-                FROM public.kv_storage
-                WHERE key LIKE %s
-                AND (expires_at IS NULL OR expires_at > NOW())
-                AND tenant_id = 'system'
-                LIMIT %s
-            """, (f"{prefix}%", limit))
+            logger.debug(f"PostgreSQL AGE KV scan: prefix={prefix}, limit={limit}")
+
+            # Call p8.scan_kv() AGE graph function
+            # Returns TABLE(key text, value jsonb, created_at text, expires_at text)
+            cursor.execute(
+                "SELECT key, value, created_at, expires_at FROM p8.scan_kv(%s, %s)",
+                (prefix, limit)
+            )
 
             rows = cursor.fetchall()
             cursor.close()
 
+            logger.debug(f"PostgreSQL AGE KV scan found {len(rows)} rows")
+
             return [
                 {
                     "key": row[0],
-                    "value": json.loads(row[1]) if isinstance(row[1], str) else row[1],
+                    "value": row[1] if isinstance(row[1], dict) else json.loads(row[1]) if row[1] else {},
                     "created_at": row[2],
                     "expires_at": row[3]
                 }
@@ -249,7 +251,7 @@ class PostgreSQLKVProvider(BaseKVProvider):
             ]
 
         except Exception as e:
-            logger.error(f"Error scanning KV pairs with prefix {prefix} in PostgreSQL: {e}")
+            logger.error(f"Error scanning KV pairs with prefix {prefix} in PostgreSQL AGE: {e}")
             return []
 
 
@@ -257,50 +259,141 @@ class TiDBKVProvider(BaseKVProvider):
     """TiDB-based KV storage with TiKV fallback.
 
     Architecture:
-    - Production: Uses native TiKV client (gRPC) when available
+    - Production: Uses native TiKV async client (gRPC) when available
     - Development: Falls back to table storage when TiKV cluster not available
 
     Detection:
-    - If P8FS_TIKV_PD_ENDPOINTS is set and reachable → Native TiKV
+    - If P8FS_TIKV_ENDPOINTS is set and tikv-client installed → Native TiKV
     - Otherwise → Table storage fallback
+
+    TTL Limitations:
+    - TiKV Python client doesn't support native TTL
+    - Operations with TTL automatically fall back to table storage
+    - Table storage handles TTL via database-native expiry (expires_at column)
     """
 
     def __init__(self, provider):
         """Initialize with parent TiDB provider."""
         self.provider = provider
-        self._tikv_client = None
-        self._use_tikv = self._check_tikv_available()
+        self._async_tikv_client = None
+        self._async_client_lock = None
+        self._use_tikv = False
+        self._tikv_available = None  # Cache availability check result
 
-        if self._use_tikv:
-            logger.info("TiDB KV: Using native TiKV client")
+        # Check if TiKV is potentially available (lazy actual connection)
+        tikv_endpoints = getattr(config, "tikv_endpoints", None)
+        if tikv_endpoints:
+            try:
+                # Just check if the module exists, don't connect yet
+                import tikv_client.asynchronous
+                self._use_tikv = True
+                logger.debug(
+                    f"TiDB KV: TiKV client available, will use native client for operations without TTL. "
+                    f"Endpoints: {tikv_endpoints}"
+                )
+            except ImportError:
+                logger.warning(
+                    "TiDB KV: tikv-client package not installed. "
+                    "Install with: pip install 'p8fs[tikv]' for better performance"
+                )
         else:
-            logger.info("TiDB KV: Using table storage fallback (TiKV not available)")
+            logger.debug("TiKV endpoints not configured (P8FS_TIKV_ENDPOINTS not set)")
 
-    def _check_tikv_available(self) -> bool:
-        """Check if TiKV cluster is available for native client."""
-        pd_endpoints = getattr(config, "tikv_pd_endpoints", None)
-        if not pd_endpoints:
-            return False
+    async def _get_async_tikv_client(self):
+        """Get or create async TiKV client (lazy initialization with retry)."""
+        if self._async_tikv_client is None:
+            # Initialize lock if needed
+            if self._async_client_lock is None:
+                import asyncio
+                self._async_client_lock = asyncio.Lock()
 
-        # TODO: Implement native TiKV client connection check
-        # try:
-        #     import tikv_client
-        #     client = tikv_client.RawClient.connect(pd_endpoints)
-        #     client.close()
-        #     return True
-        # except Exception as e:
-        #     logger.debug(f"TiKV not available: {e}")
-        #     return False
+            async with self._async_client_lock:
+                if self._async_tikv_client is None:
+                    from tikv_client.asynchronous import RawClient as AsyncRawClient
+                    tikv_endpoints = getattr(config, "tikv_endpoints", [])
 
-        # For now, always use table storage until native client is implemented
-        return False
+                    try:
+                        self._async_tikv_client = await AsyncRawClient.connect(tikv_endpoints)
+                        logger.info(f"TiKV async client connected to {tikv_endpoints}")
+                    except Exception as e:
+                        logger.error(f"Failed to connect to TiKV: {e}")
+                        raise
+
+        return self._async_tikv_client
 
     def _get_connection(self):
         """Get database connection from parent provider."""
         return self.provider.connect_sync()
 
     async def put(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> bool:
-        """Store key-value using simple table storage."""
+        """Store key-value using TiKV client or table storage fallback.
+
+        Note: TiKV Python client doesn't support TTL.
+        Operations with TTL automatically use table storage.
+        """
+        # If TTL is requested, must use table storage (TiKV doesn't support TTL)
+        if ttl_seconds is not None:
+            logger.debug(f"TTL requested ({ttl_seconds}s), using table storage for key={key}")
+            return await self._put_table(key, value, ttl_seconds)
+
+        # Try TiKV if available
+        if self._use_tikv:
+            try:
+                return await self._put_tikv(key, value)
+            except Exception as e:
+                logger.warning(f"TiKV put failed, falling back to table storage: {e}")
+                return await self._put_table(key, value, ttl_seconds)
+
+        # Default to table storage
+        return await self._put_table(key, value, ttl_seconds)
+
+    async def _put_tikv(self, key: str, value: Any) -> bool:
+        """Store key-value using native TiKV async client with retry logic."""
+        if not isinstance(value, dict):
+            value = {"value": value}
+
+        from datetime import datetime, date
+        class DateTimeEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, (datetime, date)):
+                    return obj.isoformat()
+                return super().default(obj)
+
+        json_value = json.dumps(value, cls=DateTimeEncoder, ensure_ascii=False)
+
+        # Retry logic for region errors (based on working TiKV example)
+        max_retries = 3
+        base_delay = 0.1
+
+        for attempt in range(max_retries):
+            try:
+                client = await self._get_async_tikv_client()
+                await client.put(key.encode(), json_value.encode())
+                logger.debug(f"TiKV: Stored key={key}")
+                return True
+            except Exception as e:
+                error_msg = str(e).lower()
+                is_region_error = any(keyword in error_msg for keyword in [
+                    'region not found', 'region error', 'not_leader',
+                    'epoch_not_match', 'key_not_in_region'
+                ])
+
+                if is_region_error and attempt < max_retries - 1:
+                    # Exponential backoff for region errors
+                    import asyncio
+                    delay = base_delay * (2 ** attempt)
+                    logger.warning(f"TiKV region error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+                    await asyncio.sleep(delay)
+                    # Force refresh of client connection
+                    self._async_tikv_client = None
+                    continue
+                else:
+                    # Final attempt failed or non-region error
+                    logger.error(f"TiKV put operation failed for key {key}: {e}")
+                    raise
+
+    async def _put_table(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> bool:
+        """Store key-value using table storage fallback."""
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -349,7 +442,68 @@ class TiDBKVProvider(BaseKVProvider):
             return False
 
     async def get(self, key: str) -> Optional[Any]:
-        """Get value from TiDB table storage."""
+        """Get value from TiKV client or table storage.
+
+        Since TTL-based values are stored in table storage (TiKV doesn't support TTL),
+        we must check table storage first, then fall back to TiKV native storage.
+        This ensures round-trip consistency for all put/get operations.
+        """
+        try:
+            result = await self._get_table(key)
+            if result is not None:
+                return result
+        except Exception as e:
+            logger.debug(f"Table storage get failed, trying TiKV: {e}")
+
+        if self._use_tikv:
+            try:
+                return await self._get_tikv(key)
+            except Exception as e:
+                logger.warning(f"TiKV get also failed: {e}")
+                return None
+
+        return None
+
+    async def _get_tikv(self, key: str) -> Optional[Any]:
+        """Get value from native TiKV async client with retry logic."""
+        max_retries = 3
+        base_delay = 0.1
+
+        for attempt in range(max_retries):
+            try:
+                client = await self._get_async_tikv_client()
+                raw_value = await client.get(key.encode())
+                if raw_value:
+                    value = json.loads(raw_value.decode())
+                    logger.debug(f"TiKV: Retrieved value for {key}")
+                    if isinstance(value, dict) and len(value) == 1 and "value" in value:
+                        return value["value"]
+                    return value
+
+                logger.debug(f"TiKV: No result for key {key}")
+                return None
+            except Exception as e:
+                error_msg = str(e).lower()
+                is_region_error = any(keyword in error_msg for keyword in [
+                    'region not found', 'region error', 'not_leader',
+                    'epoch_not_match', 'key_not_in_region'
+                ])
+
+                if is_region_error and attempt < max_retries - 1:
+                    import asyncio
+                    delay = base_delay * (2 ** attempt)
+                    logger.warning(f"TiKV region error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+                    await asyncio.sleep(delay)
+                    # Force refresh of client connection
+                    self._async_tikv_client = None
+                    continue
+                else:
+                    # Final attempt failed or non-region error
+                    logger.error(f"TiKV get operation failed for key {key}: {e}")
+                    raise
+
+    async def _get_table(self, key: str) -> Optional[Any]:
+        """Get value from table storage fallback."""
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -385,7 +539,65 @@ class TiDBKVProvider(BaseKVProvider):
             return None
 
     async def scan(self, prefix: str, limit: int = 100) -> List[Dict[str, Any]]:
-        """Scan keys with prefix in TiDB table storage."""
+        """Scan keys with prefix using TiKV client or table storage fallback."""
+        # Try TiKV if available
+        if self._use_tikv:
+            try:
+                return await self._scan_tikv(prefix, limit)
+            except Exception as e:
+                logger.warning(f"TiKV scan failed, falling back to table storage: {e}")
+                return await self._scan_table(prefix, limit)
+
+        # Default to table storage
+        return await self._scan_table(prefix, limit)
+
+    async def _scan_tikv(self, prefix: str, limit: int = 100) -> List[Dict[str, Any]]:
+        """Scan keys with prefix using native TiKV async client with retry logic."""
+        max_retries = 3
+        base_delay = 0.1
+
+        for attempt in range(max_retries):
+            try:
+                client = await self._get_async_tikv_client()
+                results = []
+                start_key = prefix.encode()
+                end_key = (prefix + "\xff").encode()
+
+                # The async scan returns a list of tuples, not an iterator
+                pairs = await client.scan(start_key, end=end_key, limit=limit)
+
+                for key_bytes, value_bytes in pairs:
+                    key = key_bytes.decode()
+                    value = json.loads(value_bytes.decode())
+                    results.append({
+                        "key": key,
+                        "value": value
+                    })
+
+                logger.debug(f"TiKV: Scanned {len(results)} keys with prefix {prefix}")
+                return results
+            except Exception as e:
+                error_msg = str(e).lower()
+                is_region_error = any(keyword in error_msg for keyword in [
+                    'region not found', 'region error', 'not_leader',
+                    'epoch_not_match', 'key_not_in_region'
+                ])
+
+                if is_region_error and attempt < max_retries - 1:
+                    import asyncio
+                    delay = base_delay * (2 ** attempt)
+                    logger.warning(f"TiKV region error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+                    await asyncio.sleep(delay)
+                    # Force refresh of client connection
+                    self._async_tikv_client = None
+                    continue
+                else:
+                    # Final attempt failed or non-region error
+                    logger.error(f"TiKV scan operation failed for prefix {prefix}: {e}")
+                    raise
+
+    async def _scan_table(self, prefix: str, limit: int = 100) -> List[Dict[str, Any]]:
+        """Scan keys with prefix in table storage fallback."""
         try:
             conn = self._get_connection()
             cursor = conn.cursor()
@@ -414,6 +626,70 @@ class TiDBKVProvider(BaseKVProvider):
         except Exception as e:
             logger.error(f"Error scanning KV pairs with prefix {prefix} in TiDB: {e}")
             return []
+
+    async def delete(self, key: str) -> bool:
+        """Delete key using TiKV client or table storage fallback."""
+        # Try TiKV if available
+        if self._use_tikv:
+            try:
+                return await self._delete_tikv(key)
+            except Exception as e:
+                logger.warning(f"TiKV delete failed, falling back to table storage: {e}")
+                return await self._delete_table(key)
+
+        # Default to table storage
+        return await self._delete_table(key)
+
+    async def _delete_tikv(self, key: str) -> bool:
+        """Delete key using native TiKV async client with retry logic."""
+        max_retries = 3
+        base_delay = 0.1
+
+        for attempt in range(max_retries):
+            try:
+                client = await self._get_async_tikv_client()
+                await client.delete(key.encode())
+                logger.debug(f"TiKV: Deleted key={key}")
+                return True
+            except Exception as e:
+                error_msg = str(e).lower()
+                is_region_error = any(keyword in error_msg for keyword in [
+                    'region not found', 'region error', 'not_leader',
+                    'epoch_not_match', 'key_not_in_region'
+                ])
+
+                if is_region_error and attempt < max_retries - 1:
+                    import asyncio
+                    delay = base_delay * (2 ** attempt)
+                    logger.warning(f"TiKV region error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+                    await asyncio.sleep(delay)
+                    # Force refresh of client connection
+                    self._async_tikv_client = None
+                    continue
+                else:
+                    # Final attempt failed or non-region error
+                    logger.error(f"TiKV delete operation failed for key {key}: {e}")
+                    raise
+
+    async def _delete_table(self, key: str) -> bool:
+        """Delete key using table storage fallback."""
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            cursor.execute("""
+                DELETE FROM public.kv_storage
+                WHERE `key` = %s
+            """, (key,))
+
+            conn.commit()
+            cursor.close()
+
+            logger.debug(f"TiDB: Deleted key={key}")
+            return True
+        except Exception as e:
+            logger.error(f"Error deleting KV pair {key} from TiDB: {e}")
+            return False
 
 
 class TiKVProvider(BaseKVProvider):

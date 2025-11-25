@@ -5,21 +5,51 @@ of metadata events from SeaweedFS using gRPC protocol.
 
 CRITICAL: This implementation follows the exact patterns from the reference
 implementation for production stability and compatibility.
+
+LOCAL TESTING:
+
+To test the gRPC subscriber locally before deploying to the cluster:
+
+1. Port-forward required services:
+   kubectl port-forward -n seaweed svc/seaweedfs-filer 8888:8888 &    # HTTP API
+   kubectl port-forward -n seaweed svc/seaweedfs-filer 18888:18888 &  # gRPC
+   kubectl port-forward -n p8fs svc/nats 4222:4222 &                  # NATS
+
+2. Run the subscriber locally:
+   cd p8fs
+   env SEAWEEDFS_FILER_HOST=localhost \
+       SEAWEEDFS_FILER_GRPC_PORT=18888 \
+       WATCH_PATH_PREFIX=/buckets/ \
+       P8FS_NATS_URL=nats://localhost:4222 \
+       uv run python -m p8fs.workers.queues.seaweedfs_events grpc
+
+3. Upload a test file to trigger an event:
+   echo "Test file - $(date)" > /tmp/test.txt
+   curl -F "file=@/tmp/test.txt" \
+        "http://localhost:8888/buckets/tenant-test/test-$(date +%s).txt"
+
+4. Verify the subscriber processes the event without errors:
+   - Look for "Published <event_type> event for <path>" in the logs
+   - No ERROR messages should appear
+   - Event should be successfully published to NATS
+
+This local testing approach catches issues before deployment and saves significant
+time compared to deploying to the cluster for each change.
 """
 
 import asyncio
-import logging
 import time
 from datetime import datetime
 from typing import Any
 
 import grpc
 from p8fs_cluster.config.settings import config
+from p8fs_cluster.logging import get_logger
 
 from .base import SeaweedFSEventProcessor
 from .proto.seaweedfs import filer_pb2, filer_pb2_grpc
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
@@ -124,7 +154,7 @@ class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
                 try:
                     await self.process_metadata_event(response)
                 except Exception as e:
-                    logger.error(f"Error processing metadata event: {e}")
+                    logger.error(f"Error processing metadata event: {e}", exc_info=True)
                     # Continue processing other events - don't let one failure stop the stream
                     
         except grpc.RpcError as e:
@@ -180,12 +210,15 @@ class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
         # Add entry details if available
         if event_notification.new_entry:
             event["entry"] = self.entry_to_dict(event_notification.new_entry)
-            
-            # Extract file size and MIME type
-            if hasattr(event_notification.new_entry, 'attributes'):
+
+            # Extract file size and MIME type - use HasField() for protobuf optional fields
+            if event_notification.new_entry.HasField("attributes"):
                 attrs = event_notification.new_entry.attributes
-                event["size"] = getattr(attrs, 'file_size', 0)
-                event["mime_type"] = getattr(attrs, 'mime', '')
+                event["size"] = attrs.file_size if hasattr(attrs, "file_size") else 0
+                event["mime_type"] = attrs.mime if hasattr(attrs, "mime") else ""
+            else:
+                event["size"] = 0
+                event["mime_type"] = ""
                 
         # Handle rename operations
         if event_notification.new_parent_path:
@@ -216,6 +249,16 @@ class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
         else:
             return "unknown"
             
+    def file_id_to_dict(self, file_id) -> dict[str, Any]:
+        """Convert protobuf FileId to dictionary for JSON serialization."""
+        if not file_id:
+            return {}
+        return {
+            "volume_id": file_id.volume_id if hasattr(file_id, "volume_id") else 0,
+            "file_key": file_id.file_key if hasattr(file_id, "file_key") else 0,
+            "cookie": file_id.cookie if hasattr(file_id, "cookie") else 0,
+        }
+
     def entry_to_dict(self, entry) -> dict[str, Any]:
         """Convert protobuf Entry to dictionary (matches reference exactly)."""
         result = {
@@ -224,21 +267,23 @@ class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
             "chunks": len(entry.chunks),
         }
         
-        # Add attributes if present
+        # Add attributes if present - use hasattr() for safe protobuf field access
         if entry.HasField("attributes"):
             attrs = entry.attributes
             result["attributes"] = {
-                "file_size": getattr(attrs, 'file_size', 0),
-                "mtime": getattr(attrs, 'mtime', 0),
-                "file_mode": getattr(attrs, 'file_mode', 0),
-                "uid": getattr(attrs, 'uid', 0),
-                "gid": getattr(attrs, 'gid', 0),
-                "mime": getattr(attrs, 'mime', ''),
-                "replication": getattr(attrs, 'replication', ''),
-                "collection": getattr(attrs, 'collection', ''),
-                "ttl_sec": getattr(attrs, 'ttl_sec', 0),
-                "disk_type": getattr(attrs, 'disk_type', ''),
+                "file_size": attrs.file_size if hasattr(attrs, "file_size") else 0,
+                "mtime": attrs.mtime if hasattr(attrs, "mtime") else 0,
+                "file_mode": attrs.file_mode if hasattr(attrs, "file_mode") else 0,
+                "uid": attrs.uid if hasattr(attrs, "uid") else 0,
+                "gid": attrs.gid if hasattr(attrs, "gid") else 0,
+                "mime": attrs.mime if hasattr(attrs, "mime") else "",
+                "replication": attrs.replication if hasattr(attrs, "replication") else "",
+                "collection": attrs.collection if hasattr(attrs, "collection") else "",
+                "ttl_sec": attrs.ttl_sec if hasattr(attrs, "ttl_sec") else 0,
+                "disk_type": attrs.disk_type if hasattr(attrs, "disk_type") else "",
             }
+        else:
+            result["attributes"] = {}
             
         # Add extended attributes if present
         if entry.extended:
@@ -248,15 +293,17 @@ class SeaweedFSgRPCSubscriber(SeaweedFSEventProcessor):
         if entry.chunks:
             result["chunk_details"] = [
                 {
-                    "fid": chunk.fid,
-                    "offset": chunk.offset,
-                    "size": chunk.size,
-                    "mtime": chunk.mtime,
-                    "e_tag": chunk.e_tag,
-                    "source_fid": chunk.source_fid,
-                    "crc": chunk.crc,
+                    "fid": self.file_id_to_dict(chunk.fid) if hasattr(chunk, "fid") else {},
+                    "offset": chunk.offset if hasattr(chunk, "offset") else 0,
+                    "size": chunk.size if hasattr(chunk, "size") else 0,
+                    "mtime": chunk.mtime if hasattr(chunk, "mtime") else 0,
+                    "e_tag": chunk.e_tag if hasattr(chunk, "e_tag") else "",
+                    "source_fid": self.file_id_to_dict(chunk.source_fid) if hasattr(chunk, "source_fid") else {},
+                    "crc": chunk.crc if hasattr(chunk, "crc") else 0,
                 }
                 for chunk in entry.chunks
             ]
+        else:
+            result["chunk_details"] = []
             
         return result

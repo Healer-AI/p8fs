@@ -164,6 +164,33 @@ class PostgreSQLProvider(BaseSQLProvider):
         """PostgreSQL supports vector operations via pgvector."""
         return True
 
+    def get_recent_uploads_query(self, limit: int = 20) -> str:
+        """Generate PostgreSQL query for recent file uploads with chunk aggregation."""
+        return """
+            SELECT
+                f.id as file_id,
+                f.uri,
+                f.file_size,
+                f.mime_type,
+                f.upload_timestamp,
+                f.metadata->>'filename' as file_name,
+                COUNT(r.id) as chunk_count,
+                json_agg(
+                    json_build_object(
+                        'name', r.name,
+                        'ordinal', r.ordinal,
+                        'id', r.id,
+                        'category', r.category
+                    ) ORDER BY r.ordinal
+                ) as chunk_entity_names
+            FROM files f
+            LEFT JOIN resources r ON r.uri = f.uri AND r.tenant_id = f.tenant_id
+            WHERE f.tenant_id = %s
+            GROUP BY f.id, f.uri, f.file_size, f.mime_type, f.upload_timestamp, f.metadata
+            ORDER BY f.upload_timestamp DESC
+            LIMIT %s
+        """
+
     def _reopen_connection(self) -> Any:
         """Reopen PostgreSQL connection with retry logic.
 
@@ -309,7 +336,17 @@ class PostgreSQLProvider(BaseSQLProvider):
                 return [{"affected_rows": cursor.rowcount}]
 
         except psycopg2.Error as e:
-            logger.error(f"Query execution failed: {e}")
+            error_msg = str(e)
+            if "expected" in error_msg and "dimensions" in error_msg:
+                logger.error(f"Query execution failed: {e}")
+                logger.error(
+                    "Embedding dimension mismatch detected. Set the correct embedding provider:\n"
+                    "  For OpenAI (1536 dimensions): export P8FS_DEFAULT_EMBEDDING_PROVIDER=text-embedding-3-small\n"
+                    "  For local FastEmbed (384 dimensions): export P8FS_DEFAULT_EMBEDDING_PROVIDER=all-MiniLM-L6-v2\n"
+                    "  Database schema must match the provider's vector dimensions."
+                )
+            else:
+                logger.error(f"Query execution failed: {e}")
             if connection:
                 connection.rollback()
             raise
@@ -617,7 +654,7 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
         primary_key = "id"  # Always use id as the primary key for ON CONFLICT
 
         # Serialize values for database compatibility (based on SqlModelHelper.serialize_for_db)
-        serialized_values = self.serialize_for_db(values)
+        serialized_values = self.serialize_for_db(values, model_class=model_class)
 
         # Get field names and build SQL
         columns = list(serialized_values.keys())
@@ -628,7 +665,35 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
         insert_placeholders = ", ".join(["%s"] * len(columns))
 
         # Build UPDATE SET clause for non-primary key fields
-        update_assignments = [f"{col} = EXCLUDED.{col}" for col in non_id_fields]
+        # Special handling for JSONB merge fields
+        update_assignments = []
+        for col in non_id_fields:
+            if col == "graph_paths":
+                # Merge graph_paths by dst key (newer edges override older ones with same dst)
+                # Use COALESCE to handle NULL case
+                merge_expr = f"""
+                    {col} = (
+                        SELECT COALESCE(jsonb_agg(edge), '[]'::jsonb)
+                        FROM (
+                            SELECT DISTINCT ON (edge->>'dst') edge
+                            FROM (
+                                SELECT jsonb_array_elements(COALESCE(EXCLUDED.{col}, '[]'::jsonb)) as edge
+                                UNION ALL
+                                SELECT jsonb_array_elements(COALESCE({table_name}.{col}, '[]'::jsonb)) as edge
+                            ) all_edges
+                            ORDER BY edge->>'dst'
+                        ) unique_edges
+                    )
+                """
+                update_assignments.append(merge_expr.strip())
+            elif col == "metadata":
+                # Deep merge metadata JSONB
+                update_assignments.append(
+                    f"{col} = COALESCE({table_name}.{col}, '{{}}'::jsonb) || COALESCE(EXCLUDED.{col}, '{{}}'::jsonb)"
+                )
+            else:
+                # Regular field replacement
+                update_assignments.append(f"{col} = EXCLUDED.{col}")
 
         # Only add updated_at if it's not already in the model fields
         if "updated_at" not in serialized_values:
@@ -645,17 +710,35 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
         params = tuple(serialized_values.values())
         return sql.strip(), params
 
-    def serialize_for_db(self, data: dict[str, Any]) -> dict[str, Any]:
+    def serialize_for_db(self, data: dict[str, Any], model_class=None) -> dict[str, Any]:
         """Serialize model data for database storage.
 
         Based on SqlModelHelper.serialize_for_db() with proper type adaptation
         for PostgreSQL/psycopg2 compatibility.
+
+        Args:
+            data: Dictionary of field names to values
+            model_class: Optional model class to check field types for array handling
         """
         import json
         import uuid
         import datetime
 
-        def adapt_value(value):
+        # Get array field names from model schema if available
+        # Only treat as PostgreSQL arrays if they're actually TEXT[] columns, not JSONB
+        array_fields = set()
+        if model_class:
+            table_name = model_class.to_sql_schema().get("table_name")
+
+            # Known PostgreSQL array columns (not JSONB)
+            known_array_columns = {
+                "moments": {"emotion_tags", "topic_tags", "images", "key_emotions"}
+            }
+
+            if table_name in known_array_columns:
+                array_fields = known_array_columns[table_name]
+
+        def adapt_value(value, field_name=None):
             """Adapt Python values for PostgreSQL storage."""
             if value is None:
                 return None
@@ -677,23 +760,38 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
             if isinstance(value, str):
                 return value
 
-            # Collections - convert to JSON string for JSONB storage
-            if isinstance(value, (dict, list)):
+            # Lists - keep as list if it's an array field, otherwise convert to JSON
+            if isinstance(value, list):
+                if field_name and field_name in array_fields:
+                    # PostgreSQL array - pass as Python list for psycopg2 to handle
+                    return value
+                else:
+                    # JSONB field - convert to JSON string
+                    def json_serializer(obj):
+                        """Custom JSON serializer for nested objects."""
+                        if hasattr(obj, 'value') and hasattr(obj.__class__, '__bases__'):
+                            if any("Enum" in str(base) for base in obj.__class__.__bases__):
+                                return obj.value
+                        if isinstance(obj, uuid.UUID):
+                            return str(obj)
+                        if isinstance(obj, (datetime.datetime, datetime.date)):
+                            return obj.isoformat()
+                        return str(obj)
+                    return json.dumps(value, default=json_serializer)
+
+            # Dicts - always convert to JSON for JSONB storage
+            if isinstance(value, dict):
                 def json_serializer(obj):
                     """Custom JSON serializer for nested objects."""
-                    # Handle enums
                     if hasattr(obj, 'value') and hasattr(obj.__class__, '__bases__'):
                         if any("Enum" in str(base) for base in obj.__class__.__bases__):
                             return obj.value
-                    # Handle UUID
                     if isinstance(obj, uuid.UUID):
                         return str(obj)
-                    # Handle datetime
                     if isinstance(obj, (datetime.datetime, datetime.date)):
                         return obj.isoformat()
-                    # Default to string representation
                     return str(obj)
-                
+
                 return json.dumps(value, default=json_serializer)
 
             # Handle datetime objects - psycopg2 handles these automatically
@@ -706,8 +804,8 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
 
             return value
 
-        # Apply adaptation to all values
-        return {k: adapt_value(v) for k, v in data.items()}
+        # Apply adaptation to all values, passing field name for array detection
+        return {k: adapt_value(v, field_name=k) for k, v in data.items()}
 
     def semantic_search_sql(
         self,
@@ -1020,7 +1118,7 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
         # Serialize all rows
         params_list = []
         for row in values_list:
-            serialized = self.serialize_for_db(row)
+            serialized = self.serialize_for_db(row, model_class=model_class)
             params_list.append(tuple(serialized[col] for col in columns))
 
         return sql.strip(), params_list
@@ -1046,10 +1144,17 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
             affected_rows = cursor.rowcount or len(params_list)
             cursor.close()
 
+            # Commit the transaction
+            connection.commit()
+
             return affected_rows
 
         except Exception as e:
+            import traceback
             logger.error(f"Failed to async execute batch: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
+            if connection:
+                connection.rollback()
             raise
 
     def execute_batch(
@@ -1097,7 +1202,9 @@ CREATE TABLE IF NOT EXISTS {embedding_table_name} (
             return {"affected_rows": affected_rows, "batch_size": len(params_list)}
 
         except psycopg2.Error as e:
+            import traceback
             logger.error(f"Batch execution failed: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
             if connection:
                 connection.rollback()
             raise

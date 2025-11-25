@@ -3,6 +3,66 @@
 Routes storage events from the main queue to size-specific worker queues
 based on file size thresholds.
 
+## Testing with Real NATS (Cluster)
+
+### Prerequisites
+1. Port-forward NATS from cluster:
+   ```bash
+   kubectl port-forward -n p8fs svc/nats 4222:4222 &
+   ```
+
+2. Set environment variables:
+   ```bash
+   export P8FS_NATS_URL=nats://localhost:4222
+   ```
+
+### Run Router Locally
+Start router that connects to cluster NATS:
+
+```bash
+# Set NATS connection
+export P8FS_NATS_URL=nats://localhost:4222
+
+# Run router
+cd /Users/sirsh/code/p8fs-modules/p8fs
+uv run python -m p8fs.workers.router
+```
+
+### Monitor Router Activity
+Check router logs and stream state:
+
+```bash
+# View main stream (router consumes from here)
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS
+
+# View routed messages in size-specific streams
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS_SMALL
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS_MEDIUM
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS_LARGE
+
+# Publish test event to main queue
+nats -s nats://localhost:4222 pub p8fs.storage.events '{
+  "path": "/buckets/tenant-test/content/test.txt",
+  "event_type": "create",
+  "size": 50000000,
+  "tenant_id": "tenant-test"
+}'
+
+# Check that message was routed to small queue
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS_SMALL
+```
+
+### Verify Router Consumer
+Check router consumer state:
+
+```bash
+# View router consumer
+nats -s nats://localhost:4222 consumer info P8FS_STORAGE_EVENTS tiered-storage-router
+
+# Peek at next message (without consuming)
+nats -s nats://localhost:4222 consumer next P8FS_STORAGE_EVENTS tiered-storage-router --count 1
+```
+
 CRITICAL RESILIENCE PATTERNS:
 This implementation follows carefully constructed resilience patterns from the reference
 implementation that are essential for production stability:
@@ -34,11 +94,17 @@ implementation was carefully tuned through production experience.
 
 import asyncio
 import json
-import logging
 import time
 from typing import Any
 
+from p8fs_cluster.logging import get_logger
 from p8fs.services.nats import NATSClient
+from p8fs.workers.observability import (
+    RouterMetrics,
+    get_tracer,
+    inject_trace_context,
+    setup_worker_observability,
+)
 
 from .config import (
     QueueSubjects,
@@ -46,7 +112,7 @@ from .config import (
 )
 from .models import StorageEvent
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class TieredStorageRouter:
@@ -72,15 +138,26 @@ class TieredStorageRouter:
         self._consecutive_errors = 0
         self._error_count = 0
         self._processed_count = 0
-        
-        # Size thresholds (matching reference exactly)
-        self.small_threshold = 100 * 1024 * 1024    # 100MB
-        self.medium_threshold = 1024 * 1024 * 1024  # 1GB
+
+        self.small_threshold = 100 * 1024 * 1024
+        self.medium_threshold = 1024 * 1024 * 1024
+
+        setup_worker_observability(f"p8fs-tiered-router-{self.instance_id}")
+        self.tracer = get_tracer()
+        self.metrics = RouterMetrics()
+
+        self._queue_sizes = {
+            "main": 0,
+            "small": 0,
+            "medium": 0,
+            "large": 0,
+        }
         
     async def setup(self) -> None:
         """Set up router following reference patterns exactly."""
-        logger.info("Setting up tiered storage router...")
-        
+        import p8fs
+        logger.info(f"Setting up tiered storage router (p8fs v{p8fs.__version__})...")
+
         # Step 1: Create and connect NATS client
         self.client = NATSClient()
         await self.client.connect()
@@ -120,17 +197,34 @@ class TieredStorageRouter:
         old_consumer_names = [
             "simple-tiered-router",
             "router-consumer",
-            # Add dynamic router-* consumers from old deployments
         ]
 
-        # Add any old timestamped router names if they exist
-        # These were from the old pattern: router-{timestamp}
+        # First, clean up statically named old consumers
         for consumer_name in old_consumer_names:
             try:
                 await self.client.delete_consumer("P8FS_STORAGE_EVENTS", consumer_name)
                 logger.debug(f"Deleted old consumer: {consumer_name}")
             except Exception as e:
                 logger.debug(f"Consumer {consumer_name} didn't exist or already deleted: {e}")
+
+        # Second, clean up any old timestamped router consumers (router-{timestamp})
+        # These are from old deployments that used unique consumer names per instance
+        try:
+            stream_info = await self.client.get_stream_info("P8FS_STORAGE_EVENTS")
+            if stream_info.get("consumers", 0) > 0:
+                # Get list of all consumers on the stream
+                consumers_list = await self.client._js.consumers_info("P8FS_STORAGE_EVENTS")
+                async for consumer_info in consumers_list:
+                    consumer_name = consumer_info.name
+                    # Delete any consumer that matches old pattern: router-{timestamp}
+                    if consumer_name.startswith("router-") and consumer_name != self.SHARED_CONSUMER_NAME:
+                        try:
+                            await self.client.delete_consumer("P8FS_STORAGE_EVENTS", consumer_name)
+                            logger.info(f"Deleted old timestamped consumer: {consumer_name}")
+                        except Exception as e:
+                            logger.warning(f"Failed to delete old consumer {consumer_name}: {e}")
+        except Exception as e:
+            logger.warning(f"Could not list/cleanup old timestamped consumers: {e}")
 
         # Step 6: Ensure shared consumer exists - FAIL HARD if fails
         # Note: ensure_consumer is idempotent - safe to call multiple times
@@ -162,11 +256,11 @@ class TieredStorageRouter:
         if self._running:
             logger.warning("Router is already running")
             return
-            
+
         logger.info("Starting tiered storage router...")
         self._running = True
         self._consecutive_errors = 0
-        
+
         try:
             await self._process_events()
         except Exception as e:
@@ -229,14 +323,14 @@ class TieredStorageRouter:
         """Main event processing loop - matches reference patterns exactly."""
         consecutive_errors = 0
         max_consecutive_errors = 3
-        
+
         logger.info("Starting message processing loop...")
-        
+
         while self._running:
             try:
                 # Fetch single message with 30-second timeout (reference pattern)
                 msgs = await self.subscriber.fetch(1, timeout=30.0)
-                
+
                 if not msgs:
                     logger.debug("No messages available")
                     consecutive_errors = 0  # Reset on successful fetch (even if no messages)
@@ -282,60 +376,106 @@ class TieredStorageRouter:
         logger.info(f"Message processing stopped. Processed {self._processed_count} messages, {self._error_count} errors")
         
     async def _process_single_message(self, msg) -> None:
-        """Process a single storage event message - follows reference patterns exactly."""
-        try:
-            # Parse JSON with error handling (reference pattern)
+        """Process a single storage event message with distributed tracing."""
+        start_time = time.time()
+
+        with self.tracer.start_as_current_span("router.route_message") as span:
             try:
-                event = json.loads(msg.data.decode())
-            except json.JSONDecodeError as e:
-                logger.error(f"Invalid JSON in message #{self._processed_count}: {e}")
-                await msg.ack()  # ACK bad messages to avoid infinite redelivery
-                return
-                
-            # Extract file size with multiple fallbacks (reference pattern)
-            file_size = self._extract_file_size(event)
-            
-            # Get target subject based on file size
-            target_subject = self._get_target_subject_by_size(file_size)
-            
-            # Add routing metadata (reference pattern)
-            event["routing"] = {
-                "original_subject": "p8fs.storage.events",
-                "target_subject": target_subject,
-                "file_size_bytes": file_size,
-                "router_id": self.worker_id,
-                "message_count": self._processed_count,
-                "routing_timestamp": time.time(),
-            }
-            
-            logger.debug(f"Routing message #{self._processed_count}: {file_size} bytes → {target_subject}")
-            
-            # Publish to target subject
-            await self.client._js.publish(target_subject, json.dumps(event).encode())
-            
-            # Only ACK after successful publish (reference pattern)
-            await msg.ack()
-            
-            logger.info(f"Routed message #{self._processed_count} ({file_size} bytes) to {target_subject}")
-            
-        except Exception as e:
-            logger.error(f"Error processing message #{self._processed_count}: {e}")
-            # Don't ACK failed messages - let JetStream retry
-            raise
+                try:
+                    event = json.loads(msg.data.decode())
+                except json.JSONDecodeError as e:
+                    logger.error(f"Invalid JSON in message #{self._processed_count}: {e}")
+                    span.set_attribute("error", "invalid_json")
+                    await msg.ack()
+                    return
+
+                file_size = self._extract_file_size(event)
+                file_name = event.get("path") or event.get("file_name", "unknown")
+                tenant_id = event.get("tenant_id", "unknown")
+
+                span.set_attribute("file.name", file_name)
+                span.set_attribute("file.size", file_size)
+                span.set_attribute("file.size_mb", file_size / (1024 * 1024))
+                span.set_attribute("tenant.id", tenant_id)
+                span.set_attribute("message.count", self._processed_count)
+
+                target_subject = self._get_target_subject_by_size(file_size)
+                queue_tier = target_subject.split(".")[-1]
+
+                span.set_attribute("queue.target", target_subject)
+                span.set_attribute("queue.tier", queue_tier)
+
+                event["routing"] = {
+                    "original_subject": "p8fs.storage.events",
+                    "target_subject": target_subject,
+                    "file_size_bytes": file_size,
+                    "router_id": self.instance_id,
+                    "message_count": self._processed_count,
+                    "routing_timestamp": time.time(),
+                }
+
+                headers = inject_trace_context()
+
+                logger.info(f"[ROUTER] Processing message #{self._processed_count}: {file_name} ({file_size} bytes) → {target_subject}")
+
+                await self.client._js.publish(
+                    target_subject,
+                    json.dumps(event).encode(),
+                    headers=headers
+                )
+
+                duration = time.time() - start_time
+                self.metrics.messages_routed.add(
+                    1,
+                    {"queue_tier": queue_tier, "tenant_id": tenant_id}
+                )
+                self.metrics.routing_duration.record(
+                    duration,
+                    {"queue_tier": queue_tier}
+                )
+
+                # Log successful routing at INFO level
+                file_size_mb = file_size / (1024 * 1024)
+                logger.info(f"Routed {file_name} ({file_size_mb:.2f}MB) to {queue_tier} queue for tenant {tenant_id}")
+
+                await msg.ack()
+
+                span.set_attribute("status", "success")
+                span.set_attribute("routing.duration", duration)
+
+                logger.info(f"Routed message #{self._processed_count} ({file_size} bytes) to {target_subject}")
+
+            except Exception as e:
+                self.metrics.routing_errors.add(1, {"error_type": type(e).__name__})
+
+                span.set_attribute("status", "error")
+                span.set_attribute("error.type", type(e).__name__)
+                span.set_attribute("error.message", str(e))
+                span.record_exception(e)
+
+                logger.error(f"Error processing message #{self._processed_count}: {e}")
+                raise
             
     def _extract_file_size(self, event: dict[str, Any]) -> int:
         """Extract file size with multiple fallbacks (matches reference exactly)."""
         # Try multiple possible locations for file size
         file_size = event.get("size", 0)
         if not file_size:
-            file_size = event.get("entry", {}).get("Size", 0) 
+            file_size = event.get("entry", {}).get("Size", 0)
         if not file_size:
             file_size = event.get("attributes", {}).get("file_size", 0)
         if not file_size:
             file_size = event.get("metadata", {}).get("size", 0)
         if not file_size:
             file_size = event.get("file_size", 0)
-            
+
+        # Ensure file_size is an integer (handle string values from events)
+        try:
+            file_size = int(file_size) if file_size else 0
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid file_size value: {file_size}, defaulting to 0")
+            file_size = 0
+
         # Default to 1KB if no size found (routes to small queue)
         return max(file_size, 1024)
         
@@ -355,7 +495,7 @@ class TieredStorageRouter:
             "processed_count": self._processed_count,
             "error_count": self._error_count,
             "consecutive_errors": self._consecutive_errors,
-            "worker_id": self.worker_id,
+            "instance_id": self.instance_id,
         }
         
     async def cleanup(self) -> None:

@@ -1,4 +1,9 @@
-"""Scheduled tasks for sending moment emails to tenants."""
+"""Scheduled tasks for sending moment emails to tenants.
+
+NOTE: These tasks are currently DISABLED in favor of Kubernetes CronJobs.
+The scheduler infrastructure remains available for local development and testing.
+The dreaming worker CLI handles email sending as part of moment processing.
+"""
 
 from datetime import datetime, timedelta, timezone
 from p8fs_cluster.logging import get_logger
@@ -7,13 +12,13 @@ from p8fs.workers.scheduler import scheduled
 logger = get_logger(__name__)
 
 
-@scheduled(
-    hour="*/3",
-    description="Send moment emails to all active tenants",
-    worker_type="user_insight_worker",
-    memory="512Mi",
-    envs=["development", "production"]
-)
+# @scheduled(
+#     hour="*/3",
+#     description="Send moment emails to all active tenants",
+#     worker_type="user_insight_worker",
+#     memory="512Mi",
+#     envs=["development", "production"]
+# )
 async def send_tenant_moment_emails():
     """
     Send moment emails to all tenants with moments created in the last 3 hours.
@@ -25,7 +30,7 @@ async def send_tenant_moment_emails():
     """
     from p8fs.workers.dreaming import DreamingWorker
     from p8fs.workers.dreaming_repository import DreamingRepository
-    from p8fs.models.engram.models import Moment
+    from p8fs.models.p8 import Moment
 
     logger.info("Starting scheduled moment email task")
 
@@ -89,14 +94,14 @@ async def send_tenant_moment_emails():
     )
 
 
-@scheduled(
-    hour="9",
-    minute="0",
-    description="Send daily moment summary at 9 AM UTC",
-    worker_type="user_insight_worker",
-    memory="512Mi",
-    envs=["production"]
-)
+# @scheduled(
+#     hour="9",
+#     minute="0",
+#     description="Send daily moment summary at 9 AM UTC",
+#     worker_type="user_insight_worker",
+#     memory="512Mi",
+#     envs=["production"]
+# )
 async def send_daily_moment_summary():
     """
     Send daily moment summary emails at 9 AM UTC.
@@ -108,7 +113,7 @@ async def send_daily_moment_summary():
     """
     from p8fs.workers.dreaming import DreamingWorker
     from p8fs.workers.dreaming_repository import DreamingRepository
-    from p8fs.models.engram.models import Moment
+    from p8fs.models.p8 import Moment
 
     logger.info("Starting daily moment summary task")
 

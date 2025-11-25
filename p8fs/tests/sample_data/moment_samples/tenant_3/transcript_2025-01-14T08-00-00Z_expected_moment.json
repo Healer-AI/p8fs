@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T08:00:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "08:00 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.18,
+    "word_count": 276,
+    "speaker_count": 2,
+    "meeting_type": "performance_coaching",
+    "leadership_moment": true
   },
   "name": "Performance Coaching - Contractor Conflict Resolution",
   "content": "James addressing Tony's unprofessional conduct after public confrontation with plumbing crew foreman. Tony frustrated by third late arrival this month causing electrician delays. James validated frustration but firmly corrected approach: private one-on-one conversations required, not public humiliation. Emphasized proper escalation procedures and documentation. Required Tony to apologize to foreman despite legitimate schedule concerns, teaching leadership accountability principle. Tony initially resistant but accepted responsibility. James balanced correction with support, acknowledging Tony's project dedication while maintaining professional standards. Committed to addressing underlying plumbing contractor pattern through owner-level meeting and potential replacement. Coaching moment combining accountability, process improvement, and validation of legitimate concerns.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-14T08:00:00Z",
   "resource_ends_timestamp": "2025-01-14T08:10:11Z",
   "moment_type": "meeting",
-  "emotion_tags": ["firm", "coaching", "frustrated", "resolving"],
-  "topic_tags": ["leadership", "conflict-resolution", "accountability", "professional-development", "team-management"],
-  "present_persons": {
-    "fp_james_t3": {
-      "fingerprint_id": "fp_james_t3",
-      "user_id": "user_james_001",
-      "user_label": "James"
+  "emotion_tags": [
+    "firm",
+    "coaching",
+    "frustrated",
+    "resolving"
+  ],
+  "topic_tags": [
+    "leadership",
+    "conflict-resolution",
+    "accountability",
+    "professional-development",
+    "team-management"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_james_t3",
+      "name": "James",
+      "comment": "User ID: user_james_001"
     },
-    "fp_tony_t3": {
-      "fingerprint_id": "fp_tony_t3",
-      "user_id": "user_tony_002",
-      "user_label": "Tony"
+    {
+      "id": "fp_tony_t3",
+      "name": "Tony",
+      "comment": "User ID: user_tony_002"
     }
-  },
+  ],
   "location": "office",
-  "background_sounds": "quiet office, door closed, occasional paper rustling",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.18,
-    "word_count": 276,
-    "speaker_count": 2,
-    "meeting_type": "performance_coaching",
-    "leadership_moment": true
-  }
+  "background_sounds": "quiet office, door closed, occasional paper rustling"
 }

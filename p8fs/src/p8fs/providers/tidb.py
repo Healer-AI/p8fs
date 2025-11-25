@@ -57,6 +57,14 @@ from p8fs_cluster.config.settings import config
 from p8fs_cluster.logging import get_logger
 from tenacity import retry, stop_after_attempt, wait_fixed
 
+try:
+    from dbutils.pooled_db import PooledDB
+    DBUTILS_AVAILABLE = True
+except ImportError:
+    DBUTILS_AVAILABLE = False
+    logger = get_logger(__name__)
+    logger.warning("DBUtils not available, connection pooling disabled")
+
 from p8fs.services.storage.tikv_service import TiKVReverseMapping, TiKVService
 
 from .base import BaseSQLProvider
@@ -262,6 +270,7 @@ class TiDBProvider(BaseSQLProvider):
         super().__init__(dialect="tidb")
         self._connection = None
         self._connection_string = None
+        self._connection_pool = None
         self._metadata_cache = TableMetadataCache()
         self._kv = None
         self._tikv_service = None
@@ -324,6 +333,33 @@ class TiDBProvider(BaseSQLProvider):
         """TiDB supports vector operations via VEC_* functions."""
         return True
 
+    def get_recent_uploads_query(self, limit: int = 20) -> str:
+        """Generate TiDB query for recent file uploads with chunk aggregation."""
+        return """
+            SELECT
+                f.id as file_id,
+                f.uri,
+                f.file_size,
+                f.mime_type,
+                f.upload_timestamp,
+                JSON_UNQUOTE(JSON_EXTRACT(f.metadata, '$.filename')) as file_name,
+                COUNT(r.id) as chunk_count,
+                JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'name', r.name,
+                        'ordinal', r.ordinal,
+                        'id', r.id,
+                        'category', r.category
+                    )
+                ) as chunk_entity_names
+            FROM files f
+            LEFT JOIN resources r ON r.uri = f.uri AND r.tenant_id = f.tenant_id
+            WHERE f.tenant_id = %s
+            GROUP BY f.id, f.uri, f.file_size, f.mime_type, f.upload_timestamp, f.metadata
+            ORDER BY f.upload_timestamp DESC
+            LIMIT %s
+        """
+
     def check_vector_functions_available(self, connection: Any) -> bool:
         """Check if TiDB vector functions are available in this instance."""
         try:
@@ -350,7 +386,8 @@ class TiDBProvider(BaseSQLProvider):
         # Generate column definitions
         columns = []
         for field_name, field_info in schema["fields"].items():
-            column_type = self.map_python_type(field_info["type"])
+            # Use pre-computed sql_type if available, otherwise map from Python type
+            column_type = field_info.get("sql_type") or self.map_python_type(field_info["type"])
 
             # Override type for PRIMARY KEY fields - TiDB requires VARCHAR for PRIMARY KEY
             if field_info.get("is_primary_key") and column_type == "TEXT":
@@ -364,6 +401,12 @@ class TiDBProvider(BaseSQLProvider):
                 constraints.append("NOT NULL")
             if field_info.get("unique", False):
                 constraints.append("UNIQUE")
+
+            # Add default values for timestamp columns
+            if field_name == "created_at":
+                constraints.append("DEFAULT CURRENT_TIMESTAMP")
+            elif field_name == "updated_at":
+                constraints.append("DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 
             constraint_str = " " + " ".join(constraints) if constraints else ""
 
@@ -654,9 +697,11 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
             # Get the non-None type from Union, prioritizing database-native types
             args = [arg for arg in type_hint.__args__ if arg is not type(None)]
             if args:
-                # Prioritize UUID over str if both are present (will be stored as VARCHAR(36))
+                # Prioritize database-native types
                 if UUID in args:
                     type_hint = UUID
+                elif datetime in args:
+                    type_hint = datetime
                 else:
                     type_hint = args[0]  # First type takes precedence
 
@@ -688,23 +733,82 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
         # Default to TEXT for unknown types
         return "TEXT"
 
+    def _merge_graph_paths(self, old_paths: list | None, new_paths: list | None) -> list:
+        """Merge graph_paths arrays, deduplicating by dst key in Python."""
+        import json
+
+        if not old_paths:
+            return new_paths or []
+        if not new_paths:
+            return old_paths
+
+        # Parse JSON strings if needed
+        if isinstance(old_paths, str):
+            old_paths = json.loads(old_paths)
+        if isinstance(new_paths, str):
+            new_paths = json.loads(new_paths)
+
+        # Build dict keyed by dst for deduplication (newer overrides older)
+        edges_by_dst = {}
+
+        # Add old edges first
+        for edge in old_paths:
+            if isinstance(edge, dict) and 'dst' in edge:
+                edges_by_dst[edge['dst']] = edge
+
+        # Add/override with new edges
+        for edge in new_paths:
+            if isinstance(edge, dict) and 'dst' in edge:
+                edges_by_dst[edge['dst']] = edge
+
+        # Return as list
+        return list(edges_by_dst.values())
+
     def upsert_sql(
         self, model_class: type["AbstractModel"], values: dict[str, Any]
     ) -> tuple[str, tuple]:
-        """Generate TiDB UPSERT using REPLACE INTO."""
+        """Generate TiDB UPSERT using INSERT ... ON DUPLICATE KEY UPDATE with Python-based graph_paths merge."""
+        import json
+
         schema = model_class.to_sql_schema()
         table_name = schema["table_name"]
-
-        fields = list(values.keys())
-        placeholders = ["%s" for _ in fields]
-
-        sql = f"""
-            REPLACE INTO {table_name} ({', '.join(fields)})
-            VALUES ({', '.join(placeholders)})
-        """
+        primary_key = "id"
 
         # Serialize values for TiDB
         serialized_values = self.serialize_for_db(values)
+
+        # Handle graph_paths merge in Python if present
+        if "graph_paths" in serialized_values and primary_key in serialized_values:
+            # This is handled by special upsert logic in execute()
+            # We'll mark it for special handling
+            pass
+
+        fields = list(serialized_values.keys())
+        placeholders = ["%s" for _ in fields]
+        non_id_fields = [f for f in fields if f != primary_key]
+
+        # Build UPDATE clause - simple for TiDB, graph_paths handled in execute()
+        update_assignments = []
+        for col in non_id_fields:
+            if col == "metadata":
+                # Deep merge metadata JSON
+                update_assignments.append(
+                    f"{col} = JSON_MERGE_PATCH(COALESCE({col}, '{{}}'), VALUES({col}))"
+                )
+            else:
+                # Regular field replacement
+                update_assignments.append(f"{col} = VALUES({col})")
+
+        # Add updated_at if not in fields
+        if "updated_at" not in serialized_values:
+            update_assignments.append("updated_at = NOW()")
+
+        sql = f"""
+            INSERT INTO {table_name} ({', '.join(fields)})
+            VALUES ({', '.join(placeholders)})
+            ON DUPLICATE KEY UPDATE {', '.join(update_assignments)}
+        """
+
         return sql.strip(), tuple(serialized_values[field] for field in fields)
 
     def select_sql(
@@ -875,11 +979,75 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
         except pymysql.Error as e:
             logger.warning(f"Could not apply user context: {e}")
 
+    def _init_connection_pool(self, connection_string: str) -> Any:
+        """Initialize connection pool with DBUtils.
+
+        Returns PooledDB instance if pooling is enabled, None otherwise.
+        """
+        if not config.db_pool_enabled or not DBUTILS_AVAILABLE:
+            return None
+
+        if self._connection_pool is not None:
+            return self._connection_pool
+
+        import re
+        pattern = r"mysql://(?:([^:]+)(?::([^@]+))?@)?([^:/?]+)(?::(\d+))?(?:/(.+))?"
+        match = re.match(pattern, connection_string)
+
+        if not match:
+            logger.warning(f"Invalid connection string format, pooling disabled")
+            return None
+
+        user, password, host, port, database = match.groups()
+
+        logger.debug(
+            f"Initializing TiDB connection pool: "
+            f"max_connections={config.db_pool_max_connections}, "
+            f"max_usage={config.db_pool_max_usage}, "
+            f"max_lifetime={config.db_pool_max_lifetime}s"
+        )
+
+        # Create connection pool
+        # Note: DBUtils PooledDB doesn't have maxlifetime parameter
+        # It uses maxusage to recycle connections after N queries
+        self._connection_pool = PooledDB(
+            creator=pymysql,
+            maxconnections=config.db_pool_max_connections,
+            mincached=2,
+            maxcached=5,
+            maxusage=config.db_pool_max_usage,
+            ping=config.db_pool_ping,
+            # pymysql connection parameters:
+            host=host,
+            port=int(port or 4000),
+            user=user or "root",
+            password=password or "",
+            database=database or "public",
+            charset="utf8mb4",
+            cursorclass=pymysql.cursors.DictCursor,
+            connect_timeout=5,
+        )
+
+        logger.debug("TiDB connection pool initialized successfully")
+        return self._connection_pool
+
     def connect_sync(self, connection_string: str | None = None) -> Any:
-        """Create synchronous TiDB connection using pymysql."""
+        """Create synchronous TiDB connection using pymysql.
+
+        If connection pooling is enabled (db_pool_enabled=True), returns a
+        pooled connection with automatic recycling. Otherwise, uses the
+        traditional single connection with manual management.
+        """
         self._connection_string = connection_string or config.tidb_connection_string
 
-        # Check if we have a valid connection
+        # Try to use connection pool if enabled
+        pool = self._init_connection_pool(self._connection_string)
+        if pool is not None:
+            logger.debug("Using pooled TiDB connection")
+            return pool.connection()
+
+        # Fallback to traditional single connection
+        logger.debug("Using non-pooled TiDB connection")
         if self._connection:
             try:
                 # Test if connection is still valid
@@ -917,6 +1085,43 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
         cursor = None
         try:
             cursor = connection.cursor()
+
+            # Special handling for graph_paths merge in Python
+            if params and "INSERT INTO" in query and "ON DUPLICATE KEY UPDATE" in query and "graph_paths" in query:
+                import json
+                import re
+
+                # Extract table name and field list
+                match = re.search(r'INSERT INTO (\w+) \(([^)]+)\)', query)
+                if match:
+                    table_name = match.group(1)
+                    fields_str = match.group(2)
+                    fields = [f.strip() for f in fields_str.split(',')]
+
+                    # Find graph_paths and id positions
+                    graph_paths_idx = fields.index('graph_paths') if 'graph_paths' in fields else -1
+                    id_idx = fields.index('id') if 'id' in fields else -1
+
+                    if graph_paths_idx >= 0 and id_idx >= 0 and len(params) > max(graph_paths_idx, id_idx):
+                        record_id = params[id_idx]
+                        new_graph_paths = params[graph_paths_idx]
+
+                        # Fetch existing graph_paths
+                        cursor.execute(f"SELECT graph_paths FROM {table_name} WHERE id = %s", (record_id,))
+                        existing = cursor.fetchone()
+
+                        if existing and existing.get('graph_paths'):
+                            # Merge in Python
+                            old_paths = existing['graph_paths']
+                            if isinstance(old_paths, str):
+                                old_paths = json.loads(old_paths)
+
+                            merged_paths = self._merge_graph_paths(old_paths, new_graph_paths)
+
+                            # Update params with merged result
+                            params_list = list(params)
+                            params_list[graph_paths_idx] = json.dumps(merged_paths) if merged_paths else None
+                            params = tuple(params_list)
 
             logger.debug(f"Executing query: {query[:100]}...")
             if params:
@@ -1406,10 +1611,69 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
             logger.error(f"Failed to store entity with reverse mapping: {e}")
             raise
 
+    def get_by_binary_key(self, binary_key: bytes) -> dict[str, Any] | None:
+        """
+        Get data from TiKV using the exact TiDB binary key for O(1) access.
+
+        This bypasses SQL and directly accesses the TiKV storage layer using
+        TiDB's internal binary key format: t{tableID}_r{encodedPK}
+
+        Args:
+            binary_key: The TiDB binary key as bytes (e.g., from tidb_key.hex())
+
+        Returns:
+            Entity data as dict, or None if not found or access unavailable
+        """
+        try:
+            # Try to use tikv-client RawClient for direct access
+            try:
+                from tikv_client import RawClient
+
+                # Get TiKV PD addresses from config
+                pd_endpoints = getattr(self, 'pd_endpoints', None)
+                if not pd_endpoints:
+                    # Try to derive from TiDB connection
+                    # For now, log and fall back
+                    logger.debug("PD endpoints not configured for direct TiKV access")
+                    return None
+
+                # Create RawClient for direct TiKV access
+                client = RawClient.connect(pd_endpoints)
+
+                # Get data directly from TiKV using binary key (no tenant prefix!)
+                raw_data = client.get(binary_key)
+
+                if not raw_data:
+                    return None
+
+                # Decode TiDB row format
+                # TiDB stores rows in a specific encoded format
+                # This is a simplified version - full implementation would need
+                # proper TiDB datum decoding
+                import json
+                try:
+                    # Attempt to decode as JSON if stored that way
+                    entity_data = json.loads(raw_data.decode('utf-8'))
+                    return entity_data
+                except:
+                    logger.warning(f"Binary key returned data but couldn't decode: {len(raw_data)} bytes")
+                    return None
+
+            except ImportError:
+                logger.debug("tikv-client not available, binary key access disabled")
+                return None
+            except Exception as e:
+                logger.debug(f"Direct TiKV access failed: {e}")
+                return None
+
+        except Exception as e:
+            logger.error(f"Failed to get by binary key: {e}")
+            return None
+
     def get_entity_by_name(
         self, connection: Any, entity_name: str, entity_type: str, tenant_id: str
     ) -> dict[str, Any] | None:
-        """Retrieve entity by name using reverse key mapping."""
+        """Retrieve entity by name using reverse key mapping with direct TiKV access."""
         try:
             # Look up entity reference in TiKV
             entity_ref = self.tikv_reverse_mapping.lookup_entity_reference(
@@ -1419,7 +1683,19 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
             if not entity_ref:
                 return None
 
-            # Get entity from SQL table
+            # Try direct TiKV binary key access first (O(1))
+            tidb_key_hex = entity_ref.get("tidb_key")
+            if tidb_key_hex:
+                try:
+                    tidb_key_bytes = bytes.fromhex(tidb_key_hex)
+                    entity_data = self.get_by_binary_key(tidb_key_bytes)
+                    if entity_data:
+                        logger.debug(f"Retrieved {entity_type}/{entity_name} via direct TiKV access")
+                        return entity_data
+                except Exception as e:
+                    logger.debug(f"Binary key access failed, falling back to SQL: {e}")
+
+            # Fallback to SQL if binary key access unavailable
             table_name = entity_ref.get("table_name", entity_type)
             entity_id = entity_ref.get("entity_key")
 
@@ -1432,7 +1708,7 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
                 return None
 
             sql = f"""
-                SELECT * FROM {table_name} 
+                SELECT * FROM {table_name}
                 WHERE {pk_info['column_name']} = %s
                 AND tenant_id = %s
             """
@@ -1622,10 +1898,7 @@ CREATE TABLE IF NOT EXISTS kv_entity_mapping (
             embedding_service = get_embedding_service()
 
             # Generate embeddings in batch for efficiency
-            embeddings = []
-            for text in texts:
-                embedding = embedding_service.embed(text)
-                embeddings.append(embedding)
+            embeddings = embedding_service.encode_batch(texts)
 
             return embeddings
         except Exception as e:

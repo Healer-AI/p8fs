@@ -17,51 +17,98 @@ class DreamingRepository:
     def __init__(self):
         """Initialize repositories for different models."""
         self.session_repo = SystemRepository(Session)
-        self.resource_repo = SystemRepository(Resources) 
+        self.resource_repo = SystemRepository(Resources)
         self.tenant_repo = SystemRepository(Tenant)
+
+        # Get dialect for SQL syntax compatibility
+        self.dialect = self.session_repo.provider.get_dialect_name()
+
+    def _build_interval_clause(self, hours: int) -> tuple[str, tuple]:
+        """Build interval clause compatible with both PostgreSQL and TiDB/MySQL.
+
+        Args:
+            hours: Number of hours to look back
+
+        Returns:
+            Tuple of (sql_clause, params) for use in WHERE clause
+        """
+        if self.dialect == "tidb":
+            # MySQL/TiDB syntax: DATE_SUB(NOW(), INTERVAL N HOUR)
+            return "created_at >= DATE_SUB(NOW(), INTERVAL %s HOUR)", (hours,)
+        else:
+            # PostgreSQL syntax: NOW() - INTERVAL 'N hours'
+            return "created_at >= NOW() - INTERVAL '%s hours'", (hours,)
     
-    async def get_sessions(self, tenant_id: str, limit: int = 100) -> List[Dict[str, Any]]:
-        """Get recent sessions for a tenant."""
+    async def get_sessions(self, tenant_id: str, limit: int = 100, since_hours: int | None = None) -> List[Dict[str, Any]]:
+        """Get recent user-facing sessions for a tenant (excludes system and background sessions)."""
         try:
-            # Use raw query for tenant filtering
-            query = """
-                SELECT * FROM sessions 
-                WHERE tenant_id = %s 
-                ORDER BY created_at DESC 
-                LIMIT %s
-            """
-            
-            results = self.session_repo.execute(query, (tenant_id, limit))
-            
+            # Filter out system-generated and background sessions
+            # CHAT and API: User-facing interactions only
+            # ANALYSIS, BATCH, DREAMING: System-generated (exclude to avoid feedback loops)
+            if since_hours:
+                interval_clause, interval_params = self._build_interval_clause(since_hours)
+                query = f"""
+                    SELECT * FROM sessions
+                    WHERE tenant_id = %s
+                    AND (session_type = 'chat' OR session_type = 'api')
+                    AND {interval_clause}
+                    ORDER BY created_at DESC
+                    LIMIT %s
+                """
+                results = self.session_repo.execute(query, (tenant_id, *interval_params, limit))
+            else:
+                query = """
+                    SELECT * FROM sessions
+                    WHERE tenant_id = %s
+                    AND (session_type = 'chat' OR session_type = 'api')
+                    ORDER BY created_at DESC
+                    LIMIT %s
+                """
+                results = self.session_repo.execute(query, (tenant_id, limit))
+
             # Convert to dictionaries
             session_list = [dict(row) for row in results] if results else []
-            
-            logger.info(f"Retrieved {len(session_list)} sessions for tenant {tenant_id}")
+
+            logger.info(f"Retrieved {len(session_list)} user sessions for tenant {tenant_id} (excluding system/background sessions)")
             return session_list
-            
+
         except Exception as e:
             logger.error(f"Failed to get sessions for {tenant_id}: {e}")
             return []
     
-    async def get_resources(self, tenant_id: str, limit: int = 1000) -> List[Dict[str, Any]]:
-        """Get resources/documents for a tenant."""
+    async def get_resources(self, tenant_id: str, limit: int = 1000, since_hours: int | None = None) -> List[Dict[str, Any]]:
+        """Get resources/documents for a tenant (excludes derivative resources like user_context)."""
         try:
             # Use raw query for tenant filtering
-            query = """
-                SELECT * FROM resources 
-                WHERE tenant_id = %s 
-                ORDER BY created_at DESC 
-                LIMIT %s
-            """
-            
-            results = self.resource_repo.execute(query, (tenant_id, limit))
-            
+            # Exclude derivative categories to prevent cascading:
+            # - user_context: Generated from summarize_user (derivative of sessions/resources)
+            if since_hours:
+                interval_clause, interval_params = self._build_interval_clause(since_hours)
+                query = f"""
+                    SELECT * FROM resources
+                    WHERE tenant_id = %s
+                    AND {interval_clause}
+                    AND (category IS NULL OR category NOT IN ('user_context'))
+                    ORDER BY created_at DESC
+                    LIMIT %s
+                """
+                results = self.resource_repo.execute(query, (tenant_id, *interval_params, limit))
+            else:
+                query = """
+                    SELECT * FROM resources
+                    WHERE tenant_id = %s
+                    AND (category IS NULL OR category NOT IN ('user_context'))
+                    ORDER BY created_at DESC
+                    LIMIT %s
+                """
+                results = self.resource_repo.execute(query, (tenant_id, limit))
+
             # Convert to dictionaries
             resource_list = [dict(row) for row in results] if results else []
-            
-            logger.info(f"Retrieved {len(resource_list)} resources for tenant {tenant_id}")
+
+            logger.info(f"Retrieved {len(resource_list)} user resources for tenant {tenant_id} (excluding derivative categories)")
             return resource_list
-            
+
         except Exception as e:
             logger.error(f"Failed to get resources for {tenant_id}: {e}")
             return []

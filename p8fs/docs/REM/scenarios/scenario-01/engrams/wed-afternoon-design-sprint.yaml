@@ -1,0 +1,152 @@
+kind: engram
+name: "Wednesday Afternoon Design Sprint"
+category: "meeting"
+summary: "Design sprint finalizing onboarding messaging and A/B testing strategy. Resolved copy concerns, decided to test progress bar vs single-page variations."
+resource_timestamp: "2024-11-13T13:00:00Z"
+metadata:
+  meeting_type: "design_sprint"
+  attendees:
+    - "Sarah Chen"
+    - "Jamie Lee"
+    - "Marketing Team"
+  duration_minutes: 120
+  decisions:
+    - "Messaging: 'Get started in minutes'"
+    - "A/B test: Progress bar vs single-page"
+    - "Metrics: completion rate, time-to-value, acquisition cost"
+content: |
+  Productive design sprint with Jamie and the marketing team. Focus was on finalizing
+  the onboarding flow messaging and marketing integration.
+
+  Jamie presented the updated designs - the tweaks from Monday's review look great.
+  The flow is much cleaner now. Marketing loved the visual direction.
+
+  Big discussion about the messaging. Marketing wants to emphasize "Start your health
+  journey in 60 seconds" but we need to be careful about setting expectations. If
+  setup actually takes 3 minutes, users will feel misled.
+
+  Compromised on "Get started in minutes" - truthful but still compelling. Jamie will
+  update the copy in the designs.
+
+  Also discussed the A/B testing question Kevin raised this morning. Marketing team
+  is nervous about testing - they want to launch with the best version. I pushed back
+  and explained that testing IS how we find the best version. Eventually got buy-in
+  to test two variations:
+  - Version A: Progress bar showing steps
+  - Version B: Single-page flow
+
+  We'll measure completion rate and time-to-first-value. Marketing will track
+  acquisition costs by variation.
+
+  Jamie seemed energized by the collaboration with marketing. Good cross-team work.
+
+graph_edges:
+  - dst: "Monday Afternoon Design Review"
+    rel_type: "continues"
+    weight: 0.8
+  - dst: "Wednesday Morning Standup"
+    rel_type: "follows_up_on"
+    weight: 0.7
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "finalizes"
+    weight: 0.9
+
+moments:
+  - name: "Design Review and Approval"
+    category: "review"
+    content: "Jamie presented the updated designs - the tweaks from Monday's review look great. The flow is much cleaner now. Marketing loved the visual direction."
+    summary: "Marketing team approved updated onboarding designs"
+    resource_timestamp: "2024-11-13T13:15:00Z"
+    resource_ends_timestamp: "2024-11-13T13:30:00Z"
+    present_persons:
+      - id: "person-jamie-lee"
+        name: "Jamie Lee"
+        comment: "Presented updated designs"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Facilitated review"
+      - id: "team-marketing"
+        name: "Marketing Team"
+        comment: "Approved visual direction"
+    moment_type: "design_review"
+    topic_tags:
+      - "design approval"
+      - "onboarding flow"
+      - "cross-team collaboration"
+    graph_edges:
+      - dst: "Monday Afternoon Design Review"
+        rel_type: "builds_on"
+        weight: 0.9
+      - dst: "Jamie Lee"
+        rel_type: "presented_by"
+        weight: 0.9
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "approves"
+        weight: 1.0
+
+  - name: "Messaging Compromise Decision"
+    category: "decision"
+    content: "Marketing wants 'Start your health journey in 60 seconds' but setup takes 3 minutes. Compromised on 'Get started in minutes' - truthful but still compelling."
+    summary: "Resolved messaging debate with compromise that balances marketing and user expectations"
+    resource_timestamp: "2024-11-13T13:45:00Z"
+    resource_ends_timestamp: "2024-11-13T14:15:00Z"
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Facilitated compromise"
+      - id: "team-marketing"
+        name: "Marketing Team"
+        comment: "Initially wanted '60 seconds' messaging"
+      - id: "person-jamie-lee"
+        name: "Jamie Lee"
+        comment: "Will update copy in designs"
+    moment_type: "negotiation"
+    emotion_tags:
+      - "collaborative"
+      - "diplomatic"
+    topic_tags:
+      - "marketing messaging"
+      - "user expectations"
+      - "copywriting"
+    graph_edges:
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "defines_messaging_for"
+        weight: 0.9
+      - dst: "Jamie Lee"
+        rel_type: "action_item_for"
+        weight: 0.7
+
+  - name: "A/B Testing Strategy Agreement"
+    category: "decision"
+    content: "Marketing nervous about testing. Explained testing IS how we find best version. Decided to test progress bar vs single-page flow. Measure completion rate and time-to-first-value."
+    summary: "Got marketing buy-in for A/B testing two onboarding variations with clear metrics"
+    resource_timestamp: "2024-11-13T14:20:00Z"
+    resource_ends_timestamp: "2024-11-13T14:50:00Z"
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Advocated for testing approach"
+      - id: "team-marketing"
+        name: "Marketing Team"
+        comment: "Initially hesitant, eventually bought in"
+      - id: "person-jamie-lee"
+        name: "Jamie Lee"
+        comment: "Will create both variations"
+    moment_type: "decision"
+    topic_tags:
+      - "A/B testing"
+      - "experimentation strategy"
+      - "metrics definition"
+    graph_edges:
+      - dst: "Wednesday Morning Standup"
+        rel_type: "answers_question_from"
+        weight: 0.8
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "defines_testing_for"
+        weight: 0.9
+      - dst: "Monday Afternoon Design Review"
+        rel_type: "extends"
+        weight: 0.7
+      - dst: "Kevin Park"
+        rel_type: "impacts"
+        weight: 0.6

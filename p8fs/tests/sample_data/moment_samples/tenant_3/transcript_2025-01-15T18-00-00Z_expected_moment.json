@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T18:00:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "06:00 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.1,
+    "word_count": 297,
+    "speaker_count": 2,
+    "meeting_type": "client_update",
+    "business_outcome": "very_positive"
   },
   "name": "Client Update Call - Riverside Project Status",
   "content": "James providing project readiness update to Patricia ahead of board meeting. Confirmed all subcontractors locked in (Miller Electric, ClimaTech HVAC) and ready to commit pending approval. Reaffirmed 18-month timeline with built-in buffer for weather and supply chain risks, addressing board concerns about market-wide delays. Referenced strong track record: eight consecutive projects delivered on-time or early. Patricia revealed James is top choice with board leaning heavily toward approval. Discussed value engineering: $12.8M base bid reducible to $12M target via aluminum-to-fiber-cement facade switch with no quality compromise (50-year warranty, same performance). Patricia endorsed VE option, appreciating $800K savings reallocation potential for interior finishes and landscaping where tenants notice. Call concluded with Patricia's commitment to recommend approval, expecting Friday afternoon decision.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-15T18:00:00Z",
   "resource_ends_timestamp": "2025-01-15T18:10:06Z",
   "moment_type": "conversation",
-  "emotion_tags": ["confident", "professional", "optimistic", "strategic"],
-  "topic_tags": ["client-relations", "project-status", "value-engineering", "business-development", "timeline-assurance"],
-  "present_persons": {
-    "fp_james_t3": {
-      "fingerprint_id": "fp_james_t3",
-      "user_id": "user_james_001",
-      "user_label": "James"
+  "emotion_tags": [
+    "confident",
+    "professional",
+    "optimistic",
+    "strategic"
+  ],
+  "topic_tags": [
+    "client-relations",
+    "project-status",
+    "value-engineering",
+    "business-development",
+    "timeline-assurance"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_james_t3",
+      "name": "James",
+      "comment": "User ID: user_james_001"
     },
-    "fp_patricia_t3": {
-      "fingerprint_id": "fp_patricia_t3",
-      "user_id": "user_patricia_006",
-      "user_label": "Patricia"
+    {
+      "id": "fp_patricia_t3",
+      "name": "Patricia",
+      "comment": "User ID: user_patricia_006"
     }
-  },
+  ],
   "location": "office",
-  "background_sounds": "quiet office, phone call quality",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.1,
-    "word_count": 297,
-    "speaker_count": 2,
-    "meeting_type": "client_update",
-    "business_outcome": "very_positive"
-  }
+  "background_sounds": "quiet office, phone call quality"
 }

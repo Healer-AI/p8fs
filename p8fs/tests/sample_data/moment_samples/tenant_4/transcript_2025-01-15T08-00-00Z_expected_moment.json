@@ -1,8 +1,12 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T08:00:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "08:00 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.9,
+    "word_count": 252,
+    "speaker_count": 1,
+    "activity_type": "storm_assessment",
+    "elevation_meters": 1847,
+    "personal_growth": true
   },
   "name": "Post-Storm Assessment - New Snow Management",
   "content": "Lena assessing conditions morning after storm that ended 3 AM, reporting good sleep post-wind. Discovered 30cm fresh snowfall, completely transformed landscape to pristine white. Tent performed flawlessly - no damage, building trust in equipment. Conducting systematic recovery: brushing snow before melt-refreeze cycle, excavating buried bear canister from 0.5m snow depth. Revised safety planning: recognized elevated avalanche risk from fresh snow load, abandoned high-peak plans in favor of lower elevation gentle slopes. Emphasized safety priority over summit achievement. Clear blue sky creating stark contrast to previous night's storm. Preparing breakfast while planning modified day route for snowpack stabilization period. Expressed pride in calm storm management and preparation trust. Experiencing personal growth revelation: discovering greater strength and resilience than previously believed. Trip fulfilling intended purpose of self-testing and confidence building.",
@@ -12,24 +16,26 @@
   "resource_timestamp": "2025-01-15T08:00:00Z",
   "resource_ends_timestamp": "2025-01-15T08:09:54Z",
   "moment_type": "observation",
-  "emotion_tags": ["proud", "capable", "prudent", "grateful"],
-  "topic_tags": ["storm-recovery", "avalanche-safety", "gear-assessment", "personal-growth", "decision-making"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
+  "emotion_tags": [
+    "proud",
+    "capable",
+    "prudent",
+    "grateful"
+  ],
+  "topic_tags": [
+    "storm-recovery",
+    "avalanche-safety",
+    "gear-assessment",
+    "personal-growth",
+    "decision-making"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
     }
-  },
+  ],
   "location": "46.5500,8.7000",
-  "background_sounds": "quiet morning, snow crunching, birds starting to call",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 9.9,
-    "word_count": 252,
-    "speaker_count": 1,
-    "activity_type": "storm_assessment",
-    "elevation_meters": 1847,
-    "personal_growth": true
-  }
+  "background_sounds": "quiet morning, snow crunching, birds starting to call"
 }

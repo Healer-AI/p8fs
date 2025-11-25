@@ -2,25 +2,124 @@
 
 Integrates with existing storage worker functionality while managing
 NATS queue processing for different file sizes.
+
+## Testing with Real NATS (Cluster)
+
+### Prerequisites
+1. Port-forward NATS from cluster:
+   ```bash
+   kubectl port-forward -n p8fs svc/nats 4222:4222 &
+   ```
+
+2. Port-forward TiDB from cluster:
+   ```bash
+   kubectl port-forward -n tikv-cluster svc/fresh-cluster-tidb 4000:4000 &
+   ```
+
+3. Set environment variables:
+   ```bash
+   export P8FS_NATS_URL=nats://localhost:4222
+   export P8FS_STORAGE_PROVIDER=tidb
+   export P8FS_TIDB_HOST=127.0.0.1
+   export P8FS_TIDB_PORT=4000
+   export P8FS_TIDB_USER=root
+   export P8FS_TIDB_PASSWORD=""
+   export P8FS_TIDB_DATABASE=public
+   ```
+
+### Manual Testing
+Test the storage worker end-to-end with real NATS and database:
+
+```bash
+# Terminal 1: Port-forward services
+kubectl port-forward -n p8fs svc/nats 4222:4222 &
+kubectl port-forward -n tikv-cluster svc/fresh-cluster-tidb 4000:4000 &
+
+# Terminal 2: Start tiered router (routes messages to size-specific queues)
+cd /Users/sirsh/code/p8fs-modules/p8fs
+P8FS_STORAGE_PROVIDER=tidb P8FS_NATS_URL=nats://localhost:4222 \
+uv run python -m p8fs.workers.router
+
+# Terminal 3: Start storage worker for small files
+P8FS_STORAGE_PROVIDER=tidb P8FS_NATS_URL=nats://localhost:4222 \
+uv run python -m p8fs.workers.storage_worker --queue small
+
+# Terminal 4: Publish test event to main queue
+P8FS_STORAGE_PROVIDER=tidb P8FS_NATS_URL=nats://localhost:4222 \
+uv run python tests/workers/queues/publish_test_event.py
+```
+
+### Automated Test Script
+Run integration test that uses real NATS via port-forwarding:
+
+```bash
+# Start port-forwards in background
+kubectl port-forward -n p8fs svc/nats 4222:4222 &
+kubectl port-forward -n tikv-cluster svc/fresh-cluster-tidb 4000:4000 &
+
+# Run integration test
+P8FS_STORAGE_PROVIDER=tidb P8FS_NATS_URL=nats://localhost:4222 \
+uv run pytest tests/integration/workers/test_storage_worker_nats.py -v -s
+```
+
+### Verify Event Flow
+Check messages in NATS streams:
+
+```bash
+# Install nats CLI
+brew install nats-io/nats-tools/nats
+
+# Check main stream
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS
+
+# Check small queue
+nats -s nats://localhost:4222 stream info P8FS_STORAGE_EVENTS_SMALL
+
+# Publish test message
+nats -s nats://localhost:4222 pub p8fs.storage.events '{
+  "path": "/buckets/tenant-test/content/test.txt",
+  "event_type": "create",
+  "size": 1024,
+  "tenant_id": "tenant-test"
+}'
+```
+
+### Debug NATS Consumer State
+Check consumer state and pending messages:
+
+```bash
+# View consumer info
+nats -s nats://localhost:4222 consumer info P8FS_STORAGE_EVENTS_SMALL small-workers
+
+# View pending messages
+nats -s nats://localhost:4222 consumer next P8FS_STORAGE_EVENTS_SMALL small-workers --count 1
+```
 """
 
 import asyncio
 import json
-import logging
 import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
+from p8fs_cluster.logging import get_logger
 from p8fs.repository import TenantRepository
 from p8fs.services.nats import ConsumerManager, NATSClient
+from p8fs.workers.observability import (
+    WorkerMetrics as OTelWorkerMetrics,
+    continue_trace,
+    get_tracer,
+    setup_worker_observability,
+    trace_file_processing,
+)
 from p8fs.workers.storage import StorageEvent as BaseStorageEvent
 from p8fs.workers.storage import StorageWorker
 
 from .config import ConsumerNames, QueueSize, WorkerConfig
 from .models import StorageEvent
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class WorkerStatus(Enum):
@@ -103,11 +202,17 @@ class StorageEventWorker:
         # State management
         self._status = WorkerStatus.STOPPED
         self._running = False
-        self.metrics = WorkerMetrics()
+        self.worker_metrics = WorkerMetrics()
+
+        # Initialize OpenTelemetry
+        setup_worker_observability(f"p8fs-storage-worker-{queue_size.value}")
+        self.tracer = get_tracer()
+        self.otel_metrics = OTelWorkerMetrics()
         
     async def setup(self) -> None:
         """Set up worker components."""
-        logger.info(f"Setting up {self.queue_size.value} storage worker for tenant {self.tenant_id}")
+        import p8fs
+        logger.info(f"Setting up {self.queue_size.value} storage worker for tenant {self.tenant_id} (p8fs v{p8fs.__version__})")
 
         self._status = WorkerStatus.STARTING
 
@@ -118,21 +223,20 @@ class StorageEventWorker:
         from p8fs.models.p8 import Files
         self.repository = TenantRepository(Files, tenant_id=self.tenant_id)
 
-        # Ensure stream exists
-        logger.info(f"Ensuring stream {self.stream_name} with subject {self.subject}")
-        stream_success = await self.client.ensure_stream(self.stream_name, [self.subject])
-        if not stream_success:
-            raise RuntimeError(f"Failed to create/verify stream {self.stream_name}")
+        # Verify stream exists (router should have already created it)
+        logger.info(f"Verifying stream {self.stream_name} exists")
+        try:
+            await self.client.get_stream_info(self.stream_name)
+            logger.info(f"Stream {self.stream_name} verified")
+        except Exception as e:
+            raise RuntimeError(f"Stream {self.stream_name} not found - router must create streams first: {e}")
 
-        # Create pull subscriber (this ensures consumer exists and creates the subscription)
-        logger.info(f"Creating pull subscriber for consumer {self.consumer_name}")
-        self.subscriber = await self.client.create_pull_subscriber(
-            self.stream_name,
-            self.consumer_name,
-            self.subject
-        )
+        # Connect to existing pull subscriber (router already created the consumer)
+        logger.info(f"Connecting to existing consumer {self.consumer_name} on stream {self.stream_name}")
+        self.subscriber = await self.client.connect_to_pull_subscriber(self.stream_name, self.consumer_name)
+        logger.info(f"Connected to consumer {self.consumer_name}")
 
-        self.metrics.start_time = time.time()
+        self.worker_metrics.start_time = time.time()
         logger.info(f"Setup complete for {self.queue_size.value} worker")
         
     async def start(self) -> None:
@@ -170,6 +274,74 @@ class StorageEventWorker:
         self._status = WorkerStatus.STOPPED
         logger.info(f"{self.queue_size.value} worker stopped")
         
+    def _record_event_attributes(self, span, event: StorageEvent) -> None:
+        """Record event attributes to span."""
+        span.set_attribute("file.name", event.path)
+        span.set_attribute("file.size", event.metadata.file_size)
+        span.set_attribute("file.size_mb", event.metadata.file_size / (1024 * 1024))
+        span.set_attribute("tenant.id", event.tenant_id)
+        span.set_attribute("queue.name", self.queue_size.value)
+        span.set_attribute("event.type", event.event_type.value)
+
+    def _record_success_metrics(self, event: StorageEvent, processing_time: float) -> None:
+        """Record success metrics."""
+        self.worker_metrics.messages_processed += 1
+        self.worker_metrics.processing_time_total += processing_time
+        self.worker_metrics.last_activity = time.time()
+
+        self.otel_metrics.files_processed.add(
+            1,
+            {
+                "queue": self.queue_size.value,
+                "tenant_id": event.tenant_id,
+                "event_type": event.event_type.value
+            }
+        )
+        self.otel_metrics.processing_duration.record(
+            processing_time,
+            {"queue": self.queue_size.value}
+        )
+        self.otel_metrics.file_size_processed.record(
+            event.metadata.file_size,
+            {"queue": self.queue_size.value}
+        )
+
+    def _record_error_metrics(self, span, error: Exception, error_type: str = None) -> None:
+        """Record error metrics and span attributes."""
+        error_type = error_type or type(error).__name__
+
+        self.otel_metrics.processing_errors.add(
+            1,
+            {"queue": self.queue_size.value, "error_type": error_type}
+        )
+        span.set_attribute("status", "error")
+        span.set_attribute("error.type", error_type)
+        span.set_attribute("error.message", str(error))
+        span.record_exception(error)
+
+    async def _process_event_business_logic(self, event: StorageEvent) -> None:
+        """Core business logic for processing storage events.
+
+        IMPORTANT: This worker processes ALL events it receives from the queue.
+        Event filtering should be done at the router/publisher level (gRPC subscriber),
+        not here. The worker is a consumer that trusts its upstream producers.
+        """
+        legacy_data = event.to_legacy_format()
+        legacy_event = BaseStorageEvent(**legacy_data)
+
+        if event.event_type.value == "delete":
+            from uuid import NAMESPACE_DNS, uuid5
+            file_id = str(uuid5(NAMESPACE_DNS, f"{legacy_event.tenant_id}:{legacy_event.file_path}"))
+            await self.repository.delete_file(file_id)
+        else:
+            # Process all non-delete events (create, update, rename, etc.)
+            await self.storage_worker.process_file(
+                legacy_event.file_path,
+                legacy_event.tenant_id,
+                legacy_event.s3_key
+            )
+            self.worker_metrics.files_processed += 1
+
     async def _process_queue(self) -> None:
         """Main queue processing loop."""
         logger.info(f"Starting queue processing for {self.queue_size.value} queue")
@@ -199,22 +371,25 @@ class StorageEventWorker:
                 if not messages:
                     logger.debug(f"No messages received from {self.queue_size.value} queue")
                     continue
-                    
+
+                logger.debug(f"Received {len(messages)} message(s) from {self.queue_size.value} queue")
+
                 # Process each message
                 for msg in messages:
                     if not self._running:
                         break
-                        
+
                     try:
                         await self._process_single_message(msg)
                         # Acknowledge message after successful processing
                         await self.client.ack_message(msg)
+                        logger.debug(f"Message acknowledged successfully")
                         
                     except Exception as e:
                         logger.error(f"Failed to process message in {self.queue_size.value} queue: {e}")
                         # NACK message for retry
                         await self.client.nak_message(msg)
-                        self.metrics.messages_failed += 1
+                        self.worker_metrics.messages_failed += 1
                         
             except TimeoutError:
                 logger.debug(f"Message fetch timeout for {self.queue_size.value} queue")
@@ -227,58 +402,57 @@ class StorageEventWorker:
         
     async def _process_single_message(self, msg) -> None:
         """Process a single storage event message.
-        
+
         Args:
-            msg: NATS message containing storage event
+            msg: NATS message containing storage event with trace context in headers
         """
         start_time = time.time()
-        
-        try:
-            # Parse storage event data
-            raw_event_data = json.loads(msg.data.decode('utf-8'))
-            
-            # Create validated StorageEvent
+        headers = msg.headers if hasattr(msg, 'headers') else None
+
+        with continue_trace(headers, f"worker.{self.queue_size.value}.process_message") as span:
             try:
-                event = StorageEvent.from_raw_event(raw_event_data)
-            except ValueError as e:
-                logger.debug(f"Skipping invalid event: {e}")
-                return  # Skip invalid events without error
-            
-            logger.debug(f"Processing {event.event_type.value} for {event.path} ({event.metadata.file_size} bytes)")
-            
-            # Convert to legacy format for existing storage worker
-            legacy_data = event.to_legacy_format()
-            legacy_event = BaseStorageEvent(**legacy_data)
-            
-            # Process using existing storage worker logic
-            if event.event_type.value in ["create", "update"]:
-                await self.storage_worker.process_file(
-                    legacy_event.file_path,
-                    legacy_event.tenant_id,
-                    legacy_event.s3_key
-                )
-                self.metrics.files_processed += 1
-                
-            elif event.event_type.value == "delete":
-                # Handle file deletion
-                from uuid import NAMESPACE_DNS, uuid5
-                file_id = str(uuid5(NAMESPACE_DNS, f"{legacy_event.tenant_id}:{legacy_event.file_path}"))
-                await self.repository.delete_file(file_id)
-                
-            # Update metrics
-            processing_time = time.time() - start_time
-            self.metrics.messages_processed += 1
-            self.metrics.processing_time_total += processing_time
-            self.metrics.last_activity = time.time()
-            
-            logger.info(f"Processed {event.path} in {processing_time:.2f}s")
-            
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse message as JSON: {e}")
-            raise
-        except Exception as e:
-            logger.error(f"Failed to process storage event: {e}")
-            raise
+                raw_event_data = json.loads(msg.data.decode('utf-8'))
+                logger.debug(f"Raw event data: {json.dumps(raw_event_data)}")
+
+                try:
+                    event = StorageEvent.from_raw_event(raw_event_data)
+                except ValueError as e:
+                    logger.warning(f"Skipping invalid event: {e}")
+                    logger.debug(f"Failed to parse raw event: {json.dumps(raw_event_data)}")
+                    span.set_attribute("status", "skipped")
+                    span.set_attribute("skip_reason", str(e))
+                    return
+
+                self._record_event_attributes(span, event)
+
+                logger.info(f"Processing {event.event_type.value} event: {event.path} ({event.metadata.file_size} bytes, tenant: {event.tenant_id})")
+
+                await self._process_event_business_logic(event)
+
+                processing_time = time.time() - start_time
+                self._record_success_metrics(event, processing_time)
+
+                span.set_attribute("status", "success")
+                span.set_attribute("processing.duration", processing_time)
+
+                logger.info(f"✅ Successfully processed: {event.path} ({processing_time:.2f}s)")
+
+            except json.JSONDecodeError as e:
+                self._record_error_metrics(span, e, "json_decode")
+                logger.exception(f"❌ Failed to parse message as JSON: {e}")
+                raise
+
+            except Exception as e:
+                self._record_error_metrics(span, e)
+                # Try to extract file path from event if available
+                file_info = "unknown file"
+                try:
+                    if 'event' in locals():
+                        file_info = f"{event.path} (tenant: {event.tenant_id})"
+                except:
+                    pass
+                logger.exception(f"❌ Failed to process {file_info}: {e}")
+                raise
             
     async def get_status(self) -> dict[str, Any]:
         """Get worker status and metrics.
@@ -293,7 +467,7 @@ class StorageEventWorker:
         except Exception as e:
             logger.error(f"Failed to get consumer info: {e}")
             
-        uptime = time.time() - self.metrics.start_time if self.metrics.start_time > 0 else 0
+        uptime = time.time() - self.worker_metrics.start_time if self.worker_metrics.start_time > 0 else 0
         
         return {
             "queue_size": self.queue_size.value,
@@ -303,12 +477,12 @@ class StorageEventWorker:
             "consumer_name": self.consumer_name,
             "uptime_seconds": uptime,
             "metrics": {
-                "messages_processed": self.metrics.messages_processed,
-                "messages_failed": self.metrics.messages_failed,
-                "files_processed": self.metrics.files_processed,
-                "success_rate": self.metrics.success_rate,
-                "average_processing_time": self.metrics.average_processing_time,
-                "last_activity": self.metrics.last_activity,
+                "messages_processed": self.worker_metrics.messages_processed,
+                "messages_failed": self.worker_metrics.messages_failed,
+                "files_processed": self.worker_metrics.files_processed,
+                "success_rate": self.worker_metrics.success_rate,
+                "average_processing_time": self.worker_metrics.average_processing_time,
+                "last_activity": self.worker_metrics.last_activity,
             },
             "consumer_info": consumer_info,
             "config": self.config,
@@ -350,8 +524,8 @@ class StorageEventWorker:
             health["healthy"] = False
             
         # Check recent activity
-        if self.metrics.last_activity:
-            time_since_activity = time.time() - self.metrics.last_activity
+        if self.worker_metrics.last_activity:
+            time_since_activity = time.time() - self.worker_metrics.last_activity
             health["checks"]["recent_activity"] = time_since_activity < 300  # 5 minutes
             health["checks"]["seconds_since_activity"] = time_since_activity
         else:

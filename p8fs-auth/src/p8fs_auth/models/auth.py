@@ -42,6 +42,7 @@ class Device(BaseModel):
     last_used_at: datetime | None = Field(None)
     challenge_data: dict[str, Any] | None = Field(None, description="Verification challenge")
     tenant_id: str | None = Field(None, description="Tenant isolation")
+    metadata: dict[str, Any] | None = Field(None, description="Additional device info (IMEI, model, OS, etc.)")
 
 
 class DeviceToken(BaseModel):

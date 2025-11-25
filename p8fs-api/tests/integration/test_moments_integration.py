@@ -95,7 +95,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # Create moment via PUT
     response = client.put(
-        "/api/entity/moment/",
+        "/api/v1/entity/moments/",
         json=moment_data,
         headers=headers
     )
@@ -107,7 +107,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 2. Get moment by ID
     response = client.get(
-        f"/api/entity/moment/{moment_id}",
+        f"/api/v1/entity/moments/{moment_id}",
         headers=headers
     )
     assert response.status_code == 200
@@ -118,7 +118,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 3. Get moment by name
     response = client.get(
-        f"/api/entity/moment/name/{moment_data['name']}",
+        f"/api/v1/entity/moments/name/{moment_data['name']}",
         headers=headers
     )
     assert response.status_code == 200
@@ -128,7 +128,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 4. Search without query (list all)
     response = client.get(
-        "/api/entity/moment/",
+        "/api/v1/entity/moments/",
         headers=headers
     )
     assert response.status_code == 200
@@ -143,7 +143,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 5. Search with filters
     response = client.get(
-        "/api/entity/moment/?moment_type=observation",
+        "/api/v1/entity/moments/?moment_type=observation",
         headers=headers
     )
     assert response.status_code == 200
@@ -155,7 +155,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 6. Semantic search - search for ocean/beach related content
     response = client.get(
-        "/api/entity/moment/?query=ocean%20waves%20beach%20sunset",
+        "/api/v1/entity/moments/?query=ocean%20waves%20beach%20sunset",
         headers=headers
     )
     assert response.status_code == 200
@@ -177,7 +177,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
     
     # 7. Test pagination
     response = client.get(
-        "/api/entity/moment/?limit=5&offset=0",
+        "/api/v1/entity/moments/?limit=5&offset=0",
         headers=headers
     )
     assert response.status_code == 200
@@ -197,7 +197,7 @@ def test_moments_full_flow(client: TestClient, dev_jwt_token):
         }
     }
     response = client.post(
-        "/api/entity/moment/",
+        "/api/v1/entity/moments/",
         json=updated_data,
         headers=headers
     )
@@ -215,16 +215,16 @@ async def test_moment_errors(client: AsyncClient, dev_jwt_token):
     
     # Test get non-existent moment by ID
     response = client.get(
-        f"/api/entity/moment/{uuid.uuid4()}",
+        f"/api/v1/entity/moments/{uuid.uuid4()}",
         headers=headers
     )
     assert response.status_code == 404
     error = response.json()
     assert "error" in error or "detail" in error
     
-    # Test get non-existent moment by name  
+    # Test get non-existent moment by name
     response = client.get(
-        "/api/entity/moment/name/non-existent-moment-name-xyz",
+        "/api/v1/entity/moments/name/non-existent-moment-name-xyz",
         headers=headers
     )
     assert response.status_code == 404

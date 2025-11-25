@@ -1,0 +1,147 @@
+kind: engram
+name: "Wednesday Morning Standup"
+category: "meeting"
+summary: "Wednesday standup showing progress on rate limiting (Alex) and onboarding flow (Jamie/Kevin). Resolving Monday's blocker, preparing for design sprint."
+resource_timestamp: "2024-11-13T09:00:00Z"
+metadata:
+  meeting_type: "standup"
+  attendees:
+    - "Sarah Chen"
+    - "Mike Johnson"
+    - "Alex Rodriguez"
+    - "Jamie Lee"
+    - "Kevin Park"
+  duration_minutes: 15
+content: |
+  Quick standup update - team is making good progress.
+
+  Alex: "Rate limiting implementation is going well. Got the token bucket algorithm
+  working with Redis yesterday. Running load tests this morning. Should be ready for
+  code review by tomorrow."
+
+  Mike: "Nice work Alex. Once that's merged we can start the auth endpoint migration.
+  That was our biggest blocker from Monday."
+
+  Jamie: "I've been refining the onboarding designs based on Monday's review. Kevin
+  and I synced yesterday - he's starting implementation today. Also working with
+  marketing on messaging for the design sprint this afternoon."
+
+  Kevin: "Frontend work for onboarding is straightforward. Should have a working
+  prototype by Friday. Question though - are we A/B testing this right away or
+  launching it first?"
+
+  Sarah: "Good question. Let's discuss that in the design sprint. My gut says we should
+  test, but let's see what marketing thinks about timing."
+
+  Team feels energized. Rate limiting fix is happening faster than expected.
+
+graph_edges:
+  - dst: "Monday Morning Team Standup"
+    rel_type: "follows"
+    weight: 0.8
+  - dst: "Tuesday API Architecture Discussion"
+    rel_type: "reports_progress_on"
+    weight: 0.9
+  - dst: "Monday Afternoon Design Review"
+    rel_type: "follows_up_on"
+    weight: 0.7
+
+moments:
+  - name: "Rate Limiting Progress Update"
+    category: "update"
+    content: "Rate limiting implementation is going well. Got the token bucket algorithm working with Redis yesterday. Running load tests this morning."
+    summary: "Alex reports successful implementation of rate limiting solution"
+    resource_timestamp: "2024-11-13T09:02:00Z"
+    resource_ends_timestamp: "2024-11-13T09:05:00Z"
+    present_persons:
+      - id: "person-alex-rodriguez"
+        name: "Alex Rodriguez"
+        comment: "Reported on rate limiting progress"
+      - id: "person-mike-johnson"
+        name: "Mike Johnson"
+        comment: "Praised Alex's work"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Facilitated standup"
+      - id: "person-jamie-lee"
+        name: "Jamie Lee"
+        comment: "Attended standup"
+      - id: "person-kevin-park"
+        name: "Kevin Park"
+        comment: "Attended standup"
+    moment_type: "status_update"
+    topic_tags:
+      - "rate limiting"
+      - "progress update"
+      - "load testing"
+    graph_edges:
+      - dst: "Tuesday API Architecture Discussion"
+        rel_type: "implements_decision_from"
+        weight: 0.9
+      - dst: "Alex Rodriguez"
+        rel_type: "reported_by"
+        weight: 1.0
+      - dst: "Rate Limiting Solution"
+        rel_type: "updates"
+        weight: 1.0
+
+  - name: "Blocker Resolution Confirmation"
+    category: "update"
+    content: "Once that's merged we can start the auth endpoint migration. That was our biggest blocker from Monday."
+    summary: "Mike confirms rate limiting fix will unblock auth migration"
+    resource_timestamp: "2024-11-13T09:05:00Z"
+    resource_ends_timestamp: "2024-11-13T09:06:00Z"
+    present_persons:
+      - id: "person-mike-johnson"
+        name: "Mike Johnson"
+        comment: "Connected progress to Monday's blocker"
+      - id: "person-alex-rodriguez"
+        name: "Alex Rodriguez"
+        comment: "Acknowledged connection"
+    moment_type: "status_update"
+    topic_tags:
+      - "blocker resolution"
+      - "API migration"
+      - "dependencies"
+    graph_edges:
+      - dst: "Monday Morning Team Standup"
+        rel_type: "resolves_blocker_from"
+        weight: 1.0
+      - dst: "API Migration"
+        rel_type: "unblocks"
+        weight: 0.9
+
+  - name: "Onboarding Implementation Status"
+    category: "update"
+    content: "Jamie refined onboarding designs. Kevin starting implementation today. Prototype expected Friday. Question about A/B testing timing."
+    summary: "Design refinements complete, frontend work starting, A/B testing timing to be discussed"
+    resource_timestamp: "2024-11-13T09:07:00Z"
+    resource_ends_timestamp: "2024-11-13T09:12:00Z"
+    present_persons:
+      - id: "person-jamie-lee"
+        name: "Jamie Lee"
+        comment: "Reported design refinements"
+      - id: "person-kevin-park"
+        name: "Kevin Park"
+        comment: "Asked about A/B testing"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Deferred decision to design sprint"
+    moment_type: "status_update"
+    topic_tags:
+      - "onboarding flow"
+      - "design implementation"
+      - "A/B testing"
+    graph_edges:
+      - dst: "Monday Afternoon Design Review"
+        rel_type: "implements"
+        weight: 0.8
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "updates"
+        weight: 0.9
+      - dst: "Jamie Lee"
+        rel_type: "reported_by"
+        weight: 0.8
+      - dst: "Kevin Park"
+        rel_type: "assigned_to"
+        weight: 0.7

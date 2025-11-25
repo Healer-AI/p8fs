@@ -75,9 +75,16 @@ class AuthController:
             repository=self.auth_repo, auth_service=self.auth_service
         )
 
+        # Initialize email service
+        from p8fs.services.email.email_service import EmailService
+        self.email_service = EmailService()
+
         # Initialize mobile authentication service
         self.mobile_service = MobileAuthenticationService(
-            repository=self.auth_repo, jwt_manager=self.jwt_manager
+            repository=self.auth_repo,
+            jwt_manager=self.jwt_manager,
+            email_service=self.email_service,
+            auth_service=self.auth_service
         )
 
     async def token_endpoint(self, grant_type: str, **kwargs) -> AuthTokenResponse:
@@ -225,7 +232,8 @@ class AuthController:
             )
 
             # Register device with mobile service, passing full device_info
-            device = await self.mobile_service.register_device(
+            # This returns a dict with registration_id, message, and expires_in
+            result = await self.mobile_service.register_device(
                 email=email,
                 public_key_base64=public_key,
                 device_name=device_name,
@@ -233,15 +241,16 @@ class AuthController:
             )
 
             return RegistrationResponse(
-                registration_id=device.device_id,
-                expires_in=900,  # 15 minutes for email verification
+                registration_id=result["registration_id"],
+                message=result["message"],
+                expires_in=result["expires_in"]
             )
 
         except Exception as e:
             logger.error(f"Device registration error: {e}", exc_info=True)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail={"error": "registration_failed", "error_description": str(e)},
+                detail=f"registration_failed: {str(e)}",
             )
 
     async def verify_registration(
@@ -249,27 +258,19 @@ class AuthController:
     ) -> AuthTokenResponse:
         """Verify device registration using p8fs-auth."""
         try:
-            # Verify device with mobile service
-            verified_device = await self.mobile_service.verify_device(
-                device_id=registration_id,
-                verification_code=verification_code,
-                signature_base64=challenge_signature,
-            )
-
-            # Generate OAuth tokens for verified device
-            tokens = await self.mobile_service.authenticate_with_signature(
-                device_id=verified_device.device_id,
-                challenge="verification_complete",
-                signature_base64=challenge_signature,
-                upgrade_trust=True,
+            # Verify pending registration and complete device setup
+            # This retrieves pending registration, verifies code, creates device/tenant, and issues tokens
+            result = await self.mobile_service.verify_pending_registration(
+                registration_id=registration_id,
+                verification_code=verification_code
             )
 
             return AuthTokenResponse(
-                access_token=tokens["access_token"],
+                access_token=result["access_token"],
                 token_type="Bearer",
-                expires_in=tokens.get("expires_in", 3600),
-                refresh_token=tokens.get("refresh_token"),
-                tenant_id=verified_device.tenant_id,  # Include tenant_id created during verification
+                expires_in=result.get("expires_in", 3600),
+                refresh_token=result.get("refresh_token"),
+                tenant_id=result["tenant_id"],
             )
 
         except Exception as e:
@@ -523,27 +524,30 @@ class AuthController:
     async def get_oauth_discovery(self, request) -> dict[str, Any]:
         """Build OAuth discovery document with dynamic URLs."""
         from p8fs_cluster.config.settings import config
-        
-        # Get base URL from centralized config - never use localhost in production
-        if config.environment == "production":
-            base_url = config.oauth_host.rstrip("/") if config.oauth_host else config.base_url.rstrip("/")
-        else:
-            # Development: use request URL but fallback to config
-            host = request.headers.get('host', 'localhost:8000')
-            base_url = f"{request.url.scheme}://{host}"
-        
+
+        # Always use the Host header from the request to determine base URL
+        # This ensures the OAuth endpoints match the actual deployment URL
+        host = request.headers.get('host', 'localhost:8000')
+        scheme = request.url.scheme
+
+        # In production, ensure we use https
+        if config.environment == "production" and scheme == "http":
+            scheme = "https"
+
+        base_url = f"{scheme}://{host}"
+
         # Ensure no trailing slash
         base_url = base_url.rstrip("/")
         
         return {
             "issuer": base_url,
-            "authorization_endpoint": f"{base_url}/oauth/authorize",
-            "token_endpoint": f"{base_url}/oauth/token",
-            "device_authorization_endpoint": f"{base_url}/oauth/device_authorization",
-            "device_verification_uri": f"{base_url}/oauth/device",
-            "userinfo_endpoint": f"{base_url}/oauth/userinfo",
-            "jwks_uri": f"{base_url}/oauth/.well-known/jwks.json",
-            "registration_endpoint": f"{base_url}/oauth/register",
+            "authorization_endpoint": f"{base_url}/api/v1/oauth/authorize",
+            "token_endpoint": f"{base_url}/api/v1/oauth/token",
+            "device_authorization_endpoint": f"{base_url}/api/v1/oauth/device_authorization",
+            "device_verification_uri": f"{base_url}/api/v1/oauth/device",
+            "userinfo_endpoint": f"{base_url}/api/v1/oauth/userinfo",
+            "jwks_uri": f"{base_url}/api/v1/oauth/.well-known/jwks.json",
+            "registration_endpoint": f"{base_url}/api/v1/oauth/register",
             "response_types_supported": ["code"],
             "grant_types_supported": [
                 "authorization_code",
@@ -651,33 +655,16 @@ class AuthController:
 
             await self.auth_repo.create_device(device)
 
-            # Generate JWT tokens immediately (bypass mobile service for dev)
-            from p8fs_auth.services.jwt_key_manager import JWTKeyManager
-
-            jwt_manager = JWTKeyManager()
-
-            # Generate access token using the proper method
-            access_token = await jwt_manager.create_access_token(
+            # Generate and store tokens using auth service (includes refresh token persistence)
+            tokens = await self.auth_service._issue_tokens(
                 user_id=device.device_id,
                 client_id="p8fs-dev-client",
                 scope=["read", "write"],
-                device_id=device.device_id,
-                additional_claims={"email": email, "tenant": tenant.tenant_id},
+                additional_claims={
+                    "email": email,
+                    "tenant": tenant.tenant_id
+                }
             )
-
-            # Generate refresh token for OAuth 2.1 compliance (opaque token)
-            import base64
-            import secrets
-            refresh_token = base64.urlsafe_b64encode(
-                secrets.token_bytes(32)
-            ).decode('utf-8').rstrip('=')
-
-            tokens = {
-                "access_token": access_token,
-                "refresh_token": refresh_token,
-                "token_type": "Bearer",
-                "expires_in": 24 * 3600,  # 24 hours
-            }
 
             logger.info(
                 f"Dev token created: device={device.device_id} tenant={tenant.tenant_id} email={email}"

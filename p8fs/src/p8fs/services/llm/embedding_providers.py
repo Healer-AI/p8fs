@@ -1,12 +1,12 @@
 """Embedding providers for P8FS - OpenAI and local sentence-transformers."""
 
-import logging
 from abc import ABC, abstractmethod
 from typing import Any
 
+from p8fs_cluster.logging import get_logger
 from ...config.embedding import EmbeddingProviderConfig
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class BaseEmbeddingProvider(ABC):
@@ -45,21 +45,21 @@ class BaseEmbeddingProvider(ABC):
     def validate_input(self, text: str) -> str:
         """
         Validate and potentially truncate input text.
-        
+
         Args:
             text: Input text to validate
-            
+
         Returns:
             Validated (possibly truncated) text
         """
         if not text or not isinstance(text, str):
             raise ValueError("Text must be a non-empty string")
-        
+
         # Truncate if too long
         if len(text) > self.max_input_length:
-            logger.warning(f"Text truncated from {len(text)} to {self.max_input_length} characters")
+            logger.debug(f"Text truncated from {len(text)} to {self.max_input_length} characters")
             text = text[:self.max_input_length]
-        
+
         return text
 
 
@@ -111,6 +111,11 @@ class OpenAIEmbeddingProvider(BaseEmbeddingProvider):
                 "model": self.config.model_name,
                 "input": validated_texts
             }
+
+            # Only add dimensions parameter for models that support it (text-embedding-3-*)
+            # and if we want non-default dimensions
+            if "text-embedding-3" in self.config.model_name and self.config.dimensions != 1536:
+                payload["dimensions"] = self.config.dimensions
             
             # Prepare headers
             headers = {
@@ -164,7 +169,12 @@ class LocalEmbeddingProvider(BaseEmbeddingProvider):
         """Get or load the sentence-transformers model."""
         if self._model is None:
             try:
+                import os
                 from sentence_transformers import SentenceTransformer
+
+                # Disable tqdm progress bars in production
+                os.environ["TQDM_DISABLE"] = "1"
+
                 self._model = SentenceTransformer(self.config.model_name)
                 logger.info(f"Loaded local embedding model: {self.config.model_name}")
             except ImportError:
@@ -214,9 +224,76 @@ class LocalEmbeddingProvider(BaseEmbeddingProvider):
             raise RuntimeError(f"Local embedding generation failed: {e}")
 
 
+class FastEmbedProvider(BaseEmbeddingProvider):
+    """FastEmbed ONNX-based embedding provider - lightweight alternative to sentence-transformers."""
+
+    def __init__(self, config: EmbeddingProviderConfig):
+        super().__init__(config)
+        self._model = None
+
+    def _get_model(self):
+        """Get or load the FastEmbed model."""
+        if self._model is None:
+            try:
+                import os
+                from fastembed import TextEmbedding
+
+                # Disable tqdm progress bars in production
+                os.environ["TQDM_DISABLE"] = "1"
+
+                self._model = TextEmbedding(model_name=self.config.model_name)
+                logger.info(f"Loaded FastEmbed model: {self.config.model_name}")
+            except ImportError:
+                raise ImportError(
+                    "fastembed library not installed. "
+                    "Run: pip install fastembed"
+                )
+        return self._model
+
+    def is_available(self) -> bool:
+        """Check if fastembed is available."""
+        try:
+            self._get_model()
+            return True
+        except Exception as e:
+            logger.debug(f"FastEmbed provider not available: {e}")
+            return False
+
+    def encode(self, texts: str | list[str]) -> list[float] | list[list[float]]:
+        """Generate embeddings using FastEmbed ONNX model."""
+        if not self.is_available():
+            raise RuntimeError(f"FastEmbed provider {self.name} is not available. Check fastembed installation.")
+
+        # Handle single text
+        if isinstance(texts, str):
+            texts = [texts]
+            return_single = True
+        else:
+            return_single = False
+
+        # Validate inputs
+        validated_texts = [self.validate_input(text) for text in texts]
+
+        try:
+            model = self._get_model()
+            # FastEmbed returns a generator, convert to list
+            embeddings = list(model.embed(validated_texts))
+
+            # Convert numpy arrays to lists for JSON serialization
+            embeddings = [embedding.tolist() for embedding in embeddings]
+
+            if return_single:
+                return embeddings[0]
+            return embeddings
+
+        except Exception as e:
+            logger.error(f"FastEmbed embedding failed for {self.name}: {e}")
+            raise RuntimeError(f"FastEmbed embedding generation failed: {e}")
+
+
 class EmbeddingService:
     """Main embedding service that manages providers."""
-    
+
     def __init__(self):
         """Initialize embedding service."""
         self._providers: dict[str, BaseEmbeddingProvider] = {}
@@ -235,6 +312,8 @@ class EmbeddingService:
                     provider = OpenAIEmbeddingProvider(config)
                 elif config.provider_type == "local":
                     provider = LocalEmbeddingProvider(config)
+                elif config.provider_type == "fastembed":
+                    provider = FastEmbedProvider(config)
                 else:
                     logger.warning(f"Unknown provider type: {config.provider_type}")
                     continue

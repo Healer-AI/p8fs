@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T10:30:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "10:30 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.25,
+    "word_count": 289,
+    "speaker_count": 3,
+    "activity_type": "social_encounter",
+    "elevation_meters": 2250
   },
   "name": "Trail Encounter - Fellow Hikers Marco and Sofia",
   "content": "Lena encountering first humans in two days: Marco and Sofia from Lugano on day hike to summit Piz Medel. Shared trail information and weather forecast (clear through Thursday). Sofia new to alpine mountaineering, learning from experienced Marco. Brief cultural connection: shared experience of urban fatigue (Munich, Zurich) and mountain necessity. Lena camping at 1847m, Marco/Sofia day-hiking due to work constraints. Exchanged safety information: Lena warned about summit crevasses, Marco confirmed Lena's satellite device and family check-ins. Built hiking community connection through contact info exchange. Brief but warm social interaction respecting each party's objectives (Lena's solitude, their summit goal). Demonstrated mountain culture of mutual support and information sharing among strangers.",
@@ -12,33 +15,36 @@
   "resource_timestamp": "2025-01-14T10:30:00Z",
   "resource_ends_timestamp": "2025-01-14T10:40:15Z",
   "moment_type": "conversation",
-  "emotion_tags": ["friendly", "helpful", "social", "safe"],
-  "topic_tags": ["hiking-community", "trail-info", "safety", "social-connection", "alpine-culture"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
+  "emotion_tags": [
+    "friendly",
+    "helpful",
+    "social",
+    "safe"
+  ],
+  "topic_tags": [
+    "hiking-community",
+    "trail-info",
+    "safety",
+    "social-connection",
+    "alpine-culture"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
     },
-    "fp_marco_t4": {
-      "fingerprint_id": "fp_marco_t4",
-      "user_id": "user_marco_002",
-      "user_label": "Marco"
+    {
+      "id": "fp_marco_t4",
+      "name": "Marco",
+      "comment": "User ID: user_marco_002"
     },
-    "fp_sofia_t4": {
-      "fingerprint_id": "fp_sofia_t4",
-      "user_id": "user_sofia_003",
-      "user_label": "Sofia"
+    {
+      "id": "fp_sofia_t4",
+      "name": "Sofia",
+      "comment": "User ID: user_sofia_003"
     }
-  },
+  ],
   "location": "46.5510,8.7005",
-  "background_sounds": "wind, hiking poles clicking on rocks, distant bird calls",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.25,
-    "word_count": 289,
-    "speaker_count": 3,
-    "activity_type": "social_encounter",
-    "elevation_meters": 2250
-  }
+  "background_sounds": "wind, hiking poles clicking on rocks, distant bird calls"
 }

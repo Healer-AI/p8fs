@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T16:30:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "04:30 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.13,
+    "word_count": 267,
+    "speaker_count": 1,
+    "activity_type": "wildlife_observation",
+    "elevation_meters": 2200
   },
   "name": "Wildlife Encounter - Chamois Herd at 2200m",
   "content": "Lena experiencing remarkable wildlife encounter at 2200m elevation. Observed herd of seven chamois (six adults, one juvenile) grazing on alpine grass 100m away. Remained motionless using favorable wind direction to avoid detection. Appreciated graceful movements and curved horns, juvenile playing while adults maintained vigilant watch. Witnessed natural predator-prey dynamics: golden eagle circled overhead, chamois responded by clustering defensively facing multiple directions. Brief moment of tension when one chamois spotted Lena but determined her non-threatening. Observed herd for 15 minutes before they moved upslope along ridgeline with fluid, effortless movement. Expressed profound connection to wilderness experience - seeing pure wild nature unavailable in urban environment. Heart racing from awe and privilege of close wildlife observation.",
@@ -12,23 +15,26 @@
   "resource_timestamp": "2025-01-13T16:30:00Z",
   "resource_ends_timestamp": "2025-01-13T16:40:08Z",
   "moment_type": "observation",
-  "emotion_tags": ["awestruck", "peaceful", "excited", "grateful"],
-  "topic_tags": ["wildlife", "chamois", "nature-observation", "alpine-environment", "eagles"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
+  "emotion_tags": [
+    "awestruck",
+    "peaceful",
+    "excited",
+    "grateful"
+  ],
+  "topic_tags": [
+    "wildlife",
+    "chamois",
+    "nature-observation",
+    "alpine-environment",
+    "eagles"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
     }
-  },
+  ],
   "location": "46.5520,8.7015",
-  "background_sounds": "wind, distant bird calls, rocks shifting under boots",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.13,
-    "word_count": 267,
-    "speaker_count": 1,
-    "activity_type": "wildlife_observation",
-    "elevation_meters": 2200
-  }
+  "background_sounds": "wind, distant bird calls, rocks shifting under boots"
 }

@@ -38,6 +38,7 @@ class P8FSConfig(BaseSettings):
     # Authentication & Security
     encryption_enabled: bool = True
     mobile_auth_enabled: bool = True
+    auth_disabled: bool = False  # WARNING: Only for local testing - disables JWT validation
     tenant_id: str = "default"
     token_expiry: str = "24h"
     refresh_token_expiry: str = "7d"
@@ -68,13 +69,17 @@ class P8FSConfig(BaseSettings):
 
     # OAuth 2.1 Configuration
     oauth_issuer: str = "http://localhost:8000"
-    oauth_authorization_endpoint: str = "http://localhost:8000/oauth/authorize"
-    oauth_token_endpoint: str = "http://localhost:8000/oauth/token"
-    oauth_jwks_uri: str = "http://localhost:8000/oauth/.well-known/jwks.json"
+    oauth_authorization_endpoint: str = "http://localhost:8000/api/v1/oauth/authorize"
+    oauth_token_endpoint: str = "http://localhost:8000/api/v1/oauth/token"
+    oauth_jwks_uri: str = "http://localhost:8000/api/v1/oauth/.well-known/jwks.json"
     oauth_host: str = "http://localhost:8000"
 
     # TiKV Storage Configuration
-    tikv_endpoints: list[str] = Field(default_factory=lambda: ["localhost:2379"])
+    # Cluster FQDNs for both PD replicas (high availability)
+    tikv_endpoints: list[str] = Field(default_factory=lambda: [
+        "fresh-cluster-pd-0.fresh-cluster-pd-peer.tikv-cluster.svc.cluster.local:2379",
+        "fresh-cluster-pd-1.fresh-cluster-pd-peer.tikv-cluster.svc.cluster.local:2379"
+    ])
     tikv_timeout: int = 30
     tikv_max_connections: int = 100
     tikv_error_log_ttl: int = 604800  # 7 days in seconds
@@ -99,21 +104,57 @@ class P8FSConfig(BaseSettings):
     # Monitoring & Observability
     metrics_enabled: bool = True
     metrics_port: int = 9090
-    tracing_enabled: bool = True
+    tracing_enabled: bool = Field(
+        default=True,
+        description="Enable OpenTelemetry tracing (auto-disabled locally, see OTEL_EXPORTER_OTLP_ENDPOINT)"
+    )
     otel_export_interval: int = 30000
 
     # OpenTelemetry Configuration (using standard OTEL env vars)
+    # Traces endpoint (gRPC) - defaults to Kubernetes cluster service
+    # For local development with port forwarding: kubectl port-forward -n observability svc/otel-collector 4317:4317
+    # Then set: OTEL_EXPORTER_OTLP_ENDPOINT=localhost:4317
+    otel_exporter_otlp_endpoint: str = Field(
+        default="otel-collector.observability.svc.cluster.local:4317",
+        validation_alias="OTEL_EXPORTER_OTLP_ENDPOINT",
+        description="OTLP gRPC endpoint for traces (disabled locally unless explicitly set)"
+    )
+
+    # Metrics endpoint (HTTP)
     otel_exporter_otlp_metrics_endpoint: str = Field(
         default="http://localhost:4318/v1/metrics",
         validation_alias="OTEL_EXPORTER_OTLP_METRICS_ENDPOINT",
     )
+
+    # Service identification
     otel_service_name: str = Field(default="p8fs-api", validation_alias="OTEL_SERVICE_NAME")
     otel_service_version: str = Field(default="0.1.0", validation_alias="OTEL_SERVICE_VERSION")
+    otel_service_namespace: str = Field(
+        default="p8fs",
+        validation_alias="OTEL_SERVICE_NAMESPACE",
+        description="Service namespace for grouping related services"
+    )
+
+    # Deployment environment
     deployment_environment: str = Field(
         default="kubernetes", validation_alias="DEPLOYMENT_ENVIRONMENT"
     )
+
+    # Export intervals
     otel_metric_export_interval: int = Field(
         default=30000, validation_alias="OTEL_METRIC_EXPORT_INTERVAL"
+    )
+    otel_trace_export_interval: int = Field(
+        default=5000,
+        validation_alias="OTEL_TRACE_EXPORT_INTERVAL",
+        description="Interval in milliseconds for exporting traces"
+    )
+
+    # Connection settings
+    otel_insecure: bool = Field(
+        default=True,
+        validation_alias="OTEL_EXPORTER_OTLP_INSECURE",
+        description="Use insecure connection (true for internal cluster communication)"
     )
 
     # Encryption
@@ -126,19 +167,39 @@ class P8FSConfig(BaseSettings):
     embedding_gpu_enabled: bool = False
     embedding_model_cache_dir: str = "/tmp/models"
     default_embedding_provider: str = Field(
-        default="text-embedding-3-small", validation_alias="P8FS_DEFAULT_EMBEDDING_PROVIDER"
+        default="all-MiniLM-L6-v2", validation_alias="P8FS_DEFAULT_EMBEDDING_PROVIDER"
     )
 
     # API Keys - Accept both P8FS_* (preferred) and standard env vars as fallback
     openai_api_key: str = ""
     anthropic_api_key: str = ""
     google_api_key: str = ""
+    cerebras_api_key: str = ""
 
     # LLM Configuration
     default_model: str = "gpt-4.1"
-    llm_provider: str = "openai"  # openai, anthropic, google
+    llm_provider: str = "openai"  # openai, anthropic, google, cerebras
     llm_temperature: float = 0.7
     llm_max_tokens: int = 4096
+
+    # Query Engine LLM Configuration (for REM query planning)
+    # Cerebras is recommended for fast query planning (~500ms vs Claude ~1800ms)
+    # Note: Cerebras Qwen models provide excellent speed/quality tradeoff for query planning
+    #   - Use cerebras:qwen-2.5-72b for fast, high-quality query generation
+    #   - Requires CEREBRAS_API_KEY environment variable
+    query_engine_provider: str = "openai"  # cerebras, anthropic, openai
+    query_engine_model: str = "gpt-4.1-nano"  # openai: gpt-4.1-nano, cerebras: qwen-2.5-72b, anthropic: claude-sonnet-4-5
+    query_engine_temperature: float = 0.1  # Lower temperature for more consistent query planning
+
+    # Dreaming Worker Configuration
+    dreaming_enabled: bool = True
+    dreaming_lookback_hours: int = 24
+    dreaming_batch_size: int = 50
+    dreaming_affinity_enabled: bool = True
+    dreaming_affinity_use_llm: bool = True
+    dreaming_affinity_basic_batch_size: int = 50
+    dreaming_affinity_llm_batch_size: int = 10
+    dreaming_affinity_similarity_threshold: float = -0.5
 
     # Storage Provider Configuration
     storage_provider: str = "postgresql"  # postgresql, tidb, rocksdb
@@ -158,6 +219,13 @@ class P8FSConfig(BaseSettings):
     tidb_database: str = "public"
     tikv_use_http_proxy: bool = True  # Use HTTP proxy for TiKV operations
     tikv_http_proxy_url: str = "https://p8fs.percolationlabs.ai"
+
+    # Connection Pool Configuration (TiDB/MySQL)
+    db_pool_enabled: bool = True
+    db_pool_max_connections: int = 10
+    db_pool_max_usage: int = 100  # Recycle connection after N queries
+    db_pool_max_lifetime: int = 3600  # Recycle connection after N seconds (1 hour)
+    db_pool_ping: int = 1  # Test connection before use (0=never, 1=always, 2=if idle)
 
     # RocksDB Configuration
     rocksdb_host: str = "localhost"
@@ -186,7 +254,96 @@ class P8FSConfig(BaseSettings):
     mcp_server_description: str = (
         "P8FS Model Context Protocol server for AI assistant integration"
     )
-    mcp_server_instructions: str = "You are connected to P8FS..."
+    mcp_server_instructions: str = (
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "EEPIS - Ever Evolving Personal Information System\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "\n"
+        "P8FS (Percolate File System) is an EEPIS - a smart memory system that grows\n"
+        "and evolves with you. Unlike traditional storage that just saves files, EEPIS\n"
+        "actively understands, connects, and contextualizes your information over time.\n"
+        "\n"
+        "**How EEPIS Works:**\n"
+        "\n"
+        "1. **Ingest**: You upload files, documents, voice recordings, conversations\n"
+        "2. **Extract**: AI agents extract entities, relationships, and temporal context\n"
+        "3. **Connect**: The system builds a semantic knowledge graph linking related content\n"
+        "4. **Evolve**: As you add more data, connections strengthen and new insights emerge\n"
+        "5. **Recall**: Query your memory using natural language or structured queries\n"
+        "\n"
+        "**Core Philosophy:**\n"
+        "- Your memory should grow smarter over time, not just bigger\n"
+        "- Related information should surface automatically, not require manual tags\n"
+        "- Context should emerge from relationships, not predefined categories\n"
+        "- Your personal knowledge graph is unique to you and evolves with your thinking\n"
+        "\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "REM - Resources, Entities, Moments (The Memory Model)\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "\n"
+        "EEPIS organizes information using the REM model - three interconnected layers:\n"
+        "\n"
+        "**1. RESOURCES - Raw Content**\n"
+        "   - Files, documents, notes, conversations, recordings\n"
+        "   - The actual content you've saved or created\n"
+        "   - Immutable (never changes once stored)\n"
+        "   - Tagged with entities and metadata\n"
+        "\n"
+        "   Example: A meeting transcript, a PDF document, a diary entry\n"
+        "\n"
+        "**2. ENTITIES - The \"Who\" and \"What\"**\n"
+        "   - People (sarah-chen, mike-johnson)\n"
+        "   - Projects (project-alpha, database-migration)\n"
+        "   - Technologies (tidb, postgresql, kubernetes)\n"
+        "   - Concepts (performance-optimization, authentication)\n"
+        "   - Automatically extracted from resources\n"
+        "   - Form the nodes of your knowledge graph\n"
+        "\n"
+        "   Example: From a meeting transcript, we extract entities:\n"
+        "   - People: sarah-chen, mike-johnson\n"
+        "   - Topics: tidb, database-migration, performance\n"
+        "\n"
+        "**3. MOMENTS - Temporal Context**\n"
+        "   - Time-bounded events (meetings, work sessions, conversations)\n"
+        "   - Who was present, what was discussed, when it happened\n"
+        "   - Emotional context (emotion_tags: excited, concerned)\n"
+        "   - Topics discussed (topic_tags: database-migration, api-performance)\n"
+        "   - Connect resources to temporal narrative\n"
+        "\n"
+        "   Example: A 2-hour meeting on Nov 15, 2025\n"
+        "   - present_persons: [sarah-chen, mike-johnson]\n"
+        "   - topic_tags: [database-migration, tidb]\n"
+        "   - emotion_tags: [optimistic, focused]\n"
+        "\n"
+        "**How REM Layers Work Together:**\n"
+        "\n"
+        "Resources → Entities → Moments → Knowledge Graph\n"
+        "\n"
+        "1. You upload a meeting transcript (RESOURCE)\n"
+        "2. AI extracts people, topics, concepts (ENTITIES)\n"
+        "3. AI creates temporal context (MOMENT)\n"
+        "4. System builds connections to related resources\n"
+        "5. Your knowledge graph grows and becomes queryable\n"
+        "\n"
+        "**Query Progression:**\n"
+        "\n"
+        "Stage 1 (Just Resources): \"Find files with 'Sarah'\"\n"
+        "Stage 2 (With Entities): \"Show all documents Sarah worked on\"\n"
+        "Stage 3 (With Moments): \"What meetings involved Sarah and Mike?\"\n"
+        "Stage 4 (Full Graph): \"Show the timeline of decisions leading to TiDB migration\"\n"
+        "\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "REM QUERY EXAMPLES\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+        "\n"
+        "**LOOKUP - Entity-based queries**\n"
+        "\n"
+        "  LOOKUP \"Sarah\"              # Find all resources with entity 'Sarah'\n"
+        "  LOOKUP \"project-alpha\"      # Find resources tagged with this project\n"
+        "  LOOKUP \"TiDB\"               # Case-insensitive entity search\n"
+        "\n"
+        "═══════════════════════════════════════════════════════════════════════════\n"
+    )
     mcp_auth_provider: str = "dummy"
     mcp_mount_path: str = "/mcp"
 
@@ -199,6 +356,12 @@ class P8FSConfig(BaseSettings):
     email_username: str = "saoirse@dreamingbridge.io"
     email_password: str = ""
     email_sender_name: str = "EEPIS Moments"
+
+    # Slack Configuration
+    slack_enabled: bool = False
+    slack_bot_token: str = ""
+    slack_app_token: str = ""
+    slack_signing_secret: str = ""
 
     # External Service URLs
     api_base_url: str = "https://p8fs.percolationlabs.ai"
@@ -269,6 +432,22 @@ class P8FSConfig(BaseSettings):
             if google_key:
                 self.google_api_key = google_key
 
+        # Handle Slack tokens (use standard env var names if P8FS_ prefixed versions not set)
+        if not os.getenv("P8FS_SLACK_BOT_TOKEN"):
+            slack_bot = os.getenv("SLACK_BOT_TOKEN")
+            if slack_bot:
+                self.slack_bot_token = slack_bot
+
+        if not os.getenv("P8FS_SLACK_APP_TOKEN"):
+            slack_app = os.getenv("SLACK_APP_TOKEN")
+            if slack_app:
+                self.slack_app_token = slack_app
+
+        if not os.getenv("P8FS_SLACK_SIGNING_SECRET"):
+            slack_secret = os.getenv("SLACK_SIGNING_SECRET")
+            if slack_secret:
+                self.slack_signing_secret = slack_secret
+
     @property
     def pg_connection_string(self) -> str:
         """Build PostgreSQL connection string from individual parameters."""
@@ -307,6 +486,29 @@ class P8FSConfig(BaseSettings):
     def is_testing(self) -> bool:
         """Check if running in test environment."""
         return self.environment.lower() in ("test", "testing")
+
+    def parse_model_spec(self, model_spec: str | None = None) -> tuple[str | None, str]:
+        """Parse model specification with optional provider prefix.
+
+        Supports 'provider:model' syntax to explicitly override provider inference.
+        Examples:
+            'gpt-4.1' -> (None, 'gpt-4.1')  # Provider inferred from model name
+            'openai:gpt-4.1' -> ('openai', 'gpt-4.1')  # Explicit provider
+            'anthropic:claude-sonnet-4-5' -> ('anthropic', 'claude-sonnet-4-5')
+
+        Args:
+            model_spec: Model specification string. If None, uses query_engine_model.
+
+        Returns:
+            Tuple of (provider, model_name). Provider is None if not explicitly specified.
+        """
+        spec = model_spec or self.query_engine_model
+
+        if ":" in spec:
+            provider, model_name = spec.split(":", 1)
+            return (provider, model_name)
+
+        return (None, spec)
 
 
 # Global configuration instance

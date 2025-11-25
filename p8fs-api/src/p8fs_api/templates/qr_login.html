@@ -172,7 +172,7 @@
         // Polling function
         async function pollForApproval() {
             try {
-                const response = await fetch('/oauth/token', {
+                const response = await fetch('/api/v1/oauth/token', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -205,7 +205,7 @@
                         document.cookie = `p8fs_access_token=${tokenData.access_token}; path=/; max-age=300`; // 5 min expiry
                         
                         // Redirect to callback endpoint with all OAuth parameters
-                        const callbackUrl = `/oauth/callback?${urlParams.toString()}`;
+                        const callbackUrl = `/api/v1/oauth/callback?${urlParams.toString()}`;
                         window.location.href = callbackUrl;
                     } else {
                         // Simple redirect for non-OAuth flows or device-only flows

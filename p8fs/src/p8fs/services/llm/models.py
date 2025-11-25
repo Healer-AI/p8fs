@@ -518,6 +518,11 @@ class ApiCallingContext(BaseModel):
         description="For routing purposes, describe the session's objective",
     )
 
+    session_type: str | None = Field(
+        default=None,
+        description="Type of session (chat, api, dreaming, analysis, batch) for filtering and context",
+    )
+
     moment_id: str | None = Field(
         default=None,
         description="Optional reference to associated Moment entity ID for contextual linking",
@@ -575,6 +580,11 @@ class ApiCallingContext(BaseModel):
     headers: dict[str, str] | None = Field(
         default_factory=dict,
         description="Raw X- headers from the request for custom context handling",
+    )
+
+    messages: list[dict[str, Any]] | None = Field(
+        default=None,
+        description="Optional pre-built message history (e.g., with session recovery)",
     )
 
     def get_response_format(self):
@@ -671,7 +681,7 @@ class CallingContext(ApiCallingContext):
         context_data = {
             "username": get_header("X-Username"),
             "user_id": get_header("X-User-ID"),
-            "session_id": get_header("X-Thread-ID"),  # Thread ID maps to session ID
+            "session_id": get_header("X-Session-ID") or get_header("X-Thread-ID"),  # Session ID or Thread ID maps to session ID
             "chat_id": get_header("X-Chat-ID"),
             "channel_context": get_header("X-Channel-ID"),
             "channel_ts": get_header("X-Channel-TS"),

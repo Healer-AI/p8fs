@@ -33,7 +33,7 @@ def mcp_base_url():
 @pytest.fixture
 def oauth_base_url():
     """Base URL for OAuth endpoints."""
-    return "http://testserver/oauth"
+    return "http://testserver/api/v1/oauth"
 
 
 class MockMCPClient:
@@ -57,7 +57,7 @@ class MockMCPClient:
             return response.json()
         
         # Fallback to well-known OpenID configuration
-        wellknown_url = self.mcp_url.replace("/api/mcp", "/oauth/.well-known/openid-configuration")
+        wellknown_url = self.mcp_url.replace("/api/mcp", "/api/v1/oauth/.well-known/openid-configuration")
         response = await http_client.get(wellknown_url)
         
         if response.status_code == 200:
@@ -167,14 +167,14 @@ class TestMCPClientOAuthFlow:
             assert "jwks_uri" in oauth_config
             
             # Verify endpoints are correctly formed
-            assert oauth_config["device_authorization_endpoint"].endswith("/oauth/device_authorization")
-            assert oauth_config["token_endpoint"].endswith("/oauth/token")
+            assert oauth_config["device_authorization_endpoint"].endswith("/api/v1/oauth/device_authorization")
+            assert oauth_config["token_endpoint"].endswith("/api/v1/oauth/token")
     
     @pytest.mark.asyncio
     async def test_wellknown_discovery(self):
         """Test OpenID Connect well-known discovery endpoint."""
         async with httpx.AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
-            response = await client.get("/oauth/.well-known/openid-configuration")
+            response = await client.get("/api/v1/oauth/.well-known/openid-configuration")
             
             assert response.status_code == 200
             config = response.json()
@@ -189,7 +189,7 @@ class TestMCPClientOAuthFlow:
     async def test_jwks_endpoint(self):
         """Test JWKS endpoint for public key discovery."""
         async with httpx.AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
-            response = await client.get("/oauth/.well-known/jwks.json")
+            response = await client.get("/api/v1/oauth/.well-known/jwks.json")
             
             assert response.status_code == 200
             jwks = response.json()
@@ -246,7 +246,7 @@ class TestMCPClientOAuthFlow:
         async with httpx.AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
             # Try to access authorization endpoint (should require auth)
             response = await client.get(
-                "/oauth/authorize",
+                "/api/v1/oauth/authorize",
                 params={
                     "response_type": "code",
                     "client_id": "mcp_client",
@@ -267,7 +267,7 @@ class TestMCPClientOAuthFlow:
         async with httpx.AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver") as client:
             # Test invalid grant type
             response = await client.post(
-                "/oauth/token",
+                "/api/v1/oauth/token",
                 data={
                     "grant_type": "invalid_grant_type",
                     "client_id": "mcp_client"
@@ -281,7 +281,7 @@ class TestMCPClientOAuthFlow:
             
             # Test missing device code
             response = await client.post(
-                "/oauth/token",
+                "/api/v1/oauth/token",
                 data={
                     "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                     "client_id": "mcp_client"
@@ -342,9 +342,9 @@ def test_oauth_flow_documentation():
     print("   - Falls back to .well-known/openid-configuration if needed")
     
     print("\n2. Device Authorization Flow:")
-    print("   - Client requests device code from /oauth/device_authorization")
+    print("   - Client requests device code from /api/v1/oauth/device_authorization")
     print("   - User approves via mobile app using user_code")
-    print("   - Client polls /oauth/token until approved")
+    print("   - Client polls /api/v1/oauth/token until approved")
     
     print("\n3. Token Usage:")
     print("   - Client includes token in Authorization: Bearer header")

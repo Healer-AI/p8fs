@@ -1,0 +1,128 @@
+kind: engram
+name: "Tuesday API Architecture Discussion"
+category: "meeting"
+summary: "Technical discussion on API rate limiting solutions. Decided on token bucket algorithm with Redis caching. Links to Monday's identified blocker."
+resource_timestamp: "2024-11-12T10:00:00Z"
+metadata:
+  meeting_type: "technical discussion"
+  attendees:
+    - "Sarah Chen"
+    - "Mike Johnson"
+    - "Alex Rodriguez"
+  decisions:
+    - "Use token bucket algorithm for rate limiting"
+    - "Implement with Redis caching layer"
+    - "Alex to prototype by Thursday"
+content: |
+  Deep dive with Mike and Alex on the API rate limiting solution. Mike walked through
+  three potential approaches:
+
+  1. Token bucket algorithm - most flexible, what Netflix uses
+  2. Fixed window - simpler but less precise
+  3. Sliding window - middle ground
+
+  Alex has concerns about the token bucket complexity, but Mike made a good case that
+  we'll need the flexibility as we scale. The key is getting the caching layer right -
+  Redis should handle it well.
+
+  We also discussed the broader API migration strategy. The rate limiting work needs
+  to be done before we can safely migrate the user authentication endpoints. That's
+  our critical path for the launch.
+
+  Decision: Go with token bucket + Redis. Alex will prototype this week, we'll review
+  on Thursday. This should resolve the blocker we identified in Monday's standup.
+
+graph_edges:
+  - dst: "Monday Morning Team Standup"
+    rel_type: "resolves_blocker_from"
+    weight: 0.9
+  - dst: "API Migration"
+    rel_type: "part_of"
+    weight: 0.8
+  - dst: "Vitality App"
+    rel_type: "discusses"
+    weight: 0.7
+
+moments:
+  - name: "Rate Limiting Algorithm Discussion"
+    category: "discussion"
+    content: "Mike walked through three potential approaches: Token bucket algorithm - most flexible, Fixed window - simpler but less precise, Sliding window - middle ground."
+    summary: "Technical comparison of three rate limiting approaches"
+    resource_timestamp: "2024-11-12T10:05:00Z"
+    resource_ends_timestamp: "2024-11-12T10:25:00Z"
+    present_persons:
+      - id: "person-mike-johnson"
+        name: "Mike Johnson"
+        comment: "Presented three algorithm options"
+      - id: "person-alex-rodriguez"
+        name: "Alex Rodriguez"
+        comment: "Raised concerns about token bucket complexity"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Facilitated discussion"
+    moment_type: "technical_discussion"
+    topic_tags:
+      - "rate limiting"
+      - "API architecture"
+      - "algorithm selection"
+    graph_edges:
+      - dst: "Mike Johnson"
+        rel_type: "presented_by"
+        weight: 0.9
+      - dst: "Alex Rodriguez"
+        rel_type: "attended_by"
+        weight: 0.8
+      - dst: "Rate Limiting Solution"
+        rel_type: "discusses"
+        weight: 1.0
+
+  - name: "Caching Strategy Decision"
+    category: "decision"
+    content: "The key is getting the caching layer right - Redis should handle it well. Decision: Go with token bucket + Redis."
+    summary: "Decided to use Redis for caching layer in token bucket implementation"
+    resource_timestamp: "2024-11-12T10:30:00Z"
+    resource_ends_timestamp: "2024-11-12T10:40:00Z"
+    present_persons:
+      - id: "person-mike-johnson"
+        name: "Mike Johnson"
+        comment: "Recommended Redis approach"
+      - id: "person-alex-rodriguez"
+        name: "Alex Rodriguez"
+        comment: "Will implement prototype"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Approved decision"
+    moment_type: "decision"
+    topic_tags:
+      - "caching strategy"
+      - "Redis"
+      - "technical architecture"
+    graph_edges:
+      - dst: "Rate Limiting Solution"
+        rel_type: "decides"
+        weight: 1.0
+      - dst: "Alex Rodriguez"
+        rel_type: "assigned_to"
+        weight: 0.8
+
+  - name: "Critical Path Identification"
+    category: "planning"
+    content: "The rate limiting work needs to be done before we can safely migrate the user authentication endpoints. That's our critical path for the launch."
+    summary: "Identified rate limiting as critical path blocker for auth migration and launch"
+    resource_timestamp: "2024-11-12T10:45:00Z"
+    resource_ends_timestamp: "2024-11-12T10:55:00Z"
+    moment_type: "planning"
+    topic_tags:
+      - "critical path"
+      - "launch timeline"
+      - "dependencies"
+    graph_edges:
+      - dst: "API Migration"
+        rel_type: "blocks"
+        weight: 0.9
+      - dst: "Vitality App"
+        rel_type: "impacts"
+        weight: 0.8
+      - dst: "Monday Morning Team Standup"
+        rel_type: "resolves_issue_from"
+        weight: 0.9

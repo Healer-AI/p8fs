@@ -41,7 +41,7 @@ async def test_mcp_oauth_device_flow():
         print("\n=== Step 2: Device Authorization Request ===")
         
         device_auth_response = await client.post(
-            "/oauth/device_authorization",
+            "/api/v1/oauth/device_authorization",
             data={
                 "client_id": "mcp_test_client",
                 "scope": "read write"
@@ -67,7 +67,7 @@ async def test_mcp_oauth_device_flow():
         print("\n=== Step 3: Initial Token Poll (Expecting Pending) ===")
         
         token_response = await client.post(
-            "/oauth/token",
+            "/api/v1/oauth/token",
             data={
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 "device_code": device_code,
@@ -113,7 +113,7 @@ async def test_mcp_oauth_device_flow():
             
             # Approve the device
             approval_response = await client.post(
-                "/oauth/device/approve",
+                "/api/v1/oauth/device/approve",
                 json={
                     "user_code": user_code,
                     "approved": True,
@@ -139,7 +139,7 @@ async def test_mcp_oauth_device_flow():
         await asyncio.sleep(1)
         
         token_response = await client.post(
-            "/oauth/token",
+            "/api/v1/oauth/token",
             data={
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 "device_code": device_code,
@@ -147,7 +147,7 @@ async def test_mcp_oauth_device_flow():
             },
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
-        
+
         if token_response.status_code != 200:
             print(f"Token exchange failed: {token_response.status_code}")
             print(f"Response: {token_response.text}")
@@ -170,7 +170,7 @@ async def test_mcp_oauth_device_flow():
         print("\n=== Step 6: Test Auth Ping Endpoint ===")
         
         ping_response = await client.get(
-            "/oauth/ping",
+            "/api/v1/oauth/ping",
             headers={"Authorization": f"Bearer {access_token}"}
         )
         if ping_response.status_code != 200:
@@ -204,7 +204,7 @@ async def test_mcp_oauth_device_flow():
             print("\n=== Step 8: Test Token Refresh ===")
             
             refresh_response = await client.post(
-                "/oauth/token",
+                "/api/v1/oauth/token",
                 data={
                     "grant_type": "refresh_token",
                     "refresh_token": refresh_token,
@@ -221,7 +221,7 @@ async def test_mcp_oauth_device_flow():
                 
                 # Test the new token works
                 ping_response2 = await client.get(
-                    "/oauth/ping",
+                    "/api/v1/oauth/ping",
                     headers={"Authorization": f"Bearer {new_access_token}"}
                 )
                 assert ping_response2.status_code == 200
@@ -235,7 +235,7 @@ async def test_mcp_oauth_device_flow():
         print("\n=== Step 9: Test Token Introspection ===")
         
         introspect_response = await client.post(
-            "/oauth/introspect",
+            "/api/v1/oauth/introspect",
             data={
                 "token": access_token,
                 "token_type_hint": "access_token"
@@ -252,7 +252,7 @@ async def test_mcp_oauth_device_flow():
         print("\n=== Step 10: Test Token Revocation ===")
         
         revoke_response = await client.post(
-            "/oauth/revoke",
+            "/api/v1/oauth/revoke",
             data={
                 "token": access_token,
                 "token_type_hint": "access_token",
@@ -265,7 +265,7 @@ async def test_mcp_oauth_device_flow():
         
         # Verify token no longer works
         ping_response3 = await client.get(
-            "/oauth/ping",
+            "/api/v1/oauth/ping",
             headers={"Authorization": f"Bearer {access_token}"}
         )
         # After revocation, token should be invalid (401)

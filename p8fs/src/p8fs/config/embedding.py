@@ -23,7 +23,7 @@ EMBEDDING_PROVIDERS = {
     # OpenAI embeddings - good for development, requires API key
     "text-embedding-3-small": EmbeddingProviderConfig(
         name="text-embedding-3-small",
-        model_name="text-embedding-3-small", 
+        model_name="text-embedding-3-small",
         dimensions=1536,
         max_input_length=8191,
         provider_type="openai",
@@ -43,17 +43,28 @@ EMBEDDING_PROVIDERS = {
         description="OpenAI's legacy embedding model - stable and reliable"
     ),
     
-    # Local sentence-transformers - good for production, no API costs
+    # Local embeddings using FastEmbed (ONNX) - lightweight, no PyTorch
     "all-MiniLM-L6-v2": EmbeddingProviderConfig(
         name="all-MiniLM-L6-v2",
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         dimensions=384,
         max_input_length=256,
-        provider_type="local",
+        provider_type="fastembed",
         requires_api_key=False,
-        description="Local sentence-transformers model - fast and private"
+        description="FastEmbed ONNX model - lightweight and fast, no PyTorch required"
     ),
-    
+
+    # FastEmbed (ONNX) - lightweight alternative to sentence-transformers, same model
+    "all-MiniLM-L6-v2-onnx": EmbeddingProviderConfig(
+        name="all-MiniLM-L6-v2-onnx",
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        dimensions=384,
+        max_input_length=256,
+        provider_type="fastembed",
+        requires_api_key=False,
+        description="FastEmbed ONNX model - lightweight and fast, no PyTorch required"
+    ),
+
     # Default provider (maps to 'default' in field metadata)
     "default": EmbeddingProviderConfig(
         name="default",

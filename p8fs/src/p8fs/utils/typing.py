@@ -321,6 +321,9 @@ class TypeInspector:
             schema = {"type": "array"}
             if args:
                 schema["items"] = self.get_json_schema_type(args[0])
+            else:
+                # OpenAI requires items even for untyped arrays
+                schema["items"] = {"type": "string"}
             return schema
 
         # Dict types

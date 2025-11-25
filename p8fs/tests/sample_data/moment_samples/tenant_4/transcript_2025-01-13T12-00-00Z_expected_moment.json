@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T12:00:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "12:00 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.9,
+    "word_count": 254,
+    "speaker_count": 1,
+    "activity_type": "route_planning",
+    "elevation_meters": 1847
   },
   "name": "Lunch Break - Afternoon Route Planning",
   "content": "Lena taking lunch break at base camp after morning hike to 2100m. Planning afternoon ridge trail to 2400m elevation via northwest route, estimated 3-hour round trip with 5:30 PM sunset consideration. Assessed conditions: good snow, no avalanche risk at current elevations. Prepared safety gear: emergency bivvy, extra layers for temperature drops, redundant navigation (GPS, compass, paper map). Packed provisions: 2L water, energy bars, nuts, chocolate. Maintained critical safety protocols: first aid kit and satellite communicator always in pack. Reflected on solo hiking advantages: self-paced movement, freedom to pause and appreciate views without group pressure. Expressed appreciation for independence and flexibility. Eating dehydrated chicken and rice, targeting 1:30 PM ridge departure.",
@@ -12,23 +15,26 @@
   "resource_timestamp": "2025-01-13T12:00:00Z",
   "resource_ends_timestamp": "2025-01-13T12:09:54Z",
   "moment_type": "observation",
-  "emotion_tags": ["content", "focused", "independent", "prepared"],
-  "topic_tags": ["hiking", "route-planning", "safety", "solo-travel", "mountain-navigation"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
+  "emotion_tags": [
+    "content",
+    "focused",
+    "independent",
+    "prepared"
+  ],
+  "topic_tags": [
+    "hiking",
+    "route-planning",
+    "safety",
+    "solo-travel",
+    "mountain-navigation"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
     }
-  },
+  ],
   "location": "46.5500,8.7000",
-  "background_sounds": "wind, birds, water boiling on stove, paper map rustling",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 9.9,
-    "word_count": 254,
-    "speaker_count": 1,
-    "activity_type": "route_planning",
-    "elevation_meters": 1847
-  }
+  "background_sounds": "wind, birds, water boiling on stove, paper map rustling"
 }

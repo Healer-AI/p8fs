@@ -13,6 +13,7 @@ from .eval import eval_command
 from .storage_worker import storage_worker_command
 from .ingest_images import ingest_images_command
 from .retry import retry_command
+from .rem import rem_command
 
 __all__ = [
     "agent_command",
@@ -28,4 +29,5 @@ __all__ = [
     "storage_worker_command",
     "ingest_images_command",
     "retry_command",
+    "rem_command",
 ]

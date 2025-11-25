@@ -1,29 +1,5 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-14T06:00:00Z",
-    "recording_date": "Tuesday, January 14, 2025",
-    "recording_time": "06:00 AM UTC"
-  },
-  "name": "Sunrise Photography - Ridge at 2400m",
-  "content": "Lena experiencing alpine sunrise from ridge at 2400m elevation after early morning hike in minus 8-9°C temperatures. Witnessed dramatic color transformation: eastern horizon turning pink, silhouetted peaks, then golden light illuminating highest summits with orange-pink snow glow. Observed four mountain ranges in atmospheric perspective - sharp foreground peaks fading to hazy blue distant ranges. Acknowledged photographic limitation: cameras cannot capture experiential reality, emphasizing memory as primary documentation. Cloudless sky, pure alpine air, complete solitude for kilometers. Profound moment of freedom and autonomy on mountaintop. Reflected on work-life purpose: laboring to afford transformative experiences that create feeling of being fully alive. Balanced desire to linger with practical needs (breakfast, route planning). Peak experience combining natural beauty, solitude, and existential meaning.",
-  "summary": "Sunrise photography at 2400m: witnessed dramatic alpine light show, complete solitude, reflected on purpose and aliveness",
-  "category": "outdoor",
-  "uri": "s3://p8fs-tenant4/recordings/2025-01-14/sunrise_photography.wav",
-  "resource_timestamp": "2025-01-14T06:00:00Z",
-  "resource_ends_timestamp": "2025-01-14T06:10:02Z",
-  "moment_type": "observation",
-  "emotion_tags": ["awestruck", "free", "alive", "purposeful"],
-  "topic_tags": ["sunrise", "photography", "alpine-landscape", "solitude", "meaning"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
-    }
-  },
-  "location": "46.5540,8.7020",
-  "background_sounds": "wind, camera shutter clicks, boots on rock",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 10.03,
     "word_count": 262,
@@ -31,5 +7,35 @@
     "activity_type": "photography",
     "elevation_meters": 2400,
     "peak_experience": true
-  }
+  },
+  "name": "Sunrise Photography - Ridge at 2400m",
+  "content": "Lena experiencing alpine sunrise from ridge at 2400m elevation after early morning hike in minus 8-9\u00b0C temperatures. Witnessed dramatic color transformation: eastern horizon turning pink, silhouetted peaks, then golden light illuminating highest summits with orange-pink snow glow. Observed four mountain ranges in atmospheric perspective - sharp foreground peaks fading to hazy blue distant ranges. Acknowledged photographic limitation: cameras cannot capture experiential reality, emphasizing memory as primary documentation. Cloudless sky, pure alpine air, complete solitude for kilometers. Profound moment of freedom and autonomy on mountaintop. Reflected on work-life purpose: laboring to afford transformative experiences that create feeling of being fully alive. Balanced desire to linger with practical needs (breakfast, route planning). Peak experience combining natural beauty, solitude, and existential meaning.",
+  "summary": "Sunrise photography at 2400m: witnessed dramatic alpine light show, complete solitude, reflected on purpose and aliveness",
+  "category": "outdoor",
+  "uri": "s3://p8fs-tenant4/recordings/2025-01-14/sunrise_photography.wav",
+  "resource_timestamp": "2025-01-14T06:00:00Z",
+  "resource_ends_timestamp": "2025-01-14T06:10:02Z",
+  "moment_type": "observation",
+  "emotion_tags": [
+    "awestruck",
+    "free",
+    "alive",
+    "purposeful"
+  ],
+  "topic_tags": [
+    "sunrise",
+    "photography",
+    "alpine-landscape",
+    "solitude",
+    "meaning"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
+    }
+  ],
+  "location": "46.5540,8.7020",
+  "background_sounds": "wind, camera shutter clicks, boots on rock"
 }

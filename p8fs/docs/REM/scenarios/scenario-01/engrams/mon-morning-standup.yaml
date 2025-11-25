@@ -1,0 +1,168 @@
+kind: engram
+name: "Monday Morning Team Standup"
+category: "meeting"
+summary: "Daily standup discussing sprint goals, API rate limiting blocker, and Q4 roadmap planning"
+resource_timestamp: "2024-11-11T09:00:00Z"
+uri: "meeting://daily-standup/2024-11-11"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 15
+    location: "Office Conference Room A"
+content: |
+  Daily standup with the engineering and design team to kick off the week.
+
+  Sarah Chen facilitated the meeting. Mike Johnson (Tech Lead) reported that we're
+  hitting rate limits on the third-party API, which is blocking the database migration
+  work. This is becoming a critical blocker for our Q4 roadmap.
+
+  Alex Rodriguez (Backend Engineer) suggested implementing exponential backoff and
+  caching strategy to handle the rate limiting. Mike agreed this is the right approach
+  and they'll pair on it this afternoon.
+
+  Jamie Lee (Designer) presented the completed designs for the new onboarding flow.
+  The team discussed A/B testing strategy for validating the new design. Kevin Park
+  (Frontend) will start implementation once designs are approved.
+
+  Key decisions:
+  - Priority this sprint: Fix API rate limiting issue
+  - Design review for onboarding flow scheduled for 2pm today
+  - Database migration on hold until API issue resolved
+
+graph_edges:
+  - dst: "API Rate Limiting Issue"
+    rel_type: "discusses"
+    weight: 0.9
+    properties:
+      dst_name: "API Rate Limiting Issue"
+      dst_entity_type: "concept/technical-issue"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Q4 Roadmap"
+    rel_type: "discusses"
+    weight: 0.8
+    properties:
+      dst_name: "Q4 Roadmap"
+      dst_entity_type: "project/planning"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "discusses"
+    weight: 0.85
+    properties:
+      dst_name: "Onboarding Flow Redesign"
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+moments:
+  - name: "Sprint Blockers Discussion"
+    content: "Mike raised the API rate limiting blocker. Team discussed that this is blocking database migration and impacting Q4 timeline."
+    summary: "Critical blocker identified: API rate limiting affecting migration"
+    resource_timestamp: "2024-11-11T09:02:00Z"
+    resource_ends_timestamp: "2024-11-11T09:06:00Z"
+    moment_type: "problem_solving"
+    emotion_tags: ["concerned", "focused", "collaborative"]
+    topic_tags: ["api-rate-limiting", "database-migration", "technical-blockers"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, facilitating"
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead, identified blocker"
+      - id: "Alex Rodriguez"
+        name: "Alex Rodriguez"
+        comment: "Backend Engineer, proposed solution"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer"
+      - id: "Kevin Park"
+        name: "Kevin Park"
+        comment: "Frontend Engineer"
+    speakers:
+      - text: "We're hitting rate limits on the third-party API and it's blocking our migration work"
+        speaker_identifier: "Mike Johnson"
+        timestamp: "2024-11-11T09:02:30Z"
+        emotion: "concerned"
+      - text: "Let's implement exponential backoff and add caching - we can pair this afternoon"
+        speaker_identifier: "Alex Rodriguez"
+        timestamp: "2024-11-11T09:03:45Z"
+        emotion: "solution-oriented"
+    graph_edges:
+      - dst: "Mike Johnson"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Mike Johnson"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Tech Lead"
+      - dst: "Alex Rodriguez"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Alex Rodriguez"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Backend Engineer"
+
+  - name: "Design Review Planning"
+    content: "Jamie presented completed onboarding flow designs. Team scheduled design review for 2pm to discuss A/B testing strategy."
+    summary: "Onboarding flow designs ready for review"
+    resource_timestamp: "2024-11-11T09:07:00Z"
+    resource_ends_timestamp: "2024-11-11T09:12:00Z"
+    moment_type: "planning"
+    emotion_tags: ["productive", "collaborative", "optimistic"]
+    topic_tags: ["onboarding-flow", "design-review", "ab-testing"]
+    present_persons:
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, presented designs"
+      - id: "Kevin Park"
+        name: "Kevin Park"
+        comment: "Frontend Engineer, will implement"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    graph_edges:
+      - dst: "Jamie Lee"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_name: "Jamie Lee"
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "Designer"
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "discusses"
+        weight: 0.9
+        properties:
+          dst_name: "Onboarding Flow Redesign"
+          dst_entity_type: "project/design"
+          match_type: "explicit_reference"
+
+  - name: "Sprint Priorities"
+    content: "Team agreed to prioritize API rate limiting fix this sprint. Database migration postponed until blocker resolved."
+    summary: "Sprint priority set: API rate limiting fix"
+    resource_timestamp: "2024-11-11T09:12:00Z"
+    resource_ends_timestamp: "2024-11-11T09:15:00Z"
+    moment_type: "decision"
+    emotion_tags: ["decisive", "aligned", "focused"]
+    topic_tags: ["sprint-planning", "prioritization", "technical-decisions"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, made decision"
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead, agreed"
+    metadata:
+      decision_type: "sprint_priority"
+      impact: "high"
+      stakeholders: ["engineering", "product"]

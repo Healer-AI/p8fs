@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T19:15:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "07:15 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.42,
+    "word_count": 287,
+    "speaker_count": 2,
+    "conversation_type": "personal",
+    "relationship": "partner"
   },
   "name": "Evening Chat with Casey - Day Debrief and Travel Planning",
   "content": "Casual evening conversation between Alex and Casey catching up after work. Casey had exhausting three-hour client presentation that resulted in proposal approval. Alex shared completion of rate limiting architecture work. Conversation shifted to dinner plans (Thai food) and then to travel planning inspired by Emma's Iceland trip photos. Discussed potential spring trip to Barcelona or Portugal, noting desire for warm destination. Light, relaxed tone with mix of work debrief and personal life planning.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-13T19:15:00Z",
   "resource_ends_timestamp": "2025-01-13T19:25:25Z",
   "moment_type": "conversation",
-  "emotion_tags": ["relaxed", "happy", "social", "tired"],
-  "topic_tags": ["personal", "travel-planning", "work-debrief", "dinner", "relationship"],
-  "present_persons": {
-    "fp_alex_t1": {
-      "fingerprint_id": "fp_alex_t1",
-      "user_id": "user_alex_001",
-      "user_label": "Alex"
+  "emotion_tags": [
+    "relaxed",
+    "happy",
+    "social",
+    "tired"
+  ],
+  "topic_tags": [
+    "personal",
+    "travel-planning",
+    "work-debrief",
+    "dinner",
+    "relationship"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_alex_t1",
+      "name": "Alex",
+      "comment": "User ID: user_alex_001"
     },
-    "fp_casey_t1": {
-      "fingerprint_id": "fp_casey_t1",
-      "user_id": "user_casey_004",
-      "user_label": "Casey"
+    {
+      "id": "fp_casey_t1",
+      "name": "Casey",
+      "comment": "User ID: user_casey_004"
     }
-  },
+  ],
   "location": "37.7749,-122.4194",
-  "background_sounds": "home ambient, occasional door closing",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.42,
-    "word_count": 287,
-    "speaker_count": 2,
-    "conversation_type": "personal",
-    "relationship": "partner"
-  }
+  "background_sounds": "home ambient, occasional door closing"
 }

@@ -5,7 +5,7 @@ from typing import Any, Literal
 
 from p8fs_cluster.config.settings import config
 from p8fs_cluster.logging import get_logger
-from p8fs.models.engram.models import Moment
+from p8fs.models.p8 import Moment
 from p8fs.services.llm import MemoryProxy
 
 logger = get_logger(__name__)
@@ -125,7 +125,7 @@ class MomentEmailBuilder:
         participants_html = []
         for person_data in present_persons.values():
             user_label = person_data.get("user_label", "Unknown")
-            participants_html.append(f'<span style="display: inline-flex; align-items: center; background-color: #ffffff; padding: 6px 12px; border-radius: 20px; font-size: 13px; color: #2c3e50; border: 1px solid #e8e8e8;"><img src="{icon_url}" width="16" height="16" style="margin-right: 6px;" alt="User" />{user_label}</span>')
+            participants_html.append(f'<span style="display: inline-flex; align-items: center; background-color: #ffffff; padding: 6px 12px; border-radius: 20px; font-size: 13px; color: #2c3e50; border: 1px solid #e8e8e8;"><img src="{icon_url}" width="16" height="16" style="margin-right: 6px; display: block;" alt="" />{user_label}</span>')
 
         return f'<div style="background-color: #f8f9fa; padding: 14px 16px; border-radius: 6px; margin-bottom: 16px;"><p style="margin: 0 0 8px 0; color: #7f8c8d; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">Participants</p><div style="display: flex; gap: 12px; flex-wrap: wrap;">{" ".join(participants_html)}</div></div>'
 
@@ -151,11 +151,11 @@ class MomentEmailBuilder:
 
         if location:
             location_icon_url = self._get_icon_url("location")
-            location_html = f'<div style="display: flex; align-items: center;"><img src="{location_icon_url}" width="18" height="18" style="margin-right: 10px;" alt="Location" /><span style="color: {text_color}; font-size: 13px; font-weight: 600;">{location}</span></div>'
+            location_html = f'<div style="display: flex; align-items: center;"><img src="{location_icon_url}" width="18" height="18" style="margin-right: 10px; display: block;" alt="" /><span style="color: {text_color}; font-size: 13px; font-weight: 600;">{location}</span></div>'
 
         if background_sounds:
             music_icon_url = self._get_icon_url("music")
-            sounds_html = f'<div style="display: flex; align-items: center;"><img src="{music_icon_url}" width="18" height="18" style="margin-right: 10px;" alt="Sounds" /><span style="color: {text_color}; font-size: 13px;">{background_sounds}</span></div>'
+            sounds_html = f'<div style="display: flex; align-items: center;"><img src="{music_icon_url}" width="18" height="18" style="margin-right: 10px; display: block;" alt="" /><span style="color: {text_color}; font-size: 13px;">{background_sounds}</span></div>'
 
         return f'<div style="background-color: {background_color}; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;"><div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">{location_html}{sounds_html}</div></div>'
 
@@ -170,7 +170,7 @@ class MomentEmailBuilder:
         for i, tag in enumerate(tags):
             icon_name = self._get_mood_icon([tag])
             icon_url = self._get_icon_url(icon_name)
-            emotion_items.append(f'<div style="display: flex; align-items: center;"><img src="{icon_url}" width="18" height="18" style="margin-right: 8px;" alt="{tag}" /><span style="color: {secondary_color}; font-size: 14px; font-weight: 700;">{tag.replace("-", " ").title()}</span></div>')
+            emotion_items.append(f'<div style="display: flex; align-items: center;"><img src="{icon_url}" width="18" height="18" style="margin-right: 8px; display: block;" alt="" /><span style="color: {secondary_color}; font-size: 14px; font-weight: 700;">{tag.replace("-", " ").title()}</span></div>')
 
             # Add separator if not last item
             if i < len(tags) - 1:
@@ -243,7 +243,7 @@ class MomentEmailBuilder:
                 <!-- Type Badge with Icon -->
                 <div style="margin-bottom: 22px;">
                     <span style="display: inline-flex; align-items: center; background: linear-gradient(135deg, {primary_color} 0%, {secondary_color} 100%); color: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;">
-                        <img src="{self._get_icon_url('memo')}" width="16" height="16" style="margin-right: 8px;" alt="Moment" />
+                        <img src="{self._get_icon_url('memo')}" width="16" height="16" style="margin-right: 8px; display: block;" alt="" />
                         {(moment.moment_type or "moment").replace("-", " ")}
                     </span>
                 </div>
@@ -272,6 +272,121 @@ class MomentEmailBuilder:
                 {self._format_topics(moment.topic_tags, light_color, secondary_color)}
             </div>
 
+        </div>
+
+        <!-- Footer -->
+        <div style="background: linear-gradient(135deg, {secondary_color} 0%, {primary_color} 100%); padding: 34px; text-align: center;">
+            <p style="margin: 0 0 10px 0; color: rgba(255,255,255,0.95); font-size: 13px; line-height: 1.7;">
+                Every moment captured and remembered
+            </p>
+            <p style="margin: 0; color: rgba(255,255,255,0.75); font-size: 12px; letter-spacing: 0.8px;">
+                EEPIS MOMENTS · YOUR INTELLIGENT COMPANION
+            </p>
+        </div>
+    </div>
+</body>
+</html>'''
+
+        return html
+
+    def build_moments_digest_html(self, moments: list[Moment], date_title: str = "Your Daily Moments") -> str:
+        """
+        Build beautiful HTML email digest with multiple moments.
+
+        Args:
+            moments: List of Moment objects (will display top 10)
+            date_title: Title for the email
+
+        Returns:
+            Complete HTML email string with multiple moments
+        """
+        if not moments:
+            return ""
+
+        # Sort by timestamp
+        sorted_moments = sorted(
+            moments,
+            key=lambda m: m.resource_timestamp or m.created_at or datetime.min,
+            reverse=True
+        )
+
+        # Limit to top 10 for email brevity
+        top_moments = sorted_moments[:10]
+        colors = self._get_moment_color_scheme("digest")
+        primary_color = colors["primary"]
+        secondary_color = colors["secondary"]
+        background_color = colors["background"]
+        light_color = colors["light"]
+
+        # Build moment cards
+        moment_cards = []
+        for i, moment in enumerate(top_moments, 1):
+            timestamp = moment.resource_timestamp or moment.created_at
+            timestamp_str = timestamp.strftime("%B %d, %Y at %I:%M %p") if timestamp else "Recently"
+            emotion_text = " · ".join([tag.replace("-", " ").title() for tag in (moment.emotion_tags or [])])
+
+            # Build mood indicator for this moment
+            mood_html = ""
+            if emotion_text:
+                mood_items = []
+                for tag in (moment.emotion_tags or [])[:3]:
+                    icon_name = self._get_mood_icon([tag])
+                    icon_url = self._get_icon_url(icon_name)
+                    mood_items.append(f'<img src="{icon_url}" width="14" height="14" style="margin-right: 4px; display: inline-block; vertical-align: middle;" alt="" /><span style="color: {secondary_color}; font-size: 12px;">{tag.replace("-", " ").title()}</span>')
+                mood_html = f'<div style="display: flex; gap: 10px; margin-bottom: 10px;">{" · ".join(mood_items)}</div>'
+
+            card_html = f'''
+            <div style="background: #ffffff; border: 2px solid {light_color}; border-radius: 10px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="display: inline-flex; align-items: center; background: linear-gradient(135deg, {primary_color} 0%, {secondary_color} 100%); color: white; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;">
+                        {(moment.moment_type or "moment").replace("-", " ")}
+                    </span>
+                    <span style="color: {secondary_color}; font-size: 12px;">{timestamp_str}</span>
+                </div>
+                {mood_html}
+                <h3 style="margin: 0 0 10px 0; color: #2c1810; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; line-height: 1.3;">{i}. {moment.name}</h3>
+                <p style="margin: 0; color: #5a352a; font-size: 14px; line-height: 1.7;">
+                    {moment.summary or moment.content[:200] + '...' if len(moment.content) > 200 else moment.content}
+                </p>
+            </div>
+            '''
+            moment_cards.append(card_html)
+
+        html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{date_title}</title>
+    <link href="{self.theme.fonts}" rel="stylesheet">
+</head>
+<body style="margin: 0; padding: 0; background-color: #f8fafb; font-family: 'Spectral', Georgia, serif;">
+    <div style="max-width: 680px; margin: 40px auto; background-color: #ffffff; box-shadow: 0 2px 24px rgba(0,0,0,0.08);">
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, {secondary_color} 0%, {primary_color} 100%); padding: 40px 34px;">
+            <div style="border-bottom: 2px solid rgba(255,255,255,0.25); padding-bottom: 18px;">
+                <h1 style="margin: 0; color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 700; letter-spacing: -0.5px;">EEPIS Moments</h1>
+                <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.88); font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">{date_title}</p>
+            </div>
+        </div>
+
+        <!-- Date Banner -->
+        <div style="background-color: {light_color}; padding: 18px 34px; border-bottom: 1px solid {background_color};">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <p style="margin: 0; color: {secondary_color}; font-size: 15px; font-weight: 700;">{datetime.now().strftime("%A, %B %d, %Y")}</p>
+                <span style="color: {primary_color}; font-size: 14px; font-weight: 600;">{len(moments)} moment{'s' if len(moments) != 1 else ''} captured</span>
+            </div>
+        </div>
+
+        <!-- Moments Content -->
+        <div style="padding: 40px 34px;">
+            <div style="background-color: {background_color}; padding: 16px 20px; border-radius: 8px; margin-bottom: 30px;">
+                <p style="margin: 0; color: {secondary_color}; font-size: 14px; line-height: 1.6;">
+                    ✨ Here are your top {len(top_moments)} moment{'s' if len(top_moments) != 1 else ''} from today.
+                </p>
+            </div>
+
+            {''.join(moment_cards)}
         </div>
 
         <!-- Footer -->

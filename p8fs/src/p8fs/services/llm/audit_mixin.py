@@ -33,17 +33,27 @@ class AuditSessionMixin:
         max_tokens: Optional[int] = None,
         query: Optional[str] = None,
         moment_id: Optional[str] = None,
+        session_type: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> Session:
-        """Start new audit session for tracking token usage."""
+        """Start new audit session for tracking token usage.
+
+        Note: session_id here is the PARENT/THREAD session ID for grouping,
+        not the actual Session.id which is always a new UUID.
+        """
         async with self._session_lock:
             self._current_tenant_id = tenant_id
+
             try:
-                # Create new session
+                # Always create new session with new UUID
+                # session_id from header goes into thread_id for grouping
                 self._current_session = Session(
                     id=str(uuid4()),
+                    thread_id=session_id,  # Group sessions by thread/conversation
                     userid=user_id,
                     query=query,  # Set the query field
                     moment_id=moment_id,  # Link to moment if provided
+                    session_type=session_type,  # Set session type (chat, dreaming, etc.)
                     metadata={
                         "model": model,
                         "provider": provider,
@@ -73,9 +83,11 @@ class AuditSessionMixin:
                 # Create in-memory session as fallback
                 self._current_session = Session(
                     id=str(uuid4()),
+                    thread_id=session_id,  # Group sessions by thread/conversation
                     userid=user_id,
                     query=query,  # Set the query field
                     moment_id=moment_id,  # Link to moment if provided
+                    session_type=session_type,  # Set session type (chat, dreaming, etc.)
                     metadata={
                         "model": model,
                         "provider": provider,
@@ -345,3 +357,107 @@ class AuditSessionMixin:
         except Exception as e:
             logger.error(f"Failed to audit session: {e}")
             return None
+
+    async def reload_session(
+        self,
+        thread_id: str,
+        tenant_id: str,
+        decompress_messages: bool = False
+    ) -> tuple[Session | None, list[dict]]:
+        """
+        Reload all sessions in a thread and their message history.
+
+        Args:
+            thread_id: Thread/conversation identifier (from X-Session-ID header)
+            tenant_id: Tenant identifier
+            decompress_messages: Whether to decompress long messages (default: False)
+
+        Returns:
+            Tuple of (latest_session, all_messages) or (None, []) if not found
+        """
+        from p8fs.repository.TenantRepository import TenantRepository
+        from p8fs.services.llm.session_messages import SessionMessageStore
+
+        try:
+            # Load ALL sessions in this thread
+            repo = TenantRepository(model_class=Session, tenant_id=tenant_id)
+            sessions = await repo.select(
+                filters={"thread_id": thread_id},
+                order_by=["created_at"],  # Chronological order
+            )
+
+            if not sessions:
+                logger.warning(f"No sessions found for thread: {thread_id}")
+                return None, []
+
+            # Set latest session as current
+            latest_session = sessions[-1]
+            async with self._session_lock:
+                self._current_session = latest_session
+                self._current_tenant_id = tenant_id
+
+            # Load and combine messages from all sessions in thread
+            message_store = SessionMessageStore(tenant_id=tenant_id)
+            all_messages = []
+
+            for session in sessions:
+                session_messages = await message_store.load_session_messages(
+                    session_id=session.id,
+                    decompress=decompress_messages
+                )
+                all_messages.extend(session_messages)
+
+            logger.info(
+                f"Reloaded thread {thread_id}: "
+                f"{len(sessions)} sessions, "
+                f"{len(all_messages)} total messages"
+            )
+
+            return latest_session, all_messages
+
+        except Exception as e:
+            logger.error(f"Failed to reload thread {thread_id}: {e}")
+            return None, []
+
+    async def save_session_messages(
+        self,
+        messages: list[dict],
+        compress: bool = True
+    ) -> None:
+        """
+        Save session messages with optional compression.
+
+        Args:
+            messages: List of messages to save
+            compress: Whether to compress long messages (default: True)
+        """
+        if not self._current_session:
+            logger.warning("No active session to save messages")
+            return
+
+        from p8fs.services.llm.session_messages import SessionMessageStore
+
+        try:
+            message_store = SessionMessageStore(tenant_id=self._current_tenant_id)
+
+            # Store and compress messages
+            compressed_messages = await message_store.store_session_messages(
+                session_id=self._current_session.id,
+                messages=messages,
+                compress=compress
+            )
+
+            # Update session with compressed messages
+            self._current_session.metadata["messages"] = compressed_messages
+            self._current_session.metadata["message_count"] = len(messages)
+
+            # Save to database
+            await self._update_session_async()
+
+            logger.debug(
+                f"Saved {len(messages)} messages for session {self._current_session.id} "
+                f"(compressed: {compress})"
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to save session messages: {e}")

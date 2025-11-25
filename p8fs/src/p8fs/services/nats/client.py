@@ -249,22 +249,42 @@ class NATSClient:
         
     async def create_pull_subscriber(self, stream: str, consumer: str, subject: str):
         """Create a pull subscriber for a consumer.
-        
+
         Args:
             stream: Stream name
             consumer: Consumer name
-            subject: Subject to subscribe to
-            
+            subject: Subject to subscribe to (used for consumer creation metadata only)
+
         Returns:
             Pull subscription object
         """
         await self._ensure_connected()
-        
+
         # Ensure consumer exists first
         await self.ensure_consumer(stream, consumer, f"Pull consumer for {subject}")
-        
-        # Create pull subscription
-        return await self._js.pull_subscribe(subject, durable=consumer)
+
+        # Create pull subscription with empty subject for durable consumers
+        # The consumer configuration already defines which subjects to consume from
+        return await self._js.pull_subscribe("", durable=consumer)
+
+    async def connect_to_pull_subscriber(self, stream: str, consumer: str):
+        """Connect to an existing pull subscriber without creating the consumer.
+
+        Use this method when the consumer has already been created by another process
+        (e.g., router) and you want to connect multiple workers to the same consumer.
+
+        Args:
+            stream: Stream name where the consumer exists
+            consumer: Existing durable consumer name
+
+        Returns:
+            Pull subscription object
+        """
+        await self._ensure_connected()
+
+        # Connect to existing pull consumer without creating it
+        # Pass stream explicitly and bind=True to bind to existing consumer
+        return await self._js.pull_subscribe_bind(consumer, stream)
     
     async def pull_messages(self, stream: str, consumer: str, batch_size: int = 1, timeout: float = 30.0) -> list[NATSMessage]:
         """Pull messages from a JetStream consumer.
@@ -374,8 +394,8 @@ class NATSClient:
             return {
                 "name": info.name,
                 "stream_name": info.stream_name,
-                "delivered": info.delivered.consumer_seq,
-                "ack_pending": info.ack_pending.consumer_seq,
+                "delivered": info.delivered.consumer_seq if hasattr(info.delivered, 'consumer_seq') else info.delivered,
+                "num_ack_pending": info.num_ack_pending,
                 "num_pending": info.num_pending,
             }
         except Exception as e:

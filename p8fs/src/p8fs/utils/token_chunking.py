@@ -48,6 +48,16 @@ def get_optimal_chunk_size(
     available = max_context - overhead_tokens
     optimal_chunk = int(available * (1 - response_buffer_ratio))
 
+    # Cap at 25K tokens to respect typical TPM limits (e.g., OpenAI free tier 30K TPM)
+    # This ensures we leave room for response tokens and don't hit rate limits
+    tpm_safe_limit = 25_000
+    if optimal_chunk > tpm_safe_limit:
+        logger.debug(
+            f"Capping chunk size from {optimal_chunk:,} to {tpm_safe_limit:,} tokens "
+            f"to respect TPM rate limits"
+        )
+        optimal_chunk = tpm_safe_limit
+
     logger.debug(
         f"Optimal chunk size for {model_name}: {optimal_chunk:,} tokens "
         f"(from {max_context:,} context window)"

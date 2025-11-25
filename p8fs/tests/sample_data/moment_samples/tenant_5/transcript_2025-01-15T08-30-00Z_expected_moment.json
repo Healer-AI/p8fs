@@ -1,8 +1,12 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T08:30:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "08:30 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.12,
+    "word_count": 311,
+    "speaker_count": 3,
+    "activity_type": "equipment_troubleshooting",
+    "mission_day": 89,
+    "system": "water_recycling"
   },
   "name": "Water Recycling System Troubleshooting - Pressure Leak Repair",
   "content": "Commander Chen identifying and resolving water recycling system pressure anomaly on mission day 89. Initial problem detection: primary loop pressure dropped from nominal 18 PSI to 14.2 PSI with 0.3 PSI hourly decline rate. Coordinated troubleshooting with Houston CAPCOM guidance and Dr. Novak schematic support. Systematic diagnostic approach: panel R7 opened for visual inspection of six connection points, identified moisture at joint three indicating loose coupling caused by thermal cycling effects (temperature variation-induced fitting loosening). Primary repair: joint three tightened with calibrated torque wrench, leak verified sealed after five-minute dry observation period. Preventive maintenance executed: joints four, five, six inspected with joint six receiving preemptive tightening ensuring uniform connection security across system. System restoration: manual repressurization from 14.2 PSI to nominal 18 PSI via makeup water valve, confirmed stable operation with all indicators green. Houston telemetry verification confirmed successful repair. Team collaboration effectiveness demonstrated: ground control guidance, onboard schematic analysis, hands-on mechanical repair. Proactive maintenance protocol established: biweekly joint inspection schedule added to recurring maintenance (Chen and Novak alternating Mondays). Incident highlights critical importance of water recycling system for mission sustainability and crew preparedness for real-time problem solving in isolated environment. Problem resolved in approximately ten minutes with zero mission impact.",
@@ -12,34 +16,37 @@
   "resource_timestamp": "2025-01-15T08:30:00Z",
   "resource_ends_timestamp": "2025-01-15T08:40:07Z",
   "moment_type": "collaboration",
-  "emotion_tags": ["focused", "methodical", "professional", "relieved", "confident"],
-  "topic_tags": ["troubleshooting", "system-maintenance", "problem-solving", "ground-coordination", "preventive-care"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
+  "emotion_tags": [
+    "focused",
+    "methodical",
+    "professional",
+    "relieved",
+    "confident"
+  ],
+  "topic_tags": [
+    "troubleshooting",
+    "system-maintenance",
+    "problem-solving",
+    "ground-coordination",
+    "preventive-care"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
     },
-    "fp_capcom_t5": {
-      "fingerprint_id": "fp_capcom_t5",
-      "user_id": "user_capcom_007",
-      "user_label": "CAPCOM Houston"
+    {
+      "id": "fp_capcom_t5",
+      "name": "CAPCOM Houston",
+      "comment": "User ID: user_capcom_007"
     },
-    "fp_novak_t5": {
-      "fingerprint_id": "fp_novak_t5",
-      "user_id": "user_novak_002",
-      "user_label": "Dr. Novak"
+    {
+      "id": "fp_novak_t5",
+      "name": "Dr. Novak",
+      "comment": "User ID: user_novak_002"
     }
-  },
+  ],
   "location": "iss_maintenance_area",
-  "background_sounds": "equipment humming, tool sounds, communication static, water system sounds",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.12,
-    "word_count": 311,
-    "speaker_count": 3,
-    "activity_type": "equipment_troubleshooting",
-    "mission_day": 89,
-    "system": "water_recycling"
-  }
+  "background_sounds": "equipment humming, tool sounds, communication static, water system sounds"
 }

@@ -34,6 +34,7 @@ class AuthTokenResponse(BaseModel):
     expires_in: int
     refresh_token: str | None = None
     scope: str | None = None
+    tenant_id: str | None = None
 
 
 class ChatMessage(BaseModel):
@@ -91,6 +92,7 @@ class RegistrationResponse(BaseModel):
     """Device registration response."""
 
     registration_id: str
+    message: str
     expires_in: int
 
 

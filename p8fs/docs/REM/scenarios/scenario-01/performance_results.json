@@ -1,0 +1,272 @@
+{
+  "timestamp": "2025-11-16T17:28:07.119360",
+  "summary": {
+    "total_tests": 29,
+    "passed_tests": 20,
+    "failed_tests": 9,
+    "success_rate": 69.0
+  },
+  "tests": [
+    {
+      "test_name": "Day 1: Lookup Sarah Chen",
+      "query": "LOOKUP \"Sarah Chen\"",
+      "execution_time_ms": 137.14,
+      "result_count": 5,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 1: Lookup Monday Morning Standup",
+      "query": "LOOKUP \"Monday Morning Team Standup\"",
+      "execution_time_ms": 150.72,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 1: Search for API rate limiting",
+      "query": "SEARCH \"API rate limiting\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Day 1: SQL query for meetings",
+      "query": "SELECT * FROM resources WHERE category='meeting' LIMIT 10",
+      "execution_time_ms": 73.56,
+      "result_count": 10,
+      "expected_min": 2,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 3: Traverse from CEO sync (depth 2)",
+      "query": "TRAVERSE WITH LOOKUP \"Wednesday Late Afternoon CEO Sync\" DEPTH 2",
+      "execution_time_ms": 1941.73,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 3: Search for onboarding flow discussions",
+      "query": "SEARCH \"onboarding flow\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 3,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Day 3: Lookup API Rate Limiting Issue",
+      "query": "LOOKUP \"API Rate Limiting Issue\"",
+      "execution_time_ms": 105.3,
+      "result_count": 6,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 3: Get events chronologically",
+      "query": "SELECT * FROM resources WHERE category='meeting' ORDER BY resource_timestamp LIMIT 10",
+      "execution_time_ms": 57.25,
+      "result_count": 10,
+      "expected_min": 5,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 5: Traverse onboarding flow (depth 3)",
+      "query": "TRAVERSE WITH LOOKUP \"Onboarding Flow Redesign\" DEPTH 3",
+      "execution_time_ms": 2321.41,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 5: Search for Jamie Lee interactions",
+      "query": "SEARCH \"Jamie Lee\" IN moments",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 5,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Day 5: Traverse with implements edge type",
+      "query": "TRAVERSE implements WITH LOOKUP \"Kevin Park\" DEPTH 2",
+      "execution_time_ms": 247.33,
+      "result_count": 9,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 5: Complex SQL - meetings with participants",
+      "query": "SELECT * FROM moments WHERE emotion_tags @> '[\"confident\"]'::jsonb LIMIT 10",
+      "execution_time_ms": 53.78,
+      "result_count": 10,
+      "expected_min": 2,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 7: Traverse from Sunday reflection (depth 3)",
+      "query": "TRAVERSE WITH LOOKUP \"Sunday Evening Weekly Reflection\" DEPTH 3",
+      "execution_time_ms": 2302.47,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 7: Search for weekly summary",
+      "query": "SEARCH \"entire week summary retrospective\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Day 7: Find all reflection moments",
+      "query": "SELECT * FROM moments WHERE moment_type='reflection' LIMIT 20",
+      "execution_time_ms": 76.02,
+      "result_count": 12,
+      "expected_min": 5,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 7: Deep traversal from Sarah Chen (depth 4)",
+      "query": "TRAVERSE WITH LOOKUP \"Sarah Chen\" DEPTH 4",
+      "execution_time_ms": 2869.47,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Day 7: Search for crisis and resolution",
+      "query": "SEARCH \"API blocker crisis resolution\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 2,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Benchmark: LOOKUP person 1",
+      "query": "LOOKUP \"Sarah Chen\"",
+      "execution_time_ms": 97.72,
+      "result_count": 5,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: LOOKUP person 2",
+      "query": "LOOKUP \"Mike Johnson\"",
+      "execution_time_ms": 88.88,
+      "result_count": 11,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: LOOKUP person 3",
+      "query": "LOOKUP \"Jamie Lee\"",
+      "execution_time_ms": 84.46,
+      "result_count": 14,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: LOOKUP person 4",
+      "query": "LOOKUP \"Alex Rodriguez\"",
+      "execution_time_ms": 95.91,
+      "result_count": 11,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: LOOKUP person 5",
+      "query": "LOOKUP \"Kevin Park\"",
+      "execution_time_ms": 313.47,
+      "result_count": 10,
+      "expected_min": 0,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: SEARCH query 1",
+      "query": "SEARCH \"onboarding\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Benchmark: SEARCH query 2",
+      "query": "SEARCH \"API rate limiting\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Benchmark: SEARCH query 3",
+      "query": "SEARCH \"user research\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Benchmark: SEARCH query 4",
+      "query": "SEARCH \"deployment\" IN resources",
+      "execution_time_ms": 0,
+      "result_count": 0,
+      "expected_min": 1,
+      "passed": false,
+      "error": "OpenAI API request failed: HTTP 401"
+    },
+    {
+      "test_name": "Benchmark: TRAVERSE depth 1",
+      "query": "TRAVERSE WITH LOOKUP \"Friday Morning Sprint Completion Standup\" DEPTH 1",
+      "execution_time_ms": 770.31,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: TRAVERSE depth 2",
+      "query": "TRAVERSE WITH LOOKUP \"Friday Morning Sprint Completion Standup\" DEPTH 2",
+      "execution_time_ms": 1823.51,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    },
+    {
+      "test_name": "Benchmark: TRAVERSE depth 3",
+      "query": "TRAVERSE WITH LOOKUP \"Friday Morning Sprint Completion Standup\" DEPTH 3",
+      "execution_time_ms": 2421.18,
+      "result_count": 9,
+      "expected_min": 1,
+      "passed": true,
+      "error": null
+    }
+  ]
+}

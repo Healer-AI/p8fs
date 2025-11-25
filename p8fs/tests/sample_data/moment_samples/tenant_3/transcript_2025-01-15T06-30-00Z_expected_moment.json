@@ -1,44 +1,50 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T06:30:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "06:30 AM UTC"
-  },
-  "name": "Foundation Pour Preparation - Maple Street Project",
-  "content": "James leading pre-pour briefing with Tony and Mike for critical 280-yard foundation pour at Maple Street six-story building. Verified readiness: forms solid, rebar inspection passed, pump truck positioned, concrete trucks arriving at 7 AM. Planned 6-hour pour with four vibrators plus backups to prevent voids and cold joints. Temperature forecast favorable (above 45°F) with blanket covering planned for overnight curing. Six test cylinders scheduled for 7-day and 28-day break tests with inspector witness at 9 AM. Comprehensive safety emphasis: concrete burn prevention (long sleeves, gloves, eye protection), pump line pressure zone restrictions, barrier setup. Team assignments clear: Tony running pour, Mike handling truck logistics, James supervising. High-stakes quality consciousness: one-shot critical foundation work.",
-  "summary": "Foundation pour prep: verified readiness, safety protocols, test cylinders, team assignments for 280-yard critical pour",
-  "category": "meeting",
-  "uri": "s3://p8fs-tenant3/recordings/2025-01-15/foundation_pour.wav",
-  "resource_timestamp": "2025-01-15T06:30:00Z",
-  "resource_ends_timestamp": "2025-01-15T06:40:05Z",
-  "moment_type": "meeting",
-  "emotion_tags": ["focused", "prepared", "safety-conscious", "professional"],
-  "topic_tags": ["concrete-work", "safety", "quality-control", "construction-operations", "team-coordination"],
-  "present_persons": {
-    "fp_james_t3": {
-      "fingerprint_id": "fp_james_t3",
-      "user_id": "user_james_001",
-      "user_label": "James"
-    },
-    "fp_tony_t3": {
-      "fingerprint_id": "fp_tony_t3",
-      "user_id": "user_tony_002",
-      "user_label": "Tony"
-    },
-    "fp_mike_t3": {
-      "fingerprint_id": "fp_mike_t3",
-      "user_id": "user_mike_008",
-      "user_label": "Mike"
-    }
-  },
-  "location": "construction_site",
-  "background_sounds": "early morning, equipment idling, gravel crunching, distant traffic",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 10.08,
     "word_count": 297,
     "speaker_count": 3,
     "meeting_type": "pre-operation_briefing",
     "safety_critical": true
-  }
+  },
+  "name": "Foundation Pour Preparation - Maple Street Project",
+  "content": "James leading pre-pour briefing with Tony and Mike for critical 280-yard foundation pour at Maple Street six-story building. Verified readiness: forms solid, rebar inspection passed, pump truck positioned, concrete trucks arriving at 7 AM. Planned 6-hour pour with four vibrators plus backups to prevent voids and cold joints. Temperature forecast favorable (above 45\u00b0F) with blanket covering planned for overnight curing. Six test cylinders scheduled for 7-day and 28-day break tests with inspector witness at 9 AM. Comprehensive safety emphasis: concrete burn prevention (long sleeves, gloves, eye protection), pump line pressure zone restrictions, barrier setup. Team assignments clear: Tony running pour, Mike handling truck logistics, James supervising. High-stakes quality consciousness: one-shot critical foundation work.",
+  "summary": "Foundation pour prep: verified readiness, safety protocols, test cylinders, team assignments for 280-yard critical pour",
+  "category": "meeting",
+  "uri": "s3://p8fs-tenant3/recordings/2025-01-15/foundation_pour.wav",
+  "resource_timestamp": "2025-01-15T06:30:00Z",
+  "resource_ends_timestamp": "2025-01-15T06:40:05Z",
+  "moment_type": "meeting",
+  "emotion_tags": [
+    "focused",
+    "prepared",
+    "safety-conscious",
+    "professional"
+  ],
+  "topic_tags": [
+    "concrete-work",
+    "safety",
+    "quality-control",
+    "construction-operations",
+    "team-coordination"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_james_t3",
+      "name": "James",
+      "comment": "User ID: user_james_001"
+    },
+    {
+      "id": "fp_tony_t3",
+      "name": "Tony",
+      "comment": "User ID: user_tony_002"
+    },
+    {
+      "id": "fp_mike_t3",
+      "name": "Mike",
+      "comment": "User ID: user_mike_008"
+    }
+  ],
+  "location": "construction_site",
+  "background_sounds": "early morning, equipment idling, gravel crunching, distant traffic"
 }

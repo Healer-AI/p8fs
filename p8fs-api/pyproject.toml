@@ -1,6 +1,6 @@
 [project]
 name = "p8fs-api"
-version = "1.1.27"
+version = "1.2.6"
 description = "REST API, CLI, and MCP interfaces for the P8FS smart content management system"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
@@ -20,8 +20,12 @@ dependencies = [
     "opentelemetry-api>=1.21.0",
     "opentelemetry-sdk>=1.21.0",
     "opentelemetry-instrumentation-fastapi>=0.42b0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.21.0",
+    "opentelemetry-instrumentation-httpx>=0.42b0",
+    "opentelemetry-instrumentation-logging>=0.42b0",
     "slowapi>=0.1.9",
-    "fastmcp>=2.0.0",
+    "fastmcp>=2.13.0",
+    "starlette>=0.49.1",
     "p8fs-cluster",
     "p8fs",
     "p8fs-auth",

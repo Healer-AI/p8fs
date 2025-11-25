@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T10:00:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "10:00 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.13,
+    "word_count": 294,
+    "speaker_count": 2,
+    "activity_type": "music_lesson",
+    "skill_level": "beginner"
   },
   "name": "Guitar Lesson with Emma - Barre Chords",
   "content": "Maya teaching guitar student Emma, focusing on barre chord technique. Reviewed F to B flat transition practiced from previous week. Identified buzzing issue on high E string caused by index finger placement in middle of fret space rather than close to fret. Correction immediately improved sound quality. Addressed student concern about hand fatigue, explaining it's normal muscle development and emphasizing importance of breaks and avoiding pain. Introduced new chord (G minor, third fret) and assigned practice goal: F to G minor transitions. Recommended 15 minutes daily focused practice over longer infrequent sessions. Supportive teaching style with immediate feedback and encouragement.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-15T10:00:00Z",
   "resource_ends_timestamp": "2025-01-15T10:10:08Z",
   "moment_type": "meeting",
-  "emotion_tags": ["patient", "encouraging", "instructive", "supportive"],
-  "topic_tags": ["guitar-teaching", "music-education", "barre-chords", "technique", "mentorship"],
-  "present_persons": {
-    "fp_maya_t2": {
-      "fingerprint_id": "fp_maya_t2",
-      "user_id": "user_maya_001",
-      "user_label": "Maya"
+  "emotion_tags": [
+    "patient",
+    "encouraging",
+    "instructive",
+    "supportive"
+  ],
+  "topic_tags": [
+    "guitar-teaching",
+    "music-education",
+    "barre-chords",
+    "technique",
+    "mentorship"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_maya_t2",
+      "name": "Maya",
+      "comment": "User ID: user_maya_001"
     },
-    "fp_emma_t2": {
-      "fingerprint_id": "fp_emma_t2",
-      "user_id": "user_emma_005",
-      "user_label": "Emma"
+    {
+      "id": "fp_emma_t2",
+      "name": "Emma",
+      "comment": "User ID: user_emma_005"
     }
-  },
+  ],
   "location": "music_studio",
-  "background_sounds": "guitar strings, occasional tuning, chair adjustments",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.13,
-    "word_count": 294,
-    "speaker_count": 2,
-    "activity_type": "music_lesson",
-    "skill_level": "beginner"
-  }
+  "background_sounds": "guitar strings, occasional tuning, chair adjustments"
 }

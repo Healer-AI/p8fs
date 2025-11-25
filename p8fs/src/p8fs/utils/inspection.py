@@ -278,18 +278,11 @@ def load_entity(entity_name: str):
     logger = get_logger(__name__)
     
     try:
-        # Try to load built-in P8FS agents first
-        if entity_name.startswith("p8-") or entity_name in ["Agent", "Research", "Analysis"]:
-            from p8fs.models.p8 import Agent
-            
-            # Map common agent names to Agent class
-            if entity_name in ["p8-research", "research", "Research"]:
-                return Agent.create_research_agent()
-            elif entity_name in ["p8-analysis", "analysis", "Analysis"]:
-                return Agent.create_analysis_agent()
-            elif entity_name in ["Agent", "agent"]:
-                return Agent()
-            
+        # All P8FS agents (p8-*) use SystemAgent as their model
+        if entity_name.lower() in ['p8-system', 'p8-research', 'p8-resources']: 
+            from p8fs.models.system_agent import SystemAgent
+            return SystemAgent
+
         # Try to load from database using TenantRepository
         try:
             from p8fs.repository import TenantRepository
@@ -309,12 +302,17 @@ def load_entity(entity_name: str):
         # Try dynamic import for built-in models
         try:
             from p8fs.models.base import AbstractModel
+            import p8fs.models as models
             from p8fs.models import p8
-            
+
+            # Check if it's available in the models module first
+            if hasattr(models, entity_name):
+                return getattr(models, entity_name)
+
             # Check if it's available in the p8 module
             if hasattr(p8, entity_name):
                 return getattr(p8, entity_name)
-                
+
         except Exception as e:
             logger.debug(f"Failed dynamic import for entity {entity_name}: {e}")
         

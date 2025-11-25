@@ -164,7 +164,7 @@ class FunctionHandler:
         self._functions: dict[str, Callable | RuntimeFunction] = {}
         self._function_schemas: dict[str, dict[str, Any]] = {}
         self._runtime_functions: dict[str, RuntimeFunction] = {}
-        logger.info("Initialized FunctionHandler")
+        logger.debug("Initialized FunctionHandler")
 
     def register(self, name: str, func: Callable, schema: dict[str, Any] | None = None):
         """

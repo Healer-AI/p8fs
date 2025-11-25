@@ -107,7 +107,7 @@ python get_dev_jwt.py
 ### 2. Testing OAuth Device Flow
 ```bash
 # In one terminal, initiate device flow
-curl -X POST http://localhost:8000/oauth/device_authorization \
+curl -X POST http://localhost:8000/api/v1/oauth/device_authorization \
   -d "client_id=mcp_client&scope=read write"
 
 # In another terminal, approve the request

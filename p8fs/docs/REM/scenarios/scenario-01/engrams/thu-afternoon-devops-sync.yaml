@@ -1,0 +1,213 @@
+kind: engram
+name: "Thursday DevOps Deployment Sync"
+category: "meeting"
+summary: "Technical sync with DevOps team about deployment pipeline, staging environment setup, and Friday deployment plan for onboarding flow"
+resource_timestamp: "2024-11-14T14:30:00Z"
+uri: "meeting://devops-sync/2024-11-14"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 30
+    location: "Engineering Pod"
+    meeting_type: "technical_planning"
+content: |
+  Technical planning session with Mike Johnson (Tech Lead) and the DevOps team to ensure
+  deployment infrastructure is ready for Friday's onboarding flow release and the upcoming
+  November 30 launch.
+
+  This sync connects Wednesday's CEO meeting (which confirmed Nov 30 launch and Nov 28 investor
+  demo) with the technical reality of deployment readiness.
+
+  Key discussion points:
+  - Staging environment status: 95% ready, final configuration needed by Thursday EOD
+  - CI/CD pipeline: Automated tests passing, deployment automation complete
+  - Friday deployment plan: Deploy to staging at 2pm, production deployment Monday if tests pass
+  - Investor demo environment: Separate staging instance needed by Nov 27
+
+  Mike reported that the API rate limiting fix (from Monday's standup blocker) is deployed and
+  performing well. Database migration is back on track and will complete this weekend.
+
+  Carlos Martinez (DevOps Lead) outlined the deployment sequence:
+  1. Thursday EOD: Finalize staging configuration
+  2. Friday 2pm: Deploy onboarding flow to staging
+  3. Friday 3-5pm: QA testing and validation
+  4. Monday 10am: Production deployment (if staging tests pass)
+  5. Nov 27: Investor demo environment ready
+
+  Risk identified: Tight timeline between production deployment (Nov 18) and investor demo (Nov 28)
+  leaves only 10 days for issue resolution. Team agreed to have on-call rotation Nov 25-30.
+
+graph_edges:
+  - dst: "Deployment Pipeline"
+    rel_type: "discusses"
+    weight: 1.0
+    properties:
+      dst_entity_type: "concept/infrastructure"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Wednesday Afternoon CEO Sync"
+    rel_type: "implements"
+    weight: 0.8
+    properties:
+      dst_entity_type: "resource/meeting"
+      match_type: "temporal_reference"
+      confidence: 0.9
+      context: "Technical planning to support CEO's launch timeline"
+
+  - dst: "Launch Timeline"
+    rel_type: "relates_to"
+    weight: 0.85
+    properties:
+      dst_entity_type: "project/planning"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Investor Demo"
+    rel_type: "prepares_for"
+    weight: 0.75
+    properties:
+      dst_entity_type: "concept/business-event"
+      match_type: "explicit_reference"
+
+  - dst: "Monday Morning Team Standup"
+    rel_type: "follows_up"
+    weight: 0.7
+    properties:
+      dst_entity_type: "resource/meeting"
+      match_type: "temporal_reference"
+      context: "API rate limiting blocker from Monday is now resolved"
+
+moments:
+  - name: "Staging Environment Review"
+    content: "Carlos provided update on staging environment: 95% ready, final database configuration and SSL certificates needed by EOD Thursday. On track for Friday deployment."
+    summary: "Staging 95% ready, final config by Thursday EOD"
+    resource_timestamp: "2024-11-14T14:32:00Z"
+    resource_ends_timestamp: "2024-11-14T14:45:00Z"
+    moment_type: "status_update"
+    emotion_tags: ["confident", "organized", "on-track"]
+    topic_tags: ["staging-environment", "deployment-readiness", "infrastructure"]
+    present_persons:
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead"
+      - id: "Carlos Martinez"
+        name: "Carlos Martinez"
+        comment: "DevOps Lead, provided update"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    speakers:
+      - text: "Staging is 95% ready. Just need final database config and SSL certs, which I'll have done by end of day"
+        speaker_identifier: "Carlos Martinez"
+        timestamp: "2024-11-14T14:35:00Z"
+        emotion: "confident"
+      - text: "Good. That puts us on track for Friday 2pm deployment window"
+        speaker_identifier: "Mike Johnson"
+        timestamp: "2024-11-14T14:36:00Z"
+        emotion: "satisfied"
+    graph_edges:
+      - dst: "Carlos Martinez"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_attendance"
+          role: "DevOps Lead"
+          participation_level: "primary_contributor"
+
+      - dst: "Mike Johnson"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "Tech Lead"
+
+      - dst: "Deployment Pipeline"
+        rel_type: "discusses"
+        weight: 0.9
+        properties:
+          dst_entity_type: "concept/infrastructure"
+
+  - name: "API Blocker Resolution Update"
+    content: "Mike confirmed that the API rate limiting fix from Monday's standup is deployed and performing well. Exponential backoff and caching working as designed. Database migration back on track."
+    summary: "Monday's API blocker resolved, migration proceeding"
+    resource_timestamp: "2024-11-14T14:45:00Z"
+    resource_ends_timestamp: "2024-11-14T14:52:00Z"
+    moment_type: "status_update"
+    emotion_tags: ["relieved", "validated", "productive"]
+    topic_tags: ["api-rate-limiting", "blocker-resolution", "database-migration"]
+    present_persons:
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead, provided update"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    speakers:
+      - text: "The rate limiting fix is live and working great. Alex's exponential backoff implementation is handling the load perfectly"
+        speaker_identifier: "Mike Johnson"
+        timestamp: "2024-11-14T14:47:00Z"
+        emotion: "satisfied"
+    metadata:
+      blocker_status: "resolved"
+      original_blocker_date: "2024-11-11"
+      resolution_time_days: 3
+    graph_edges:
+      - dst: "API Rate Limiting Issue"
+        rel_type: "resolves"
+        weight: 0.95
+        properties:
+          dst_entity_type: "concept/technical-issue"
+          match_type: "explicit_reference"
+          context: "Blocker from Monday standup now resolved"
+
+      - dst: "Alex Rodriguez"
+        rel_type: "mentions"
+        weight: 0.7
+        properties:
+          dst_entity_type: "person/employee"
+          match_type: "explicit_reference"
+          context: "Alex implemented the rate limiting fix"
+
+  - name: "Deployment Timeline Planning"
+    content: "Team outlined detailed deployment sequence from Friday through investor demo. Identified 10-day risk window between production deployment and demo. Agreed on on-call rotation for Nov 25-30."
+    summary: "Deployment sequence planned, on-call rotation established"
+    resource_timestamp: "2024-11-14T14:52:00Z"
+    resource_ends_timestamp: "2024-11-14T15:00:00Z"
+    moment_type: "planning"
+    emotion_tags: ["strategic", "risk-aware", "prepared"]
+    topic_tags: ["deployment-timeline", "risk-management", "on-call-rotation"]
+    present_persons:
+      - id: "Mike Johnson"
+        name: "Mike Johnson"
+        comment: "Tech Lead"
+      - id: "Carlos Martinez"
+        name: "Carlos Martinez"
+        comment: "DevOps Lead"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+    metadata:
+      deployment_date_staging: "2024-11-15"
+      deployment_date_production: "2024-11-18"
+      investor_demo_date: "2024-11-28"
+      launch_date: "2024-11-30"
+      risk_window_days: 10
+      on_call_period: "2024-11-25 to 2024-11-30"
+    graph_edges:
+      - dst: "Launch Timeline"
+        rel_type: "implements"
+        weight: 0.9
+        properties:
+          dst_entity_type: "project/planning"
+          match_type: "explicit_reference"
+
+      - dst: "Investor Demo"
+        rel_type: "prepares_for"
+        weight: 0.85
+        properties:
+          dst_entity_type: "concept/business-event"

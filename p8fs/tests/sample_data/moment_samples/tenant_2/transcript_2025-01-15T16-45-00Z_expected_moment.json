@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T16:45:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "04:45 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.05,
+    "word_count": 298,
+    "speaker_count": 1,
+    "activity_type": "audio_mixing",
+    "technical_depth": "high"
   },
   "name": "Mixing Session - Track Six Bridge",
   "content": "Maya mixing bridge section of track six with detailed audio engineering work. Identified and corrected harsh frequency at 3.2kHz in vocal track using notch EQ. Balanced string arrangement by ducking levels and adding subtle sidechain compression to vocal, creating breathing space. Stripped back drum arrangement by muting kick and snare, retaining only hi-hat and ride cymbal for intimate vulnerable feel. Experimented with reverb options (plate vs hall), ultimately choosing blended approach: 1.2-second short plate with subtle room layer for natural but present sound. Tested bridge in full context and confirmed dynamics build and release as intended. Marked section complete and ready to move to track seven.",
@@ -12,23 +15,27 @@
   "resource_timestamp": "2025-01-15T16:45:00Z",
   "resource_ends_timestamp": "2025-01-15T16:55:03Z",
   "moment_type": "observation",
-  "emotion_tags": ["focused", "analytical", "satisfied", "meticulous"],
-  "topic_tags": ["audio-engineering", "mixing", "eq", "reverb", "production", "dynamics"],
-  "present_persons": {
-    "fp_maya_t2": {
-      "fingerprint_id": "fp_maya_t2",
-      "user_id": "user_maya_001",
-      "user_label": "Maya"
+  "emotion_tags": [
+    "focused",
+    "analytical",
+    "satisfied",
+    "meticulous"
+  ],
+  "topic_tags": [
+    "audio-engineering",
+    "mixing",
+    "eq",
+    "reverb",
+    "production",
+    "dynamics"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_maya_t2",
+      "name": "Maya",
+      "comment": "User ID: user_maya_001"
     }
-  },
+  ],
   "location": "home_studio",
-  "background_sounds": "music playback, mouse clicks, keyboard typing, equipment hum",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.05,
-    "word_count": 298,
-    "speaker_count": 1,
-    "activity_type": "audio_mixing",
-    "technical_depth": "high"
-  }
+  "background_sounds": "music playback, mouse clicks, keyboard typing, equipment hum"
 }

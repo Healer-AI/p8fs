@@ -60,22 +60,90 @@ class EngramDocumentProcessor(DocumentProcessor):
         return "engram"
 
 
-class GenericDocumentProcessor(DocumentProcessor):
-    """Fallback processor for generic JSON/YAML documents."""
-    
+class AgentDocumentProcessor(DocumentProcessor):
+    """Processor for agent JSON Schema documents."""
+
     def __init__(self, repo: TenantRepository):
         self.repo = repo
-    
+
+    def can_process(self, data: dict, content_type: str) -> bool:
+        """Check if document is an agent (p8-type == 'agent' or kind == 'agent')."""
+        p8_type = data.get("p8-type") or data.get("p8Type") or data.get("kind")
+        return p8_type == "agent"
+
+    async def process(self, data: dict, content_type: str, tenant_id: str, session_id: UUID | None) -> Dict[str, Any]:
+        """Store agent as resource with category='agent'."""
+        from uuid import uuid4, NAMESPACE_DNS, uuid5
+
+        # Extract agent metadata
+        name = data.get("short_name") or data.get("name") or data.get("title", "unnamed-agent")
+        version = data.get("version", "1.0.0")
+        description = data.get("description", "")
+        fully_qualified_name = data.get("fully_qualified_name", f"user.agents.{name}")
+        use_in_dreaming = data.get("use_in_dreaming", False)
+
+        # Generate deterministic ID based on tenant and name for upsert
+        resource_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:agent:{name}"))
+
+        # Store full JSON schema as content
+        content_str = json.dumps(data, indent=2)
+
+        # Prepare resource record
+        resource = {
+            "id": resource_id,
+            "tenant_id": tenant_id,
+            "name": name,
+            "category": "agent",
+            "content": content_str,
+            "summary": description[:500] if description else None,
+            "ordinal": 0,
+            "graph_paths": [],
+            "metadata": {
+                "processor": self.processor_name,
+                "version": version,
+                "fully_qualified_name": fully_qualified_name,
+                "use_in_dreaming": use_in_dreaming,
+                "short_name": name,
+                "schema_type": "agent",
+                "properties": list(data.get("properties", {}).keys())[:20] if "properties" in data else [],
+                "tools": data.get("tools", []) if "tools" in data else [],
+            }
+        }
+
+        # Upsert resource (update if exists, create otherwise)
+        await self.repo.upsert(resource)
+
+        logger.info(f"Stored agent '{name}' (version {version}) as resource {resource_id}")
+
+        return {
+            "resource_id": resource_id,
+            "processor": self.processor_name,
+            "agent_name": name,
+            "version": version,
+            "use_in_dreaming": use_in_dreaming
+        }
+
+    @property
+    def processor_name(self) -> str:
+        return "agent"
+
+
+class GenericDocumentProcessor(DocumentProcessor):
+    """Fallback processor for generic JSON/YAML documents."""
+
+    def __init__(self, repo: TenantRepository):
+        self.repo = repo
+
     def can_process(self, data: dict, content_type: str) -> bool:
         """Can process any document as fallback."""
         return True
-    
+
     async def process(self, data: dict, content_type: str, tenant_id: str, session_id: UUID | None) -> Dict[str, Any]:
         """Store document as generic resource."""
         from uuid import uuid4
-        
+
         resource_id = uuid4()
-        
+
         await self.repo.create_resource({
             "id": str(resource_id),
             "tenant_id": tenant_id,
@@ -87,9 +155,9 @@ class GenericDocumentProcessor(DocumentProcessor):
                 "document_keys": list(data.keys())[:10]  # Store some metadata about the document
             }
         })
-        
+
         return {"resource_id": str(resource_id), "processor": self.processor_name}
-    
+
     @property
     def processor_name(self) -> str:
         return "generic"
@@ -108,6 +176,7 @@ class ProcessorRegistry:
         # Add processors in priority order (most specific first)
         self.processors = [
             EngramDocumentProcessor(self.repo),
+            AgentDocumentProcessor(self.repo),
             GenericDocumentProcessor(self.repo),  # Fallback processor
         ]
     

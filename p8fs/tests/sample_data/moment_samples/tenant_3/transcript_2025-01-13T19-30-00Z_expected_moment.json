@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T19:30:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "07:30 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 9.92,
+    "word_count": 289,
+    "speaker_count": 2,
+    "meeting_type": "client_dinner",
+    "business_outcome": "positive"
   },
   "name": "Client Dinner - Riverside Project Discussion",
   "content": "James meeting client Patricia over dinner to discuss Riverside project bid ahead of board meeting. Presented $12.8M bid with value engineering option to meet $12M budget cap through facade material substitution (fiber cement replacing aluminum panels, saving $600K). Patricia questioned performance implications; James assured 50-year warranty and proven longevity, noting only aesthetic difference. Timeline discussion: 18 months groundbreaking to occupancy with April start for fall next year tenant move-in. James emphasized honest communication about construction uncertainties (weather, supply chain, inspections) versus unrealistic promises. Patricia appreciated candor and company's on-time delivery track record. Agreed to recommend bid to board with Friday decision expected. Relationship-building through transparent business discussion.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-13T19:30:00Z",
   "resource_ends_timestamp": "2025-01-13T19:39:55Z",
   "moment_type": "conversation",
-  "emotion_tags": ["professional", "confident", "diplomatic", "strategic"],
-  "topic_tags": ["client-relations", "business-development", "value-engineering", "project-timeline", "trust-building"],
-  "present_persons": {
-    "fp_james_t3": {
-      "fingerprint_id": "fp_james_t3",
-      "user_id": "user_james_001",
-      "user_label": "James"
+  "emotion_tags": [
+    "professional",
+    "confident",
+    "diplomatic",
+    "strategic"
+  ],
+  "topic_tags": [
+    "client-relations",
+    "business-development",
+    "value-engineering",
+    "project-timeline",
+    "trust-building"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_james_t3",
+      "name": "James",
+      "comment": "User ID: user_james_001"
     },
-    "fp_patricia_t3": {
-      "fingerprint_id": "fp_patricia_t3",
-      "user_id": "user_patricia_006",
-      "user_label": "Patricia"
+    {
+      "id": "fp_patricia_t3",
+      "name": "Patricia",
+      "comment": "User ID: user_patricia_006"
     }
-  },
+  ],
   "location": "restaurant",
-  "background_sounds": "restaurant ambiance, clinking dishes, background conversations, soft music",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 9.92,
-    "word_count": 289,
-    "speaker_count": 2,
-    "meeting_type": "client_dinner",
-    "business_outcome": "positive"
-  }
+  "background_sounds": "restaurant ambiance, clinking dishes, background conversations, soft music"
 }

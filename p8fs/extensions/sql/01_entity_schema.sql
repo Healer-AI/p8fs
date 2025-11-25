@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS embeddings.agents_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.agents(id) ON DELETE CASCADE,
@@ -119,10 +119,16 @@ CREATE TABLE IF NOT EXISTS public.files (
     content_hash TEXT,
     upload_timestamp TIMESTAMPTZ,
     metadata JSONB,
+    parsing_metadata JSONB,
+    derived_attributes JSONB,
+    model_pipeline_run_at TIMESTAMPTZ,
+    encryption_key_owner TEXT,
     tenant_id TEXT NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_files_metadata_gin ON files USING GIN (metadata);
+CREATE INDEX IF NOT EXISTS idx_files_parsing_metadata_gin ON files USING GIN (parsing_metadata);
+CREATE INDEX IF NOT EXISTS idx_files_derived_attributes_gin ON files USING GIN (derived_attributes);
 
 -- Register entity for graph integration
 SELECT * FROM p8.register_entities('files', 'id', false, 'p8graph');
@@ -234,6 +240,81 @@ CREATE TRIGGER update_language_model_apis_updated_at
     FOR EACH ROW 
     EXECUTE FUNCTION update_updated_at_column();
 
+-- Moment Model
+CREATE TABLE IF NOT EXISTS public.moments (
+    id UUID PRIMARY KEY NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    name TEXT NOT NULL,
+    category TEXT,
+    content TEXT NOT NULL,
+    summary TEXT,
+    ordinal BIGINT,
+    uri TEXT,
+    metadata JSONB,
+    graph_paths JSONB,
+    resource_timestamp TIMESTAMPTZ,
+    userid TEXT,
+    resource_ends_timestamp TIMESTAMPTZ,
+    present_persons JSONB,
+    location TEXT,
+    background_sounds TEXT,
+    moment_type TEXT,
+    emotion_tags JSONB,
+    topic_tags JSONB,
+    images JSONB,
+    speakers JSONB,
+    key_emotions JSONB,
+    tenant_id TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_moments_metadata_gin ON moments USING GIN (metadata);
+CREATE INDEX IF NOT EXISTS idx_moments_graph_paths_gin ON moments USING GIN (graph_paths);
+CREATE INDEX IF NOT EXISTS idx_moments_present_persons_gin ON moments USING GIN (present_persons);
+CREATE INDEX IF NOT EXISTS idx_moments_emotion_tags_gin ON moments USING GIN (emotion_tags);
+CREATE INDEX IF NOT EXISTS idx_moments_topic_tags_gin ON moments USING GIN (topic_tags);
+CREATE INDEX IF NOT EXISTS idx_moments_images_gin ON moments USING GIN (images);
+CREATE INDEX IF NOT EXISTS idx_moments_speakers_gin ON moments USING GIN (speakers);
+CREATE INDEX IF NOT EXISTS idx_moments_key_emotions_gin ON moments USING GIN (key_emotions);
+
+-- Ensure business key is unique per tenant
+ALTER TABLE public.moments DROP CONSTRAINT IF EXISTS moments_name_tenant_id_key;
+ALTER TABLE public.moments ADD CONSTRAINT moments_name_tenant_id_key UNIQUE (name, tenant_id);
+
+-- Register entity for graph integration
+SELECT * FROM p8.register_entities('moments', 'name', false, 'p8graph');
+
+-- Create trigger for automatic updated_at timestamp
+DROP TRIGGER IF EXISTS update_moments_updated_at ON public.moments;
+CREATE TRIGGER update_moments_updated_at 
+    BEFORE UPDATE ON public.moments
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Create embeddings schema if it doesn't exist
+CREATE SCHEMA IF NOT EXISTS embeddings;
+
+CREATE TABLE IF NOT EXISTS embeddings.moments_embeddings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    entity_id UUID NOT NULL,
+    field_name VARCHAR(255) NOT NULL,
+    embedding_provider VARCHAR(255) NOT NULL,
+    embedding_vector vector(384),
+    tenant_id TEXT NOT NULL,
+    vector_dimension INTEGER DEFAULT 384,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    FOREIGN KEY (entity_id) REFERENCES public.moments(id) ON DELETE CASCADE,
+    UNIQUE(entity_id, field_name, tenant_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_vector_cosine ON embeddings.moments_embeddings USING ivfflat (embedding_vector vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_vector_l2 ON embeddings.moments_embeddings USING ivfflat (embedding_vector vector_l2_ops);
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_vector_ip ON embeddings.moments_embeddings USING ivfflat (embedding_vector vector_ip_ops);
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_entity_field ON embeddings.moments_embeddings (entity_id, field_name);
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_provider ON embeddings.moments_embeddings (embedding_provider);
+CREATE INDEX IF NOT EXISTS idx_moments_embeddings_field_provider ON embeddings.moments_embeddings (field_name, embedding_provider);
+
 -- Project Model
 CREATE TABLE IF NOT EXISTS public.projects (
     id UUID PRIMARY KEY NOT NULL,
@@ -272,9 +353,9 @@ CREATE TABLE IF NOT EXISTS embeddings.projects_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.projects(id) ON DELETE CASCADE,
@@ -309,8 +390,12 @@ CREATE TABLE IF NOT EXISTS public.resources (
 CREATE INDEX IF NOT EXISTS idx_resources_metadata_gin ON resources USING GIN (metadata);
 CREATE INDEX IF NOT EXISTS idx_resources_graph_paths_gin ON resources USING GIN (graph_paths);
 
+-- Ensure business key is unique per tenant
+ALTER TABLE public.resources DROP CONSTRAINT IF EXISTS resources_name_tenant_id_key;
+ALTER TABLE public.resources ADD CONSTRAINT resources_name_tenant_id_key UNIQUE (name, tenant_id);
+
 -- Register entity for graph integration
-SELECT * FROM p8.register_entities('resources', 'id', false, 'p8graph');
+SELECT * FROM p8.register_entities('resources', 'name', false, 'p8graph');
 
 -- Create trigger for automatic updated_at timestamp
 DROP TRIGGER IF EXISTS update_resources_updated_at ON public.resources;
@@ -327,9 +412,9 @@ CREATE TABLE IF NOT EXISTS embeddings.resources_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.resources(id) ON DELETE CASCADE,
@@ -361,6 +446,7 @@ CREATE TABLE IF NOT EXISTS public.sessions (
     session_completed_at TIMESTAMPTZ,
     graph_paths JSONB,
     userid TEXT,
+    moment_id TEXT,
     tenant_id TEXT NOT NULL
 );
 
@@ -385,9 +471,9 @@ CREATE TABLE IF NOT EXISTS embeddings.sessions_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.sessions(id) ON DELETE CASCADE,
@@ -438,9 +524,9 @@ CREATE TABLE IF NOT EXISTS embeddings.tasks_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.tasks(id) ON DELETE CASCADE,
@@ -465,11 +551,14 @@ CREATE TABLE IF NOT EXISTS public.tenants (
     device_ids JSONB,
     storage_bucket TEXT,
     metadata JSONB,
-    active BOOLEAN
+    active BOOLEAN,
+    security_policy JSONB,
+    encryption_wait_time_days BIGINT
 );
 
 CREATE INDEX IF NOT EXISTS idx_tenants_device_ids_gin ON tenants USING GIN (device_ids);
 CREATE INDEX IF NOT EXISTS idx_tenants_metadata_gin ON tenants USING GIN (metadata);
+CREATE INDEX IF NOT EXISTS idx_tenants_security_policy_gin ON tenants USING GIN (security_policy);
 
 -- Register entity for graph integration
 SELECT * FROM p8.register_entities('tenants', 'id', false, 'p8graph');
@@ -560,9 +649,9 @@ CREATE TABLE IF NOT EXISTS embeddings.users_embeddings (
     entity_id UUID NOT NULL,
     field_name VARCHAR(255) NOT NULL,
     embedding_provider VARCHAR(255) NOT NULL,
-    embedding_vector vector(1536),
+    embedding_vector vector(384),
     tenant_id TEXT NOT NULL,
-    vector_dimension INTEGER DEFAULT 1536,
+    vector_dimension INTEGER DEFAULT 384,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     FOREIGN KEY (entity_id) REFERENCES public.users(id) ON DELETE CASCADE,

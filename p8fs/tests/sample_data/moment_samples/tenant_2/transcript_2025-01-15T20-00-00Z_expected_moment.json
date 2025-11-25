@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T20:00:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "08:00 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.23,
+    "word_count": 301,
+    "speaker_count": 2,
+    "meeting_type": "peer_consultation",
+    "professional_network": "music_industry"
   },
   "name": "Coffee Meeting with Producer Marcus - Production Advice",
   "content": "Maya meeting fellow producer Marcus at coffee shop to discuss album production concerns. Expressed worry about track three mix density on streaming platforms. Marcus advised testing on multiple playback systems (phone speakers, car stereos) rather than just studio monitors. Discussed loudness targeting: agreed on -14 LUFS to preserve dynamics and avoid loudness war trap, emphasizing importance of dynamic range for listener engagement. Decided to send album for professional mastering rather than self-mastering. Marcus recommended Sarah Chen as mastering engineer experienced with indie music and dynamic preservation. Supportive peer mentorship providing technical validation and practical production guidance.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-15T20:00:00Z",
   "resource_ends_timestamp": "2025-01-15T20:10:14Z",
   "moment_type": "conversation",
-  "emotion_tags": ["uncertain", "collaborative", "reassured", "thoughtful"],
-  "topic_tags": ["music-production", "mastering", "mixing", "peer-mentorship", "technical-advice"],
-  "present_persons": {
-    "fp_maya_t2": {
-      "fingerprint_id": "fp_maya_t2",
-      "user_id": "user_maya_001",
-      "user_label": "Maya"
+  "emotion_tags": [
+    "uncertain",
+    "collaborative",
+    "reassured",
+    "thoughtful"
+  ],
+  "topic_tags": [
+    "music-production",
+    "mastering",
+    "mixing",
+    "peer-mentorship",
+    "technical-advice"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_maya_t2",
+      "name": "Maya",
+      "comment": "User ID: user_maya_001"
     },
-    "fp_marcus_t2": {
-      "fingerprint_id": "fp_marcus_t2",
-      "user_id": "user_marcus_006",
-      "user_label": "Marcus"
+    {
+      "id": "fp_marcus_t2",
+      "name": "Marcus",
+      "comment": "User ID: user_marcus_006"
     }
-  },
+  ],
   "location": "coffee_shop",
-  "background_sounds": "cafe ambiance, espresso machine, background chatter, cups clinking",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.23,
-    "word_count": 301,
-    "speaker_count": 2,
-    "meeting_type": "peer_consultation",
-    "professional_network": "music_industry"
-  }
+  "background_sounds": "cafe ambiance, espresso machine, background chatter, cups clinking"
 }

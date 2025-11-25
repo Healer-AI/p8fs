@@ -6,6 +6,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jwt.exceptions import PyJWTError as JWTError, ExpiredSignatureError
 from p8fs_auth.services.jwt_key_manager import JWTKeyManager
 from p8fs_cluster.logging.setup import get_logger
+from p8fs_cluster.config.settings import config
 from pydantic import BaseModel
 from typing import Optional
 
@@ -37,27 +38,45 @@ class TokenPayload(BaseModel):
 
 async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> TokenPayload:
     """Verify JWT token and return payload.
-    
+
     MCP Specification Section: Access Token Usage
     - Validates Bearer tokens from Authorization header
     - TODO: Add resource parameter validation for token audience binding
     """
+    # If auth is disabled (local testing only), return a test token payload
+    if config.auth_disabled:
+        logger.warning("AUTH DISABLED: Bypassing JWT validation - only for local testing!")
+        return TokenPayload(
+            sub=config.default_tenant_id,
+            email="test@local.dev",
+            tenant=config.default_tenant_id,
+            client="test-client",
+            scope=["read", "write"],
+            device=None,
+            exp=9999999999,
+            iat=0
+        )
+
     token = credentials.credentials
     error_code = None
     error_detail = None
-    
+
     try:
         # Use proper ES256 verification through JWTKeyManager
         jwt_manager = JWTKeyManager()
         payload = await jwt_manager.verify_token(token)
-        
+
+        # Log full payload for debugging (excluding sensitive fields)
+        debug_payload = {k: v for k, v in payload.items() if k not in ['exp', 'iat', 'nbf']}
+        logger.debug(f"Token payload received: {debug_payload}")
+
         # Validate required fields
         if not payload.get("sub") and not payload.get("user_id"):
             error_code = "AUTH_INVALID_TOKEN_SUBJECT"
             error_detail = "Token missing subject claim"
             logger.warning(f"Token validation failed: {error_detail} token={token[:20]}...")
             raise ValueError(error_detail)
-            
+
         # For device flow tokens, the sub claim IS the tenant_id
         # Regular tokens have separate tenant claim
         tenant_value = payload.get("tenant") or payload.get("tenant_id")
@@ -71,7 +90,7 @@ async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(secur
             else:
                 error_code = "AUTH_INVALID_TOKEN_TENANT"
                 error_detail = "Token missing tenant claim"
-                logger.warning(f"Token validation failed: {error_detail} token={token[:20]}... sub={sub_value}")
+                logger.warning(f"Token validation failed: {error_detail}. Full payload: {debug_payload}")
                 raise ValueError(error_detail)
         
         # Map JWT claims to our TokenPayload structure
@@ -131,26 +150,55 @@ async def get_current_user(token_payload: TokenPayload = Depends(verify_token)) 
 
 async def get_optional_token(credentials: Optional[HTTPAuthorizationCredentials] = Depends(optional_security)) -> Optional[TokenPayload]:
     """Get optional token payload without raising auth errors."""
+    # If auth is disabled (local testing only), return a test token payload
+    if config.auth_disabled:
+        logger.debug("AUTH DISABLED: Bypassing JWT validation for optional token")
+        return TokenPayload(
+            sub=config.default_tenant_id,
+            email="test@local.dev",
+            tenant=config.default_tenant_id,
+            client="test-client",
+            scope=["read", "write"],
+            device=None,
+            exp=9999999999,
+            iat=0
+        )
+
     if not credentials:
         return None
-    
+
     try:
         jwt_manager = JWTKeyManager()
         payload = await jwt_manager.verify_token(credentials.credentials)
-        
+
+        # Log full payload for debugging (excluding sensitive fields)
+        debug_payload = {k: v for k, v in payload.items() if k not in ['exp', 'iat', 'nbf']}
+        logger.debug(f"Optional token payload received: {debug_payload}")
+
         # Validate required fields
         if not payload.get("sub") and not payload.get("user_id"):
             logger.debug("Optional token missing subject claim")
             return None
-            
-        if not payload.get("tenant"):
-            logger.debug("Optional token missing tenant claim")
-            return None
-        
+
+        # For device flow tokens, the sub claim IS the tenant_id
+        # Regular tokens have separate tenant claim
+        tenant_value = payload.get("tenant") or payload.get("tenant_id")
+        if not tenant_value:
+            # Check if this is a device flow token where sub is tenant_id
+            sub_value = payload.get("sub") or payload.get("user_id", "")
+            if sub_value.startswith("tenant-"):
+                logger.debug(f"Optional token: Device flow token detected, using sub as tenant_id")
+                tenant_value = sub_value
+            else:
+                logger.warning(f"Optional token missing tenant claim. Full payload: {debug_payload}")
+                return None
+
         return TokenPayload(
             sub=payload.get("sub") or payload.get("user_id"),
             email=payload.get("email", ""),
-            tenant=payload.get("tenant", ""),
+            tenant=tenant_value,
+            client=payload.get("client_id", ""),
+            scope=payload.get("scope", "").split() if isinstance(payload.get("scope"), str) else payload.get("scope", []),
             device=payload.get("device_id"),
             exp=payload.get("exp", 0),
             iat=payload.get("iat", 0)

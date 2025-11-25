@@ -101,16 +101,10 @@ def create_sample_moments(tenant_id: str) -> list[dict[str, Any]]:
             "images": SAMPLE_IMAGES["device_setup"][:1],
             "emotion_tags": ["welcoming", "hopeful", "motivated", "excited"],
             "topic_tags": ["onboarding", "device-setup", "introduction", "goals"],
-            "present_persons": {
-                "user": {
-                    "fingerprint_id": "user",
-                    "user_label": "You",
-                },
-                "eepis": {
-                    "fingerprint_id": "eepis",
-                    "user_label": "Eepis",
-                },
-            },
+            "present_persons": [
+                {"id": "user", "name": "You"},
+                {"id": "eepis", "name": "Eepis"},
+            ],
             "uri": f"sample://moments/device-setup-{base_time.date()}",
             "created_at": now,
             "updated_at": now,
@@ -161,16 +155,10 @@ def create_sample_moments(tenant_id: str) -> list[dict[str, Any]]:
             "images": SAMPLE_IMAGES["goal_setting"],
             "emotion_tags": ["focused", "determined", "thoughtful", "encouraging"],
             "topic_tags": ["goals", "career-growth", "planning", "leadership", "skill-development"],
-            "present_persons": {
-                "user": {
-                    "fingerprint_id": "user",
-                    "user_label": "You",
-                },
-                "eepis": {
-                    "fingerprint_id": "eepis",
-                    "user_label": "Eepis",
-                },
-            },
+            "present_persons": [
+                {"id": "user", "name": "You"},
+                {"id": "eepis", "name": "Eepis"},
+            ],
             "uri": f"sample://moments/goal-setting-{base_time.date()}",
             "created_at": now,
             "updated_at": now,
@@ -221,16 +209,10 @@ def create_sample_moments(tenant_id: str) -> list[dict[str, Any]]:
             "images": SAMPLE_IMAGES["career"],
             "emotion_tags": ["reflective", "thoughtful", "honest", "encouraging"],
             "topic_tags": ["career", "aspirations", "leadership", "confidence", "mentorship"],
-            "present_persons": {
-                "user": {
-                    "fingerprint_id": "user",
-                    "user_label": "You",
-                },
-                "eepis": {
-                    "fingerprint_id": "eepis",
-                    "user_label": "Eepis",
-                },
-            },
+            "present_persons": [
+                {"id": "user", "name": "You"},
+                {"id": "eepis", "name": "Eepis"},
+            ],
             "uri": f"sample://moments/career-discussion-{base_time.date()}",
             "created_at": now,
             "updated_at": now,
@@ -287,16 +269,10 @@ def create_sample_moments(tenant_id: str) -> list[dict[str, Any]]:
             "images": SAMPLE_IMAGES["reflection"][:1],
             "emotion_tags": ["proud", "encouraging", "reflective", "accomplished"],
             "topic_tags": ["reflection", "progress", "wins", "goals", "work-life-balance"],
-            "present_persons": {
-                "user": {
-                    "fingerprint_id": "user",
-                    "user_label": "You",
-                },
-                "eepis": {
-                    "fingerprint_id": "eepis",
-                    "user_label": "Eepis",
-                },
-            },
+            "present_persons": [
+                {"id": "user", "name": "You"},
+                {"id": "eepis", "name": "Eepis"},
+            ],
             "uri": f"sample://moments/weekly-reflection-{base_time.date()}",
             "created_at": now,
             "updated_at": now,
@@ -359,16 +335,10 @@ def create_sample_moments(tenant_id: str) -> list[dict[str, Any]]:
             "images": SAMPLE_IMAGES["wellness"] + SAMPLE_IMAGES["goal_setting"][:1],
             "emotion_tags": ["motivated", "supportive", "solution-focused", "committed"],
             "topic_tags": ["planning", "work-life-balance", "networking", "boundaries", "action-steps"],
-            "present_persons": {
-                "user": {
-                    "fingerprint_id": "user",
-                    "user_label": "You",
-                },
-                "eepis": {
-                    "fingerprint_id": "eepis",
-                    "user_label": "Eepis",
-                },
-            },
+            "present_persons": [
+                {"id": "user", "name": "You"},
+                {"id": "eepis", "name": "Eepis"},
+            ],
             "uri": f"sample://moments/action-planning-{base_time.date()}",
             "created_at": now,
             "updated_at": now,
@@ -456,8 +426,9 @@ async def initialize_tenant_sample_data(tenant_id: str) -> dict[str, Any]:
         moment_ids = []
         for moment_data in moments_data:
             try:
-                # Insert moment
-                result = await moment_repo.upsert([moment_data])
+                # Use put() instead of upsert() to trigger entity indexing in KV store
+                moment = Moment(**moment_data)
+                await moment_repo.put(moment)
                 moment_ids.append(moment_data["id"])
                 logger.info(f"Created sample moment: {moment_data['name']}")
             except Exception as e:
@@ -476,7 +447,9 @@ async def initialize_tenant_sample_data(tenant_id: str) -> dict[str, Any]:
 
             for session_data in sessions_data:
                 try:
-                    result = await session_repo.upsert([session_data])
+                    # Use put() instead of upsert() to trigger entity indexing in KV store
+                    session = Session(**session_data)
+                    await session_repo.put(session)
                     session_ids.append(session_data["id"])
                     logger.info(f"Created sample session for moment: {moment_data['name']}")
                 except Exception as e:

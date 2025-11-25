@@ -1,6 +1,6 @@
 [project]
 name = "p8fs-auth"
-version = "1.1.27"
+version = "1.2.6"
 description = "Mobile-first authentication system with OAuth 2.1 compliance and end-to-end encryption"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,15 +20,6 @@ dependencies = [
     "p8fs",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.4.0",
-    "pytest-asyncio>=0.21.0",
-    "pytest-mock>=3.11.0",
-    "pytest-cov>=4.1.0",
-    "ruff>=0.1.6",
-]
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -44,7 +35,7 @@ p8fs-auth = "p8fs_auth.cli.main:main"
 
 [tool.ruff]
 line-length = 88
-target-version = "1.1.27"
+target-version = "1.2.6"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM"]
@@ -65,6 +56,9 @@ asyncio_default_fixture_loop_scope = "function"
 
 [dependency-groups]
 dev = [
+    "pytest>=7.4.0",
     "pytest-asyncio>=1.1.0",
+    "pytest-mock>=3.11.0",
     "pytest-cov>=6.3.0",
+    "ruff>=0.1.6",
 ]

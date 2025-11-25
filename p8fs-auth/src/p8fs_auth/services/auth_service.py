@@ -541,9 +541,40 @@ class AuthenticationService:
         # Reference: p8fs-auth/docs/endpoint-implementation.md - "For public clients, rotate refresh token"
         if client.client_type == "public":
             await self.token_repository.revoke_auth_token(token.token_id)
-        
-        # Issue new tokens
-        return await self._issue_tokens(token.user_id, client_id, scope=token.scope)
+
+        # Preserve additional claims from original token (email, tenant, etc.)
+        additional_claims = {}
+        if token.tenant_id:
+            additional_claims["tenant"] = token.tenant_id
+            logger.info(f"[REFRESH] Adding tenant claim: {token.tenant_id}")
+        else:
+            logger.warning(f"[REFRESH] Token has NO tenant_id! token_id={token.token_id}")
+
+        if token.device_id:
+            additional_claims["device_id"] = token.device_id
+            logger.info(f"[REFRESH] Adding device_id claim: {token.device_id}")
+
+        # Try to fetch email from tenant if tenant_id is available
+        if token.tenant_id:
+            try:
+                from p8fs_auth.models.repository import get_auth_repository
+                tenant = await get_auth_repository().get_tenant_by_id(token.tenant_id)
+                if tenant:
+                    additional_claims["email"] = tenant.email
+                    logger.info(f"[REFRESH] Adding email claim: {tenant.email}")
+                else:
+                    logger.warning(f"[REFRESH] Tenant not found for tenant_id: {token.tenant_id}")
+            except Exception as e:
+                # Non-critical - continue without email claim
+                logger.warning(f"Could not fetch tenant email for token refresh: {e}")
+
+        # Issue new tokens with preserved claims
+        return await self._issue_tokens(
+            token.user_id,
+            client_id,
+            scope=token.scope,
+            additional_claims=additional_claims if additional_claims else None
+        )
     
     async def revoke_token(
         self,
@@ -610,47 +641,59 @@ class AuthenticationService:
         self,
         user_id: str,
         client_id: str,
-        scope: list[str]
+        scope: list[str],
+        additional_claims: dict[str, any] | None = None
     ) -> dict[str, any]:
         """Issue access and refresh tokens.
-        
+
         Internal method to generate token pair.
         Uses JWT for access tokens with ES256 signing.
-        
+
         Reference: p8fs-auth/docs/authentication-flows.md - JWT Signing Keys (ES256)
         """
         # Generate access token JWT
         access_token_value = await self.jwt_manager.create_access_token(
             user_id=user_id,
             client_id=client_id,
-            scope=scope
+            scope=scope,
+            additional_claims=additional_claims
         )
         
         # Generate refresh token (opaque)
         refresh_token_value = base64.urlsafe_b64encode(
             secrets.token_bytes(32)
         ).decode('utf-8').rstrip('=')
-        
+
+        # Extract tenant_id and device_id from additional_claims if present
+        tenant_id = additional_claims.get("tenant") if additional_claims else None
+        device_id = additional_claims.get("device_id") if additional_claims else None
+
+        logger.info(f"[ISSUE_TOKENS] tenant_id={tenant_id}, device_id={device_id}, additional_claims={additional_claims}")
+
         # Store access token
         access_token = AuthToken(
             token_type=TokenType.ACCESS,
             token_value=access_token_value,
             user_id=user_id,
+            device_id=device_id,
             client_id=client_id,
             scope=scope,
-            expires_at=datetime.utcnow() + timedelta(seconds=self.access_token_ttl)
+            expires_at=datetime.utcnow() + timedelta(seconds=self.access_token_ttl),
+            tenant_id=tenant_id
         )
         await self.token_repository.create_auth_token(access_token)
-        
+
         # Store refresh token
         refresh_token = AuthToken(
             token_type=TokenType.REFRESH,
             token_value=refresh_token_value,
             user_id=user_id,
+            device_id=device_id,
             client_id=client_id,
             scope=scope,
             expires_at=datetime.utcnow() + timedelta(seconds=self.refresh_token_ttl),
-            refresh_token=refresh_token_value  # Self-reference for token family
+            refresh_token=refresh_token_value,  # Self-reference for token family
+            tenant_id=tenant_id
         )
         await self.token_repository.create_auth_token(refresh_token)
         

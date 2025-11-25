@@ -1,0 +1,227 @@
+kind: engram
+name: "Friday Afternoon 1-on-1 with Jamie"
+category: "meeting"
+summary: "Career development 1-on-1 with Jamie Lee discussing design leadership growth, design system expansion, and post-launch opportunities"
+resource_timestamp: "2024-11-15T16:30:00Z"
+uri: "meeting://one-on-one/jamie-2024-11-15"
+metadata:
+  device:
+    model: "MacBook Pro"
+    app: "Meeting Notes"
+    version: "1.0"
+  meeting:
+    duration_minutes: 30
+    location: "Sarah's Office"
+    meeting_type: "one_on_one"
+    meeting_series: "biweekly_1on1"
+content: |
+  Regular 1-on-1 with Jamie Lee to discuss career growth and upcoming opportunities.
+  This week's meeting had extra significance given Jamie's successful onboarding flow
+  work and validation from user research.
+
+  Sarah opened by recognizing Jamie's excellent work this week:
+  - Onboarding flow designs validated by user testing (75% success rate, 48% faster)
+  - Quick response to UX friction points identified Thursday
+  - Strong collaboration with Kevin (Frontend) on implementation
+  - Design thinking that balanced user needs with business timeline
+
+  Career development discussion focused on design leadership:
+
+  Jamie expressed interest in expanding beyond individual contributor role. Wants to
+  lead design system work and mentor junior designers as team grows. Feels ready for
+  more strategic influence on product direction.
+
+  Sarah proposed plan:
+  - Lead design system project post-launch (starting December)
+  - Take ownership of design-engineering collaboration process
+  - Mentor new designer joining in Q1 2025
+  - Present at design team all-hands in January
+  - Work toward Senior Designer promotion by Q2 2025
+
+  Design system project scope:
+  - Create comprehensive component library
+  - Document design patterns and guidelines
+  - Establish design-to-development workflow
+  - Build reusable assets for marketing and product teams
+  - Timeline: 3-month project starting December 1
+
+  Jamie was energized by the opportunity. Sees design system work as perfect next
+  challenge that leverages learnings from onboarding flow project (where component
+  consistency was a challenge).
+
+  Discussion also touched on work-life balance. Jamie appreciated the weekend break
+  after intense week, acknowledged the on-call requirement for launch, but felt
+  supported by the team.
+
+  Meeting concluded with clear action items:
+  - Sarah: Draft design system project charter by Nov 22
+  - Jamie: Outline initial component library scope by Nov 25
+  - Both: Check in after Thanksgiving to finalize plan
+  - Target: Present design system proposal to David in early December
+
+  This is exactly the kind of leadership development conversation that helps retain
+  top talent. Jamie's success this week earned the opportunity.
+
+graph_edges:
+  - dst: "Design System"
+    rel_type: "discusses"
+    weight: 1.0
+    properties:
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      confidence: 1.0
+
+  - dst: "Onboarding Flow Redesign"
+    rel_type: "reflects_on"
+    weight: 0.85
+    properties:
+      dst_entity_type: "project/design"
+      match_type: "explicit_reference"
+      context: "Jamie's work this week discussed as career development foundation"
+
+  - dst: "Thursday User Testing Review"
+    rel_type: "references"
+    weight: 0.7
+    properties:
+      dst_entity_type: "resource/meeting"
+      match_type: "temporal_reference"
+      context: "User testing validation cited as evidence of Jamie's growth"
+
+moments:
+  - name: "Recognition of Week's Work"
+    content: "Sarah recognized Jamie's successful onboarding flow work: validated by user testing, quick UX fixes, strong collaboration with Kevin, balancing user needs and business timeline."
+    summary: "Recognition for excellent onboarding flow design work"
+    resource_timestamp: "2024-11-15T16:32:00Z"
+    resource_ends_timestamp: "2024-11-15T16:40:00Z"
+    moment_type: "feedback"
+    emotion_tags: ["appreciative", "validating", "proud"]
+    topic_tags: ["performance-recognition", "design-excellence", "user-testing-validation"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, giving recognition"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, receiving feedback"
+    speakers:
+      - text: "The user testing results were fantastic. 75% success rate and 48% faster signup validates all your design decisions"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-15T16:34:00Z"
+        emotion: "appreciative"
+      - text: "And the way you quickly responded to Thursday's friction points with Kevin showed great collaboration"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-15T16:36:00Z"
+        emotion: "validating"
+    graph_edges:
+      - dst: "Sarah Chen"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "Product Manager"
+
+      - dst: "Jamie Lee"
+        rel_type: "attended_by"
+        weight: 1.0
+        properties:
+          dst_entity_type: "person/employee"
+          role: "Designer"
+
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "celebrates"
+        weight: 0.9
+        properties:
+          dst_entity_type: "project/design"
+
+      - dst: "Kevin Park"
+        rel_type: "mentions"
+        weight: 0.7
+        properties:
+          dst_entity_type: "person/employee"
+          context: "Collaboration with Kevin highlighted"
+
+  - name: "Career Growth Discussion"
+    content: "Jamie expressed interest in design leadership: leading design system, mentoring juniors, strategic product influence. Sarah proposed Senior Designer track with design system project as proving ground."
+    summary: "Career path discussion: design leadership and promotion track"
+    resource_timestamp: "2024-11-15T16:40:00Z"
+    resource_ends_timestamp: "2024-11-15T16:52:00Z"
+    moment_type: "planning"
+    emotion_tags: ["ambitious", "supportive", "strategic"]
+    topic_tags: ["career-development", "design-leadership", "promotion-planning"]
+    present_persons:
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, expressing career goals"
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager, supporting growth"
+    speakers:
+      - text: "I'm ready for more than individual contributor work. I want to lead the design system and mentor new designers"
+        speaker_identifier: "Jamie Lee"
+        timestamp: "2024-11-15T16:42:00Z"
+        emotion: "ambitious"
+      - text: "Perfect timing. Post-launch we need design system work, and you're the right person to lead it. This could be your path to Senior Designer"
+        speaker_identifier: "Sarah Chen"
+        timestamp: "2024-11-15T16:45:00Z"
+        emotion: "supportive"
+    metadata:
+      career_goal: "Senior Designer"
+      target_timeframe: "Q2 2025"
+      growth_opportunity: "Design system leadership"
+    graph_edges:
+      - dst: "Design System"
+        rel_type: "plans"
+        weight: 1.0
+        properties:
+          dst_entity_type: "project/design"
+          context: "Jamie to lead design system project"
+
+      - dst: "Jamie Lee"
+        rel_type: "develops"
+        weight: 0.95
+        properties:
+          dst_entity_type: "person/employee"
+          context: "Career development planning"
+
+  - name: "Design System Project Scoping"
+    content: "Defined design system scope: component library, design patterns, design-to-dev workflow, 3-month timeline starting December 1. Jamie energized by challenge leveraging onboarding flow learnings."
+    summary: "Design system project scoped: 3 months starting December"
+    resource_timestamp: "2024-11-15T16:52:00Z"
+    resource_ends_timestamp: "2024-11-15T17:00:00Z"
+    moment_type: "planning"
+    emotion_tags: ["energized", "focused", "creative"]
+    topic_tags: ["project-scoping", "design-system", "roadmap-planning"]
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Product Manager"
+      - id: "Jamie Lee"
+        name: "Jamie Lee"
+        comment: "Designer, will lead project"
+    metadata:
+      project_name: "Design System"
+      start_date: "2024-12-01"
+      duration_months: 3
+      project_owner: "Jamie Lee"
+      deliverables: ["component_library", "design_patterns", "workflow_documentation"]
+    graph_edges:
+      - dst: "Design System"
+        rel_type: "scopes"
+        weight: 1.0
+        properties:
+          dst_entity_type: "project/design"
+          context: "Project scope defined in 1-on-1"
+
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "builds_on"
+        weight: 0.75
+        properties:
+          dst_entity_type: "project/design"
+          context: "Design system leverages onboarding learnings"
+
+      - dst: "Launch Timeline"
+        rel_type: "follows"
+        weight: 0.7
+        properties:
+          dst_entity_type: "project/planning"
+          context: "Design system starts post-launch in December"

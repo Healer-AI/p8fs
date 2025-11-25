@@ -139,7 +139,7 @@ class DeviceCLI:
                     print(f"Using standard registration endpoint...")
 
                     response = await client.post(
-                        f"{self.base_url}/oauth/device/register",
+                        f"{self.base_url}/api/v1/oauth/device/register",
                         json={
                             "email": email,
                             "public_key": public_key_b64,
@@ -271,7 +271,7 @@ class DeviceCLI:
 
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{self.base_url}/oauth/device/approve",
+                    f"{self.base_url}/api/v1/oauth/device/approve",
                     json={
                         "user_code": user_code,
                         "approved": True,
@@ -332,7 +332,7 @@ class DeviceCLI:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.get(
-                    f"{self.base_url}/oauth/ping",
+                    f"{self.base_url}/api/v1/oauth/ping",
                     headers={
                         "Authorization": f"Bearer {access_token}"
                     }
@@ -393,7 +393,7 @@ class DeviceCLI:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{self.base_url}/oauth/token",
+                    f"{self.base_url}/api/v1/oauth/token",
                     data={
                         "grant_type": "refresh_token",
                         "refresh_token": refresh_token,
@@ -500,7 +500,7 @@ class DeviceCLI:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{self.base_url}/oauth/device/code",
+                    f"{self.base_url}/api/v1/oauth/device/code",
                     data={
                         "client_id": f"cli-{self.device_id}",
                         "scope": "read write"
@@ -654,7 +654,7 @@ class DeviceCLI:
 
                 async with httpx.AsyncClient(timeout=30.0) as client:
                     response = await client.post(
-                        f"{self.base_url}/oauth/token",
+                        f"{self.base_url}/api/v1/oauth/token",
                         data={
                             "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                             "device_code": device_code,

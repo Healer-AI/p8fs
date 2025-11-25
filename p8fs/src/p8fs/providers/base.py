@@ -244,10 +244,31 @@ class BaseSQLProvider(ABC):
     def get_json_type(self) -> str:
         """Get the JSON data type for this provider."""
         pass
-    
+
     @abstractmethod
     def supports_vector_operations(self) -> bool:
         """Check if provider supports native vector operations."""
+        pass
+
+    @abstractmethod
+    def get_recent_uploads_query(self, limit: int = 20) -> str:
+        """
+        Generate SQL query for recent file uploads with chunk aggregation.
+
+        Args:
+            limit: Maximum number of recent files to return
+
+        Returns:
+            SQL query string with dialect-specific JSON aggregation
+
+        Implementation should:
+        - Query files table with LEFT JOIN to resources
+        - Extract filename from metadata JSON field
+        - Aggregate chunk info with provider-specific JSON functions
+        - Order results by upload timestamp DESC
+        - Use provider's JSON aggregation syntax (json_agg vs JSON_ARRAYAGG)
+        - Handle ORDER BY in aggregation if supported by dialect
+        """
         pass
     
     def build_where_clause_with_params(self, conditions: dict[str, Any]) -> tuple[str, list[Any]]:

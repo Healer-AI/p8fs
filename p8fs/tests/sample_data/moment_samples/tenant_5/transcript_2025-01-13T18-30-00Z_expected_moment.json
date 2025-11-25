@@ -1,8 +1,12 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T18:30:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "06:30 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.18,
+    "word_count": 315,
+    "speaker_count": 1,
+    "activity_type": "earth_observation",
+    "mission_day": 87,
+    "personal_log": true
   },
   "name": "Personal Reflection - Earth Observation from Cupola",
   "content": "Commander Chen conducting evening Earth observation session from ISS Cupola window module, recording personal reflections on mission day 87. Observed orbital path across Mediterranean (Italy's coastline, Alps cloud formations), North Africa (Sahara Desert with Nile River corridor demonstrating civilization's water dependency), Indian Ocean region (Madagascar, developing typhoon system), Great Barrier Reef. Captured high-resolution coral reef imagery for scientific bleaching monitoring research. Philosophical reflection on unique orbital perspective: experiencing 16 daily sunrises/sunsets, witnessing Earth's fragile atmospheric boundary layer containing all human history, recognizing arbitrariness of political borders from space vantage point. Personal emotional processing: complex homesickness balanced against privilege of rare human experience, missing terrestrial sensations (rain smell, fresh coffee, wind) while appreciating extraordinary opportunity. Command responsibility weighing heavily regarding tomorrow's EVA mission - feeling protective concern for Torres and Kim's spacewalk safety despite comprehensive preparation. Contemplated daughter's future, expressing hope current generation pioneers accessible space exploration for next generation. Documented sunrise terminator crossing with atmospheric layer visualization (purple, blue, orange gradients). Paradox acknowledged: Earth's peaceful orbital appearance contrasting with ground-level complexity (typhoon beauty versus evacuation reality). Session concluded with practical transition to dinner and flight plan review while maintaining commitment to daily observation ritual.",
@@ -12,24 +16,28 @@
   "resource_timestamp": "2025-01-13T18:30:00Z",
   "resource_ends_timestamp": "2025-01-13T18:40:11Z",
   "moment_type": "reflection",
-  "emotion_tags": ["contemplative", "awestruck", "homesick", "hopeful", "responsible"],
-  "topic_tags": ["earth-observation", "personal-reflection", "command-responsibility", "family", "environmental-monitoring", "philosophical"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
+  "emotion_tags": [
+    "contemplative",
+    "awestruck",
+    "homesick",
+    "hopeful",
+    "responsible"
+  ],
+  "topic_tags": [
+    "earth-observation",
+    "personal-reflection",
+    "command-responsibility",
+    "family",
+    "environmental-monitoring",
+    "philosophical"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
     }
-  },
+  ],
   "location": "iss_cupola",
-  "background_sounds": "quiet ventilation, occasional camera shutter, gentle equipment hum",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.18,
-    "word_count": 315,
-    "speaker_count": 1,
-    "activity_type": "earth_observation",
-    "mission_day": 87,
-    "personal_log": true
-  }
+  "background_sounds": "quiet ventilation, occasional camera shutter, gentle equipment hum"
 }

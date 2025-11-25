@@ -39,8 +39,9 @@ BEGIN
         IF safe_key_list IS NULL OR array_length(safe_key_list, 1) IS NULL OR array_length(safe_key_list, 1) = 0 THEN
             result := '[]'::jsonb;
         ELSE
-            -- Use a safer approach: build the query with explicit array handling
-            query := format('SELECT jsonb_agg(to_jsonb(t)) FROM %I."%s" t WHERE t.%I::TEXT = ANY($1::TEXT[])', schema_name, pure_table_name, key_column);
+            -- Use the view which abstracts the key column to 'key' for all tables
+            -- Views are created by register_entities and map the actual key column to 'key'
+            query := format('SELECT jsonb_agg(to_jsonb(t)) FROM p8.vw_%s_%s t WHERE t.key::TEXT = ANY($1::TEXT[])', schema_name, pure_table_name);
             
             -- Execute the dynamic query with the safe key list
             EXECUTE query USING safe_key_list INTO result;

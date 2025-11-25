@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 from uuid import uuid4
 
-from p8fs.models.engram.models import Moment
+from p8fs.models.p8 import Moment
 from p8fs.repository.TenantRepository import TenantRepository
 
 

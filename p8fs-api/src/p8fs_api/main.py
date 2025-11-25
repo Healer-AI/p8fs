@@ -1,19 +1,54 @@
-"""P8FS API main application."""
+"""P8FS API main application.
 
+Authentication Configuration
+============================
+
+The API requires JWT bearer token authentication by default. For local development
+and testing, authentication can be disabled using the P8FS_AUTH_DISABLED setting.
+
+Environment Variables:
+  P8FS_AUTH_DISABLED: Set to 'true' to bypass JWT validation (default: false)
+                      WARNING: Only use for local development/testing
+
+Example Usage:
+  # Start API with auth disabled for local testing
+  P8FS_AUTH_DISABLED=true uvicorn src.p8fs_api.main:app --reload
+
+  # Test endpoints without valid JWT (still requires Authorization header)
+  curl -X GET http://localhost:8001/api/v1/entity/moments/ \\
+    -H "Authorization: Bearer fake-token"
+
+When auth is disabled:
+  - All endpoints return a test token with tenant_id 'tenant-test'
+  - JWT signature validation is bypassed
+  - Warning logged: "AUTH DISABLED: Bypassing JWT validation"
+  - Authorization header still required (can be any value)
+
+For production use:
+  - Never set P8FS_AUTH_DISABLED=true
+  - Use proper OAuth 2.1 device flow authentication
+  - See /api/v1/oauth/.well-known/openid-configuration for discovery
+"""
+
+import os
 import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from p8fs_cluster.config.settings import config
 from p8fs_cluster.logging.setup import get_logger, setup_service_logging
+from pathlib import Path
 
 from . import __version__
 from .middleware import setup_cors, setup_rate_limiting, setup_request_context
 from .models import ErrorResponse
 from .routers import (
+    admin_router,
     dev_auth_router,
+    files_router,
     health_router,
     icons_router,
     mcp_auth_router,
@@ -22,6 +57,8 @@ from .routers import (
     protected_chat_router,
     public_auth_router,
     public_chat_router,
+    rem_query_router,
+    slack_router,
 )
 
 # Setup logging for API service
@@ -34,25 +71,28 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     # Startup
     logger.info("Starting P8FS API", version=__version__)
-    
+
+    # Initialize OpenTelemetry observability (uses config.otel_service_name)
+    from .observability import setup_observability
+    setup_observability()
+
     # Initialize repository for p8fs-auth
     from p8fs_auth.models.repository import set_repository
 
     from .repositories.auth_repository import P8FSAuthRepository
-    
+
     logger.info("Initializing auth repository")
     auth_repo = P8FSAuthRepository()
     set_repository(auth_repo)
-    
-    # TODO: Initialize other service connections
-    # - p8fs-node client
-    # - Observability setup
-    
+
+    # Health checks now only run when /health endpoint is called with extended=True
+    # This prevents Docker build tests from failing when services are unavailable
+    logger.info("API started - health checks available via /health?extended=true")
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down P8FS API")
-    # TODO: Cleanup connections
 
 
 def create_app() -> FastAPI:
@@ -80,7 +120,27 @@ def create_app() -> FastAPI:
     
     app = FastAPI(
         title="P8FS API",
-        description="REST API, CLI, and MCP interfaces for the P8FS smart content management system",
+        description="""
+# P8FS Smart Content Management System
+
+REST API, CLI, and MCP interfaces for the P8FS platform.
+
+## Features
+- **OAuth 2.1 Authentication**: Device flow and token management
+- **Content Management**: Resources, files, and moments
+- **AI Integration**: LLM chat, embeddings, and semantic search
+- **MCP Support**: Model Context Protocol for IDE integration
+
+## Health & Status
+- Visit `/health` for system status and startup diagnostics
+- Check `/ready` for Kubernetes readiness probe
+- Check `/live` for Kubernetes liveness probe
+
+## Authentication
+Most endpoints require JWT bearer token authentication. See `/api/v1/oauth/.well-known/openid-configuration` for OAuth discovery.
+
+For local development, set `P8FS_AUTH_DISABLED=true` to bypass authentication (not for production use).
+        """,
         version=__version__,
         docs_url="/docs",
         redoc_url="/redoc",
@@ -88,10 +148,14 @@ def create_app() -> FastAPI:
         lifespan=app_lifespan
     )
     
+    # OpenTelemetry auto-instrumentation for FastAPI
+    from .observability import instrument_fastapi
+    instrument_fastapi(app)
+
     # Security middleware
     app.add_middleware(
-        TrustedHostMiddleware, 
-        allowed_hosts=["*"] if config.debug else ["localhost", "127.0.0.1", "*.p8fs.com", "testserver"]
+        TrustedHostMiddleware,
+        allowed_hosts=["*"] if config.debug else ["localhost", "127.0.0.1", "*.p8fs.com", "*.eepis.ai", "eepis.ai", "testserver"]
     )
     
     # CORS middleware
@@ -116,7 +180,7 @@ def create_app() -> FastAPI:
         request_id = f"req_{int(time.time() * 1000000)}"
 
         # Add request context
-        logger.info(
+        logger.debug(
             "Request started",
             method=request.method,
             url=str(request.url),
@@ -128,7 +192,7 @@ def create_app() -> FastAPI:
             response = await call_next(request)
 
             process_time = time.time() - start_time
-            logger.info(
+            logger.debug(
                 "Request completed",
                 status_code=response.status_code,
                 process_time=round(process_time, 4),
@@ -221,16 +285,20 @@ def create_app() -> FastAPI:
     
     # Public routers (no JWT auth required)
     app.include_router(health_router)                    # Health endpoints
+    app.include_router(admin_router)                    # Admin endpoints (bearer token auth)
     app.include_router(public_auth_router)              # OAuth token exchange, device registration
     app.include_router(public_chat_router, prefix="/api")  # Model listing endpoints (/api/v1/models)
     app.include_router(dev_auth_router)                 # Dev endpoints (dev token auth)
     app.include_router(mcp_auth_router)                 # MCP OAuth discovery endpoints
     app.include_router(icons_router)                    # Icon serving for email templates
+    app.include_router(slack_router)                    # Slack webhook endpoints
     
     # Protected routers (JWT auth required at router level)
     app.include_router(protected_auth_router)           # OAuth authorize, userinfo
     app.include_router(protected_chat_router, prefix="/api")  # Chat completions, agent endpoints
     app.include_router(moments_router)                  # Moments entity endpoints
+    app.include_router(files_router)                    # Files listing endpoints
+    app.include_router(rem_query_router, prefix="/api")  # REM query endpoints with AI conversion
     # Mount MCP server if it was created successfully
     if mcp_app:
         # Mount at /api so the MCP server is accessible at /api/mcp
@@ -302,17 +370,42 @@ def create_app() -> FastAPI:
             
         return response
     
-    # Root endpoint
-    @app.get("/", include_in_schema=False)
-    async def root():
-        return {
-            "name": "P8FS API",
-            "version": __version__,
-            "description": "REST API, CLI, and MCP interfaces for P8FS",
-            "docs": "/docs",
-            "health": "/health"
-        }
-    
+    # Static file serving for www.eepis.ai
+    static_dir = Path(__file__).parent / "static" / "www"
+    if static_dir.exists():
+        app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+        # Also mount assets and css at root level for www.eepis.ai
+        app.mount("/assets", StaticFiles(directory=str(static_dir / "assets")), name="assets")
+        app.mount("/css", StaticFiles(directory=str(static_dir / "css")), name="css")
+
+        @app.get("/", include_in_schema=False)
+        async def serve_landing_page():
+            """Serve the main landing page."""
+            index_file = static_dir / "index.html"
+            if index_file.exists():
+                return FileResponse(str(index_file))
+            return JSONResponse({"error": "Landing page not found"}, status_code=404)
+
+        @app.get("/{page}.html", include_in_schema=False)
+        async def serve_html_pages(page: str):
+            """Serve HTML pages from the static directory."""
+            html_file = static_dir / f"{page}.html"
+            if html_file.exists():
+                return FileResponse(str(html_file))
+            return JSONResponse({"error": "Page not found"}, status_code=404)
+    else:
+        logger.warning(f"Static directory not found: {static_dir}")
+
+        @app.get("/", include_in_schema=False)
+        async def root():
+            return {
+                "name": "P8FS API",
+                "version": __version__,
+                "description": "REST API, CLI, and MCP interfaces for P8FS",
+                "docs": "/docs",
+                "health": "/health"
+            }
+
     return app
 
 

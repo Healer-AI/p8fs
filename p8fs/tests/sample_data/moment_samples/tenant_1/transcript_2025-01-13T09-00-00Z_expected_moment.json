@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T09:00:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "09:00 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.2,
+    "word_count": 248,
+    "speaker_count": 3,
+    "meeting_type": "daily_standup",
+    "team": "engineering"
   },
   "name": "Engineering Team Standup - Sprint Progress",
   "content": "Daily standup meeting with Alex, Jordan, and Sam discussing sprint progress. Alex completed authentication middleware refactor and is moving to rate limiting implementation. Jordan is 60% complete on dashboard redesign but experiencing delays with charting library integration. Sam finished API versioning early and offered to pair with Jordan on data transformation. Main blocker identified: database migration approval from ops team. Team coordination is strong with proactive problem-solving.",
@@ -12,33 +15,35 @@
   "resource_timestamp": "2025-01-13T09:00:00Z",
   "resource_ends_timestamp": "2025-01-13T09:10:12Z",
   "moment_type": "meeting",
-  "emotion_tags": ["focused", "collaborative", "productive"],
-  "topic_tags": ["daily-standup", "sprint-progress", "engineering", "pair-programming", "blockers"],
-  "present_persons": {
-    "fp_alex_t1": {
-      "fingerprint_id": "fp_alex_t1",
-      "user_id": "user_alex_001",
-      "user_label": "Alex"
+  "emotion_tags": [
+    "focused",
+    "collaborative",
+    "productive"
+  ],
+  "topic_tags": [
+    "daily-standup",
+    "sprint-progress",
+    "engineering",
+    "pair-programming",
+    "blockers"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_alex_t1",
+      "name": "Alex",
+      "comment": "User ID: user_alex_001"
     },
-    "fp_jordan_t1": {
-      "fingerprint_id": "fp_jordan_t1",
-      "user_id": "user_jordan_002",
-      "user_label": "Jordan"
+    {
+      "id": "fp_jordan_t1",
+      "name": "Jordan",
+      "comment": "User ID: user_jordan_002"
     },
-    "fp_sam_t1": {
-      "fingerprint_id": "fp_sam_t1",
-      "user_id": "user_sam_003",
-      "user_label": "Sam"
+    {
+      "id": "fp_sam_t1",
+      "name": "Sam",
+      "comment": "User ID: user_sam_003"
     }
-  },
+  ],
   "location": "video_conference",
-  "background_sounds": "keyboard typing, occasional mouse clicks",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.2,
-    "word_count": 248,
-    "speaker_count": 3,
-    "meeting_type": "daily_standup",
-    "team": "engineering"
-  }
+  "background_sounds": "keyboard typing, occasional mouse clicks"
 }

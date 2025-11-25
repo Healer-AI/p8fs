@@ -1,0 +1,26 @@
+apiVersion: pingcap.com/v1alpha1
+kind: TidbCluster
+metadata:
+  name: fresh-cluster
+  namespace: tikv-cluster
+spec:
+  tidb:
+    config: |
+      [log]
+      level = "info"
+      [performance]
+      txn-entry-size-limit = 125829120
+      txn-total-size-limit = 1073741824
+      # Transaction timeout settings to prevent stuck transactions
+      max-txn-ttl = 3600000  # 1 hour max transaction time
+      [prepared-plan-cache]
+      enabled = true
+      [pessimistic-txn]
+      # Maximum TTL for pessimistic transactions (milliseconds)
+      max-retry-count = 256
+      [stmt-summary]
+      enable = true
+      # MySQL compatibility settings
+      [instance]
+      tidb_idle_transaction_timeout = 300  # 5 minutes idle transaction timeout
+      tidb_max_tidb_stmt_count = 5000      # Maximum statements per session

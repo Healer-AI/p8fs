@@ -1,34 +1,40 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T07:30:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "07:30 AM UTC"
-  },
-  "name": "Day 1 - Alpine Camp Setup at 1847m",
-  "content": "Lena establishing base camp at 1847m elevation in the Alps after 5 AM start hike. Assessed conditions: 2°C temperature, 15cm snow depth, north wind. Set up four-season tent on frozen ground with secure staking against wind. Organized critical gear: minus-15 rated sleeping bag, bear-resistant food container. Located water source 50m away requiring filtration and boiling. Started camp stove for coffee while planning navigation. Confirmed GPS position and identified western trail to summit. Reviewed three-day forecast: decent conditions with possible Wednesday snow. Planned acclimatization strategy: day hike to 2400m with return to camp. Expressed deep appreciation for solo wilderness experience - peace, silence, mountain views from camp, escape from urban noise. Methodical preparation balanced with mindful presence.",
-  "summary": "Camp setup at 1847m: secured tent in snow, organized gear, located water, planned 2400m acclimatization hike",
-  "category": "outdoor",
-  "uri": "s3://p8fs-tenant4/recordings/2025-01-13/morning_setup.wav",
-  "resource_timestamp": "2025-01-13T07:30:00Z",
-  "resource_ends_timestamp": "2025-01-13T07:40:01Z",
-  "moment_type": "observation",
-  "emotion_tags": ["focused", "peaceful", "prepared", "appreciative"],
-  "topic_tags": ["camping", "alps", "wilderness", "preparation", "solitude"],
-  "present_persons": {
-    "fp_lena_t4": {
-      "fingerprint_id": "fp_lena_t4",
-      "user_id": "user_lena_001",
-      "user_label": "Lena"
-    }
-  },
-  "location": "46.5500,8.7000",
-  "background_sounds": "wind, stream flowing nearby, tent fabric rustling, stove hissing",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 10.02,
     "word_count": 278,
     "speaker_count": 1,
     "activity_type": "camping_setup",
     "elevation_meters": 1847
-  }
+  },
+  "name": "Day 1 - Alpine Camp Setup at 1847m",
+  "content": "Lena establishing base camp at 1847m elevation in the Alps after 5 AM start hike. Assessed conditions: 2\u00b0C temperature, 15cm snow depth, north wind. Set up four-season tent on frozen ground with secure staking against wind. Organized critical gear: minus-15 rated sleeping bag, bear-resistant food container. Located water source 50m away requiring filtration and boiling. Started camp stove for coffee while planning navigation. Confirmed GPS position and identified western trail to summit. Reviewed three-day forecast: decent conditions with possible Wednesday snow. Planned acclimatization strategy: day hike to 2400m with return to camp. Expressed deep appreciation for solo wilderness experience - peace, silence, mountain views from camp, escape from urban noise. Methodical preparation balanced with mindful presence.",
+  "summary": "Camp setup at 1847m: secured tent in snow, organized gear, located water, planned 2400m acclimatization hike",
+  "category": "outdoor",
+  "uri": "s3://p8fs-tenant4/recordings/2025-01-13/morning_setup.wav",
+  "resource_timestamp": "2025-01-13T07:30:00Z",
+  "resource_ends_timestamp": "2025-01-13T07:40:01Z",
+  "moment_type": "observation",
+  "emotion_tags": [
+    "focused",
+    "peaceful",
+    "prepared",
+    "appreciative"
+  ],
+  "topic_tags": [
+    "camping",
+    "alps",
+    "wilderness",
+    "preparation",
+    "solitude"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_lena_t4",
+      "name": "Lena",
+      "comment": "User ID: user_lena_001"
+    }
+  ],
+  "location": "46.5500,8.7000",
+  "background_sounds": "wind, stream flowing nearby, tent fabric rustling, stove hissing"
 }

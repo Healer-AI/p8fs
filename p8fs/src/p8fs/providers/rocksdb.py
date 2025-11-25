@@ -38,7 +38,15 @@ class RocksDBProvider(BaseSQLProvider):
     def supports_vector_operations(self) -> bool:
         """RocksDB doesn't support native vector operations."""
         return False
-    
+
+    def get_recent_uploads_query(self, limit: int = 20) -> str:
+        """RocksDB doesn't support SQL joins - requires application-level implementation."""
+        return f"""-- RocksDB Recent Uploads (requires application-level implementation)
+-- 1. SCAN files:* LIMIT {limit} (ordered by upload_timestamp)
+-- 2. For each file, SCAN resources:* WHERE uri = file.uri
+-- 3. Aggregate chunks in application code
+-- Note: RocksDB is key-value store, no native SQL JOIN support"""
+
     def create_table_sql(self, model_class: type['AbstractModel']) -> str:
         """Generate RocksDB CREATE TABLE SQL (TiKV compatibility)."""
         # Note: RocksDB is primarily key-value, but for TiKV integration

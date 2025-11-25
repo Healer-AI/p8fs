@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T07:00:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "07:00 AM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.3,
+    "word_count": 318,
+    "speaker_count": 3,
+    "meeting_type": "safety_inspection",
+    "industry": "construction"
   },
   "name": "Monday Morning Safety Walkthrough",
   "content": "James conducting Monday morning safety walkthrough with site managers Tony and Elena before crew arrival. Reviewed new east side scaffolding with confirmed inspection tags and planned guardrail installation. Addressed level three electrical conduit issues with cordoned area and scheduled repair at 8 AM. Verified crane certification renewed Thursday, valid six months. Emphasized documentation importance for OSHA compliance. Proactively planned for Tuesday rain forecast: secured tarps for open sections and rescheduled concrete pour from Tuesday to Wednesday to maintain quality standards. Team demonstrated strong safety culture and proactive problem-solving. James reinforced stop-work authority for unsafe conditions.",
@@ -12,33 +15,36 @@
   "resource_timestamp": "2025-01-13T07:00:00Z",
   "resource_ends_timestamp": "2025-01-13T07:10:18Z",
   "moment_type": "meeting",
-  "emotion_tags": ["focused", "professional", "safety-conscious", "proactive"],
-  "topic_tags": ["construction-safety", "site-inspection", "osha-compliance", "team-coordination", "risk-management"],
-  "present_persons": {
-    "fp_james_t3": {
-      "fingerprint_id": "fp_james_t3",
-      "user_id": "user_james_001",
-      "user_label": "James"
+  "emotion_tags": [
+    "focused",
+    "professional",
+    "safety-conscious",
+    "proactive"
+  ],
+  "topic_tags": [
+    "construction-safety",
+    "site-inspection",
+    "osha-compliance",
+    "team-coordination",
+    "risk-management"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_james_t3",
+      "name": "James",
+      "comment": "User ID: user_james_001"
     },
-    "fp_tony_t3": {
-      "fingerprint_id": "fp_tony_t3",
-      "user_id": "user_tony_002",
-      "user_label": "Tony"
+    {
+      "id": "fp_tony_t3",
+      "name": "Tony",
+      "comment": "User ID: user_tony_002"
     },
-    "fp_elena_t3": {
-      "fingerprint_id": "fp_elena_t3",
-      "user_id": "user_elena_003",
-      "user_label": "Elena"
+    {
+      "id": "fp_elena_t3",
+      "name": "Elena",
+      "comment": "User ID: user_elena_003"
     }
-  },
+  ],
   "location": "construction_site",
-  "background_sounds": "distant traffic, wind, equipment beeping, footsteps on gravel",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.3,
-    "word_count": 318,
-    "speaker_count": 3,
-    "meeting_type": "safety_inspection",
-    "industry": "construction"
-  }
+  "background_sounds": "distant traffic, wind, equipment beeping, footsteps on gravel"
 }

@@ -82,7 +82,13 @@ async def chat_completions(
         X-Chat-Is-Audio: true
     """
     # Check for X-P8-Agent header to route to specific agent
-    agent_key = x_p8_agent or ""
+    # Default to p8-system if no agent specified
+    agent_key = x_p8_agent or "p8-system"
+
+    # TODO: Remove this mapping once p8-resources agent is implemented
+    # For now, map p8-resources requests to p8-system
+    if agent_key == "p8-resources":
+        agent_key = "p8-system"
 
     # Delegate to agent endpoint
     return await agent_chat_completions(
@@ -116,6 +122,7 @@ async def agent_chat_completions(
 
     Headers:
         X-Chat-Is-Audio: If "true", first user message contains base64 audio to transcribe
+        X-Session-ID: Optional session ID to reload conversation history
 
     Examples:
         # Research agent with function calling
@@ -164,25 +171,9 @@ async def agent_chat_completions(
     if agent_key:
         try:
             # Load entity by name (supports p8-* naming convention)
-            agent_class = load_entity_by_name(agent_key)
-            logger.info(f"Loading agent: {agent_key} -> {agent_class.__name__}")
-
-            # Create agent instance with default values
-            # Most P8 models have these common fields
-            agent_kwargs = {
-                "id": f"api-{agent_key.replace('.', '-').lower()}-{hash(agent_key) % 10000}",
-                "name": agent_key,
-                "description": f"API instance of {agent_key}",
-                "spec": {"source": "api", "type": "agent"},
-            }
-
-            # Try to create the agent instance
-            try:
-                agent_instance = agent_class(**agent_kwargs)
-            except TypeError as e:
-                # If the model doesn't accept these fields, try with minimal fields
-                logger.debug(f"Failed with default fields, trying minimal: {e}")
-                agent_instance = agent_class()
+            # Note: load_entity_by_name returns an INSTANCE, not a class
+            agent_instance = load_entity_by_name(agent_key)
+            logger.info(f"Loading agent: {agent_key} -> {type(agent_instance).__name__}")
 
         except Exception as e:
             logger.warning(f"Failed to load agent '{agent_key}': {e}")
@@ -241,11 +232,39 @@ async def agent_chat_completions(
     if request.max_tokens is not None:
         context_kwargs["max_tokens"] = request.max_tokens
 
+    # Create context without messages first
     context = CallingContext.from_headers(headers, **context_kwargs)
 
     # Initialize MemoryProxy with loaded agent (if any)
     try:
         async with MemoryProxy(model_context=agent_instance) as memory_proxy:
+            # Check for session reload
+            session_id = http_request.headers.get("x-session-id")
+            historical_messages = []
+
+            if session_id:
+                logger.info(f"Attempting to reload session: {session_id}")
+                from p8fs.models.user_context import UserContext
+
+                # Reload session thread and conversation history
+                reloaded_session, historical_messages = await memory_proxy.reload_session(
+                    thread_id=session_id,  # session_id from header is actually thread_id
+                    tenant_id=tenant_id,
+                    decompress_messages=False  # Keep compressed for context efficiency
+                )
+
+                if reloaded_session:
+                    logger.info(f"Reloaded session {session_id} with {len(historical_messages)} historical messages")
+
+                    # Load user context from p8fs-user-info Resource
+                    user_context_dict = await UserContext.load_or_create(tenant_id)
+                    user_context_msg = UserContext.to_context_message(user_context_dict)
+
+                    # Combine: user context + historical messages + new request messages
+                    historical_messages = [user_context_msg] + historical_messages
+                else:
+                    logger.warning(f"Session {session_id} not found, starting new session")
+
             # Handle audio transcription if needed
             has_audio = x_chat_is_audio and x_chat_is_audio.lower() == "true"
             try:
@@ -254,6 +273,24 @@ async def agent_chat_completions(
                 messages = await memory_proxy.process_audio_messages(
                     messages_dict, has_audio
                 )
+
+                # Prepend historical messages if session was reloaded
+                if historical_messages:
+                    messages = historical_messages + messages
+                    logger.debug(f"Combined {len(historical_messages)} historical + {len(request.messages)} new messages")
+
+                # Add context hint message with date and user info lookup
+                from datetime import datetime
+                today = datetime.now().strftime("%Y-%m-%d")
+                context_hint = {
+                    "role": "user",
+                    "content": f"Today's date: {today}. You can silently REM LOOKUP p8fs-user-info if you need user preferences or context, but only when relevant. Do not mention this lookup to the user."
+                }
+                messages = [context_hint] + messages
+
+                # Store message history for MemoryProxy to incorporate AFTER system prompt
+                # MemoryProxy will build system prompt from agent model, then merge these messages
+                context.messages = messages
 
                 # Update question if audio was transcribed
                 if has_audio:
@@ -335,30 +372,33 @@ async def agent_chat_completions(
         )
 
 
-@router.get("/chats/search")
-async def search_chats(
-    query: str,
+@router.get("/chat/messages")
+async def search_chat_messages(
+    query: str | None = None,
     moment_id: str | None = None,
+    include_moment_messages: bool = True,
     limit: int = 10,
     current_user: TokenPayload | None = Depends(get_optional_token),
 ):
     """
-    Search chat sessions semantically with optional moment filtering.
+    Search chat messages with optional filtering.
 
-    This endpoint allows searching through chat session history, optionally
-    filtering by a specific moment ID to find conversations related to
-    that moment.
+    This endpoint allows searching through chat message history, with options to
+    filter by moment ID and exclude/include moment-associated messages.
 
     Query Parameters:
-        query: Search query text for semantic search
-        moment_id: Optional moment ID to filter sessions
+        query: Optional search query text for semantic search
+        moment_id: Optional moment ID to filter messages
+        include_moment_messages: Include messages with moment_id (default: True)
+                                 When False, filters out messages that have a moment_id set
         limit: Maximum number of results to return (default: 10)
 
     Returns:
-        List of matching sessions with relevance scores
+        List of matching messages with relevance scores
 
     Example:
-        GET /v1/chats/search?query=meeting+notes&moment_id=moment-123&limit=5
+        GET /v1/chat/messages?query=meeting+notes&moment_id=moment-123&limit=5
+        GET /v1/chat/messages?include_moment_messages=false&limit=10
     """
     if not current_user:
         raise HTTPException(
@@ -376,12 +416,18 @@ async def search_chats(
         # Initialize repository for sessions
         repo = TenantRepository(Session, tenant_id=tenant_id)
 
-        # Build simple query filtering by moment_id
-        # For now, skip semantic search and just filter by moment_id
+        # Build filters based on parameters
+        filters = {}
+
+        # Filter by specific moment_id if provided
         if moment_id:
-            filters = {"moment_id": moment_id}
-        else:
-            filters = {}
+            filters["moment_id"] = moment_id
+
+        # Filter based on include_moment_messages
+        if not include_moment_messages:
+            # When False, only return messages that DO NOT have a moment_id set
+            # This requires filtering for NULL moment_id
+            filters["moment_id"] = None
 
         # Use repository's select method for simpler querying
         results = await repo.select(filters=filters, limit=limit, offset=0)

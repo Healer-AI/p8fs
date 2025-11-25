@@ -1,8 +1,13 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T21:30:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "09:30 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.02,
+    "word_count": 337,
+    "speaker_count": 1,
+    "activity_type": "personal_reflection",
+    "mission_day": 89,
+    "personal_log": true,
+    "introspective": true
   },
   "name": "Late Evening Personal Reflection - Mission Purpose and Identity",
   "content": "Commander Chen recording introspective personal log from sleep compartment on mission day 89, processing accumulated experiences and existential questions during crew sleep period. Day's events reviewed: water system repair, media interview, exercise routine creating physical exhaustion but mental restlessness preventing sleep. Mission value contemplation: questioned personal contribution significance, resolved doubt by acknowledging protein crystallization research potential to benefit millions through improved diabetes treatments despite abstract nature of impact. Overview Effect processing: emotional response during interview acknowledged, reaffirmed transformative power of whole-Earth perspective revealing political border artificiality and planetary fragility. Family sacrifice wrestling: questioned parental decision morality (six-month absence from eight-year-old Mei and wife Lin), justified through legacy framework - creating expansive future possibilities for next generation through boundary-pushing exploration. Command responsibility reflection: EVA supervision anxiety regarding crew safety, pride in Torres/Kim textbook execution, acknowledged training's role transforming danger into manageable risk through preparation and discipline. Systems thinking: water leak incident recognized as potential cascade trigger, emphasized self-sufficiency necessity in orbital environment, contrasted modern safety margins with early space program higher risks. Historical perspective: honored Apollo and Shuttle astronauts as foundation builders, acknowledged standing on predecessors' shoulders. Human space adaptation philosophy: recognized fundamental unnaturalness of space environment for evolved terrestrial organisms, celebrated human adaptability as species strength. Mars vision: accepted personal age limitation preventing participation while embracing contributory role building knowledge base for future missions. Readjustment anticipation: expected physical, mental, emotional challenges returning to Earth after six-month microgravity exposure and transformative perspective shift. Purpose reaffirmation: concluded with mission commitment focused on work continuation and human progress contribution. Vulnerability and doubt balanced with resolve and meaning-making.",
@@ -12,25 +17,28 @@
   "resource_timestamp": "2025-01-15T21:30:00Z",
   "resource_ends_timestamp": "2025-01-15T21:40:01Z",
   "moment_type": "reflection",
-  "emotion_tags": ["contemplative", "uncertain", "resolved", "lonely", "purposeful"],
-  "topic_tags": ["personal-reflection", "mission-meaning", "family-sacrifice", "leadership", "future-vision", "identity"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
+  "emotion_tags": [
+    "contemplative",
+    "uncertain",
+    "resolved",
+    "lonely",
+    "purposeful"
+  ],
+  "topic_tags": [
+    "personal-reflection",
+    "mission-meaning",
+    "family-sacrifice",
+    "leadership",
+    "future-vision",
+    "identity"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
     }
-  },
+  ],
   "location": "iss_sleep_compartment",
-  "background_sounds": "quiet ventilation, equipment beeping, station creaking",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.02,
-    "word_count": 337,
-    "speaker_count": 1,
-    "activity_type": "personal_reflection",
-    "mission_day": 89,
-    "personal_log": true,
-    "introspective": true
-  }
+  "background_sounds": "quiet ventilation, equipment beeping, station creaking"
 }

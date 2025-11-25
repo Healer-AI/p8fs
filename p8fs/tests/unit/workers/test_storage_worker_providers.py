@@ -43,20 +43,37 @@ class TestStorageWorkerProviders:
         # Create test file with unsupported extension
         test_file = tmp_path / "test.xyz"
         test_file.write_text("unsupported content")
-        
+
         tenant_id = "test-tenant"
-        
-        with patch("p8fs.workers.storage.get_content_provider") as mock_get_provider:
+
+        # Mock repository instances that will be created inside process_file
+        mock_files_repo = Mock()
+        mock_files_repo.upsert = AsyncMock()
+        mock_resources_repo = Mock()
+        mock_resources_repo.upsert = AsyncMock()
+
+        with patch("p8fs.workers.storage.get_content_provider") as mock_get_provider, \
+             patch("p8fs.workers.storage.TenantRepository") as mock_repo_class:
+
             mock_get_provider.side_effect = ValueError("No content provider found for file: test.xyz")
-            
+
+            # Configure mock to return appropriate repos
+            def repo_factory(model, tenant_id):
+                if model.__name__ == 'Files':
+                    return mock_files_repo
+                else:
+                    return mock_resources_repo
+
+            mock_repo_class.side_effect = repo_factory
+
             # Process should complete without raising exception
             await storage_worker.process_file(str(test_file), tenant_id)
-            
+
             # File entry should still be created
-            storage_worker.files_repo.upsert.assert_called_once()
-            
+            mock_files_repo.upsert.assert_called_once()
+
             # But no resources should be created
-            storage_worker.resources_repo.upsert.assert_not_called()
+            mock_resources_repo.upsert.assert_not_called()
     
     
     
@@ -65,23 +82,40 @@ class TestStorageWorkerProviders:
         """Test handling of empty content from provider."""
         test_file = tmp_path / "empty.md"
         test_file.write_text("")
-        
+
         tenant_id = "test-tenant"
-        
+
         mock_provider = Mock()
         mock_provider.extract_text = AsyncMock(return_value="")  # Empty content
         mock_provider.to_markdown_chunks = AsyncMock(return_value=[])  # No chunks from empty content
-        
-        with patch("p8fs.workers.storage.get_content_provider") as mock_get_provider:
+
+        # Mock repository instances that will be created inside process_file
+        mock_files_repo = Mock()
+        mock_files_repo.upsert = AsyncMock()
+        mock_resources_repo = Mock()
+        mock_resources_repo.upsert = AsyncMock()
+
+        with patch("p8fs.workers.storage.get_content_provider") as mock_get_provider, \
+             patch("p8fs.workers.storage.TenantRepository") as mock_repo_class:
+
             mock_get_provider.return_value = mock_provider
-            
+
+            # Configure mock to return appropriate repos
+            def repo_factory(model, tenant_id):
+                if model.__name__ == 'Files':
+                    return mock_files_repo
+                else:
+                    return mock_resources_repo
+
+            mock_repo_class.side_effect = repo_factory
+
             await storage_worker.process_file(str(test_file), tenant_id)
-            
+
             # File entry should be created
-            storage_worker.files_repo.upsert.assert_called_once()
-            
+            mock_files_repo.upsert.assert_called_once()
+
             # But no resources should be created for empty content
-            storage_worker.resources_repo.upsert.assert_not_called()
+            mock_resources_repo.upsert.assert_not_called()
     
 
 

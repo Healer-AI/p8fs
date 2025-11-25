@@ -1,0 +1,444 @@
+"""
+End-to-end integration test for first and second-order dreaming.
+
+This test validates the complete dreaming workflow:
+1. Load sample data (voice memos, documents, sessions)
+2. First-order dreaming: Extract moments and inline entities
+3. Second-order dreaming: Create semantic edges between resources
+4. Verify graph edges can be resolved via key lookup
+5. Query the complete knowledge graph
+
+Run with:
+    cd /Users/sirsh/code/p8fs-modules/p8fs
+    export P8FS_STORAGE_PROVIDER=postgresql
+    export OPENAI_API_KEY=sk-your-key-here
+    docker compose up postgres -d
+    uv run pytest tests/integration/test_dreaming_end_to_end.py -v -s
+"""
+
+import pytest
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+from p8fs_cluster.config.settings import config
+from p8fs_cluster.logging import get_logger
+from p8fs.providers import get_provider
+from p8fs.providers.postgresql import PostgreSQLProvider
+from p8fs.services.graph import PostgresGraphProvider
+from p8fs.providers.rem_query import REMQueryProvider
+from p8fs.repository.TenantRepository import TenantRepository
+from p8fs.services.llm import MemoryProxy
+from p8fs.models.agentlets.moments import MomentBuilder
+from p8fs.models.agentlets.entity_extractor import EntityExtractorAgent, EntityExtractionRequest
+from p8fs.models.agentlets.resource_edge_builder import ResourceEdgeBuilder
+
+# Import sample data loader
+import sys
+sys.path.insert(0, str(Path(__file__).parent / "sample_data" / "dreaming"))
+from load_sample_data import SampleDataLoader
+
+logger = get_logger(__name__)
+
+TENANT_ID = "tenant-test"
+
+
+@pytest.mark.integration
+class TestDreamingEndToEnd:
+    """End-to-end test for dreaming workflow."""
+
+    @pytest.fixture(scope="class")
+    def provider(self):
+        """Get PostgreSQL provider."""
+        assert config.storage_provider == "postgresql", "Must use PostgreSQL provider"
+        provider = get_provider()
+        provider.connect_sync()
+        yield provider
+        # Cleanup after tests
+        try:
+            provider.execute("DELETE FROM resources WHERE tenant_id = %s", (TENANT_ID,))
+            provider.execute("DELETE FROM moments WHERE tenant_id = %s", (TENANT_ID,))
+            provider.execute("DELETE FROM sessions WHERE tenant_id = %s", (TENANT_ID,))
+        except Exception as e:
+            logger.warning(f"Cleanup failed: {e}")
+
+    @pytest.fixture(scope="class")
+    def repo(self, provider):
+        """Get tenant repository."""
+        return TenantRepository(provider, tenant_id=TENANT_ID)
+
+    @pytest.fixture(scope="class")
+    def graph_provider(self, provider):
+        """Get graph provider."""
+        return PostgresGraphProvider(provider)
+
+    @pytest.fixture(scope="class")
+    def rem_provider(self, provider):
+        """Get REM query provider."""
+        return REMQueryProvider(provider, tenant_id=TENANT_ID)
+
+    @pytest.fixture(scope="class")
+    def memory_proxy(self):
+        """Get memory proxy for LLM calls."""
+        return MemoryProxy()
+
+    @pytest.fixture(scope="class")
+    def sample_data(self, repo):
+        """Load sample data once for all tests."""
+        logger.info("=" * 70)
+        logger.info("LOADING SAMPLE DATA")
+        logger.info("=" * 70)
+
+        loader = SampleDataLoader(tenant_id=TENANT_ID)
+        summary = loader.load_all()
+
+        logger.info(f"\nLoaded {summary['total_resources']} resources")
+        return summary
+
+    def test_01_sample_data_loaded(self, sample_data, provider):
+        """Verify sample data was loaded correctly."""
+        logger.info("\n" + "=" * 70)
+        logger.info("TEST 1: Verify Sample Data Loaded")
+        logger.info("=" * 70)
+
+        # Check resources in database
+        result = provider.execute(
+            "SELECT COUNT(*) as count FROM resources WHERE tenant_id = %s",
+            (TENANT_ID,)
+        )
+        resource_count = result[0]['count']
+
+        logger.info(f"Resources in database: {resource_count}")
+        assert resource_count == sample_data['total_resources'], \
+            f"Expected {sample_data['total_resources']} resources, found {resource_count}"
+
+        # Check resource types
+        result = provider.execute(
+            "SELECT category, COUNT(*) as count FROM resources WHERE tenant_id = %s GROUP BY category",
+            (TENANT_ID,)
+        )
+
+        for row in result:
+            logger.info(f"  {row['category']}: {row['count']} resources")
+
+        logger.info("✓ Sample data loaded successfully\n")
+
+    async def test_02_extract_moments(self, sample_data, repo, memory_proxy):
+        """Test moment extraction from voice memos."""
+        logger.info("=" * 70)
+        logger.info("TEST 2: Extract Moments (First-Order Dreaming - Part 1)")
+        logger.info("=" * 70)
+
+        # Get voice memo resources
+        voice_memo_ids = sample_data['resource_ids']['voice_memos']
+        logger.info(f"Processing {len(voice_memo_ids)} voice memos for moment extraction")
+
+        moment_builder = MomentBuilder()
+        moments_created = []
+
+        for resource_id in voice_memo_ids:
+            # Fetch resource
+            resource = repo.get_by_id(resource_id)
+            if not resource or not resource.content:
+                logger.warning(f"Resource {resource_id} not found or has no content")
+                continue
+
+            logger.info(f"\nProcessing: {resource.name}")
+
+            # Extract moments using MomentBuilder
+            try:
+                # Build request for moment extraction
+                from p8fs.models.agentlets.moments import MomentExtractionRequest
+
+                request = MomentExtractionRequest(
+                    content=resource.content,
+                    resource_id=resource_id,
+                    resource_timestamp=resource.resource_timestamp or datetime.now(timezone.utc)
+                )
+
+                result = await moment_builder.extract_moments(request, memory_proxy)
+
+                logger.info(f"  Extracted {len(result.moments)} moments")
+
+                # Save moments to database
+                for moment in result.moments:
+                    moment.tenant_id = TENANT_ID
+                    saved_moment = await repo.put(moment)
+                    moments_created.append(saved_moment.id)
+                    logger.info(f"    - {moment.moment_type}: {moment.name} ({moment.duration_seconds()}s)")
+
+            except Exception as e:
+                logger.error(f"  Failed to extract moments: {e}")
+                continue
+
+        logger.info(f"\n✓ Created {len(moments_created)} moments\n")
+        assert len(moments_created) > 0, "Should have created at least one moment"
+
+    async def test_03_extract_entities(self, sample_data, repo, provider, memory_proxy):
+        """Test entity extraction from all resources (First-Order Dreaming - Part 2)."""
+        logger.info("=" * 70)
+        logger.info("TEST 3: Extract Entities (First-Order Dreaming - Part 2)")
+        logger.info("=" * 70)
+
+        # Get all resources
+        all_resource_ids = (
+            sample_data['resource_ids']['voice_memos'] +
+            sample_data['resource_ids']['documents'] +
+            sample_data['resource_ids']['technical']
+        )
+
+        logger.info(f"Extracting entities from {len(all_resource_ids)} resources")
+
+        entity_extractor = EntityExtractorAgent()
+        total_entities_extracted = 0
+
+        for resource_id in all_resource_ids:
+            # Fetch resource
+            resource = repo.get_by_id(resource_id)
+            if not resource or not resource.content:
+                continue
+
+            logger.info(f"\nProcessing: {resource.name}")
+
+            try:
+                # Extract entities
+                request = EntityExtractionRequest(
+                    content=resource.content,
+                    resource_id=resource_id,
+                    resource_type=resource.metadata.get('resource_type')
+                )
+
+                result = await entity_extractor.extract_entities(request, memory_proxy)
+
+                logger.info(f"  Extracted {result.total_entities} entities")
+
+                if result.entities:
+                    # Convert entities to graph edges for storage
+                    entities_dict = entity_extractor.entities_to_dict_list(result.entities)
+                    graph_edges = [
+                        {"dst": entity.get("name", entity.get("entity_id")), "rel": "mentions", "entity_type": entity.get("entity_type", "entity")}
+                        for entity in entities_dict
+                    ]
+
+                    # Update resource with graph_paths
+                    provider.execute(
+                        "UPDATE resources SET graph_paths = %s WHERE id = %s",
+                        (json.dumps(graph_edges), resource_id)
+                    )
+
+                    total_entities_extracted += result.total_entities
+
+                    # Log sample entities
+                    for entity in result.entities[:3]:
+                        logger.info(f"    - {entity.entity_id} ({entity.entity_type}): {entity.entity_name}")
+
+            except Exception as e:
+                logger.error(f"  Failed to extract entities: {e}")
+                continue
+
+        logger.info(f"\n✓ Extracted {total_entities_extracted} total entities\n")
+        assert total_entities_extracted > 0, "Should have extracted at least one entity"
+
+    async def test_04_create_resource_edges(
+        self,
+        sample_data,
+        repo,
+        provider,
+        graph_provider,
+        rem_provider
+    ):
+        """Test resource-to-resource edge creation (Second-Order Dreaming)."""
+        logger.info("=" * 70)
+        logger.info("TEST 4: Create Resource Edges (Second-Order Dreaming)")
+        logger.info("=" * 70)
+
+        # Get all resources
+        all_resource_ids = (
+            sample_data['resource_ids']['voice_memos'] +
+            sample_data['resource_ids']['documents'] +
+            sample_data['resource_ids']['technical']
+        )
+
+        logger.info(f"Creating semantic edges for {len(all_resource_ids)} resources")
+
+        # Create edge builder
+        edge_builder = ResourceEdgeBuilder(
+            rem_provider=rem_provider,
+            graph_provider=graph_provider,
+            tenant_id=TENANT_ID
+        )
+
+        # Fetch all resources
+        resources = []
+        for resource_id in all_resource_ids:
+            resource = repo.get_by_id(resource_id)
+            if resource and resource.content:
+                resources.append({
+                    'id': resource.id,
+                    'content': resource.content,
+                    'name': resource.name
+                })
+
+        # Process batch
+        batch_result = await edge_builder.process_batch(
+            resources=resources,
+            similarity_threshold=0.6,  # Lower threshold for test data
+            max_edges_per_resource=3
+        )
+
+        logger.info(f"\nBatch processing results:")
+        logger.info(f"  Resources processed: {batch_result['resources_processed']}")
+        logger.info(f"  Total edges created: {batch_result['total_edges_created']}")
+        logger.info(f"  Avg edges per resource: {batch_result['average_edges_per_resource']:.2f}")
+
+        # Log individual results
+        for result in batch_result['results'][:5]:
+            resource = next((r for r in resources if r['id'] == result['resource_id']), None)
+            if resource:
+                logger.info(f"\n  {resource['name']}:")
+                logger.info(f"    Related found: {result['related_found']}")
+                logger.info(f"    Edges created: {result['edges_created']}")
+                logger.info(f"    Avg similarity: {result['average_similarity']:.2f}")
+
+        logger.info(f"\n✓ Created {batch_result['total_edges_created']} SEE_ALSO edges\n")
+        assert batch_result['total_edges_created'] > 0, "Should have created at least one edge"
+
+    def test_05_verify_graph_edges(self, graph_provider):
+        """Verify graph edges exist and can be queried."""
+        logger.info("=" * 70)
+        logger.info("TEST 5: Verify Graph Edges")
+        logger.info("=" * 70)
+
+        # Query all SEE_ALSO relationships
+        relationships = graph_provider.get_relationships(relationship_type="SEE_ALSO")
+
+        logger.info(f"Found {len(relationships)} SEE_ALSO relationships in graph")
+
+        # Display sample relationships
+        for rel in relationships[:5]:
+            from_id = rel.get('from_id')
+            to_id = rel.get('to_id')
+            metadata = rel.get('metadata', {})
+            similarity = metadata.get('similarity_score', 'N/A')
+
+            logger.info(f"  {from_id} → {to_id} (similarity: {similarity})")
+
+        logger.info("\n✓ Graph edges verified\n")
+        assert len(relationships) > 0, "Should have at least one SEE_ALSO relationship"
+
+    def test_06_query_knowledge_graph(self, provider):
+        """Test querying the complete knowledge graph."""
+        logger.info("=" * 70)
+        logger.info("TEST 6: Query Knowledge Graph")
+        logger.info("=" * 70)
+
+        # Query 1: Get moments with emotions and topics
+        logger.info("\n1. Moments classified:")
+        moments = provider.execute(
+            """
+            SELECT name, moment_type, emotion_tags, topic_tags,
+                   resource_timestamp, resource_ends_timestamp
+            FROM moments
+            WHERE tenant_id = %s
+            ORDER BY resource_timestamp
+            """,
+            (TENANT_ID,)
+        )
+
+        for moment in moments:
+            logger.info(f"  - {moment['moment_type']}: {moment['name']}")
+            if moment['emotion_tags']:
+                logger.info(f"    Emotions: {', '.join(moment['emotion_tags'][:3])}")
+            if moment['topic_tags']:
+                logger.info(f"    Topics: {', '.join(moment['topic_tags'][:3])}")
+
+        # Query 2: Get resources with entities
+        logger.info("\n2. Resources with extracted entities:")
+        resources_with_entities = provider.execute(
+            """
+            SELECT name, category, jsonb_array_length(graph_paths) as entity_count
+            FROM resources
+            WHERE tenant_id = %s AND graph_paths IS NOT NULL AND jsonb_array_length(graph_paths) > 0
+            ORDER BY entity_count DESC
+            LIMIT 5
+            """,
+            (TENANT_ID,)
+        )
+
+        for resource in resources_with_entities:
+            logger.info(f"  - {resource['name']} ({resource['category']}): {resource['entity_count']} entities")
+
+        # Query 3: Summary statistics
+        logger.info("\n3. Summary statistics:")
+        stats = provider.execute(
+            """
+            SELECT
+                (SELECT COUNT(*) FROM resources WHERE tenant_id = %s) as total_resources,
+                (SELECT COUNT(*) FROM moments WHERE tenant_id = %s) as total_moments,
+                (SELECT COUNT(*) FROM resources WHERE tenant_id = %s AND graph_paths IS NOT NULL AND jsonb_array_length(graph_paths) > 0) as resources_with_entities
+            """,
+            (TENANT_ID, TENANT_ID, TENANT_ID)
+        )
+
+        if stats:
+            logger.info(f"  Total resources: {stats[0]['total_resources']}")
+            logger.info(f"  Total moments: {stats[0]['total_moments']}")
+            logger.info(f"  Resources with entities: {stats[0]['resources_with_entities']}")
+
+        logger.info("\n✓ Knowledge graph query complete\n")
+        assert len(moments) > 0, "Should have moments"
+        assert len(resources_with_entities) > 0, "Should have resources with entities"
+
+    def test_07_verify_end_to_end_workflow(self, provider):
+        """Verify the complete end-to-end workflow succeeded."""
+        logger.info("=" * 70)
+        logger.info("TEST 7: End-to-End Workflow Verification")
+        logger.info("=" * 70)
+
+        # Verify we have all expected data
+        checks = []
+
+        # Check 1: Resources loaded
+        resources = provider.execute(
+            "SELECT COUNT(*) as count FROM resources WHERE tenant_id = %s",
+            (TENANT_ID,)
+        )
+        resource_count = resources[0]['count']
+        checks.append(("Resources loaded", resource_count > 0, resource_count))
+
+        # Check 2: Moments extracted
+        moments = provider.execute(
+            "SELECT COUNT(*) as count FROM moments WHERE tenant_id = %s",
+            (TENANT_ID,)
+        )
+        moment_count = moments[0]['count']
+        checks.append(("Moments extracted", moment_count > 0, moment_count))
+
+        # Check 3: Entities extracted
+        entities = provider.execute(
+            "SELECT COUNT(*) as count FROM resources WHERE tenant_id = %s AND related_entities IS NOT NULL",
+            (TENANT_ID,)
+        )
+        entity_resource_count = entities[0]['count']
+        checks.append(("Entities extracted", entity_resource_count > 0, entity_resource_count))
+
+        # Check 4: Graph edges created
+        # Note: This requires Apache AGE to query properly
+        # For now we'll skip the graph query and rely on earlier test
+
+        logger.info("\nWorkflow verification:")
+        for check_name, passed, count in checks:
+            status = "✓" if passed else "✗"
+            logger.info(f"  {status} {check_name}: {count}")
+
+        all_passed = all(passed for _, passed, _ in checks)
+        logger.info(f"\n{'✓' if all_passed else '✗'} All checks passed: {all_passed}\n")
+
+        assert all_passed, "All workflow checks should pass"
+
+        logger.info("=" * 70)
+        logger.info("END-TO-END TEST COMPLETE ✓")
+        logger.info("=" * 70)
+
+
+# Add json import that was missing
+import json

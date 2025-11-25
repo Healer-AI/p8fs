@@ -185,7 +185,7 @@ Test the full OAuth device flow with QR code:
 
 ```bash
 # 1. Open the device verification page in browser
-open http://localhost:8001/oauth/device
+open http://localhost:8001/api/v1/oauth/device
 
 # 2. Scan QR code or note the user code (e.g., A1B2-C3D4)
 

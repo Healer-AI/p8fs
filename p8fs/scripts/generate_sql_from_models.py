@@ -15,7 +15,7 @@ def generate_migration_sql():
     try:
         from p8fs.models.p8 import (
             Agent, ApiProxy, Error, Files, Function, Job,
-            LanguageModelApi, Project, Resources, Session, Task, 
+            LanguageModelApi, Moment, Project, Resources, Session, Task,
             Tenant, TokenUsage, User, KVStorage
         )
         from p8fs.providers.postgresql import PostgreSQLProvider
@@ -28,7 +28,7 @@ def generate_migration_sql():
     # List of all models to generate
     models = [
         Agent, ApiProxy, Error, Files, Function, Job,
-        LanguageModelApi, Project, Resources, Session, Task, 
+        LanguageModelApi, Moment, Project, Resources, Session, Task,
         Tenant, TokenUsage, User, KVStorage
     ]
 

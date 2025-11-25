@@ -1,8 +1,11 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-15T16:00:00Z",
-    "recording_date": "Wednesday, January 15, 2025",
-    "recording_time": "04:00 PM UTC"
+    "source_type": "audio_transcript",
+    "duration_minutes": 10.3,
+    "word_count": 294,
+    "speaker_count": 2,
+    "meeting_type": "code_review",
+    "technical_depth": "high"
   },
   "name": "Code Review - Dashboard Component Refactoring",
   "content": "Jordan requested code review from Alex for dashboard refactor. Identified 450-line DataVisualization component as overly complex 'God component' handling data fetching, transformation, rendering, and state management. Alex suggested architectural improvements: extract data fetching into custom hook (useVisualizationData), move transformation logic to utility function, return loading/error states from hook. Jordan recognized the pattern and committed to refactoring before PR submission. Alex praised the chart library integration work that Sam helped with. Collaborative problem-solving with constructive feedback.",
@@ -12,28 +15,31 @@
   "resource_timestamp": "2025-01-15T16:00:00Z",
   "resource_ends_timestamp": "2025-01-15T16:10:18Z",
   "moment_type": "meeting",
-  "emotion_tags": ["collaborative", "analytical", "helpful", "focused"],
-  "topic_tags": ["code-review", "refactoring", "react-hooks", "architecture", "mentorship"],
-  "present_persons": {
-    "fp_jordan_t1": {
-      "fingerprint_id": "fp_jordan_t1",
-      "user_id": "user_jordan_002",
-      "user_label": "Jordan"
+  "emotion_tags": [
+    "collaborative",
+    "analytical",
+    "helpful",
+    "focused"
+  ],
+  "topic_tags": [
+    "code-review",
+    "refactoring",
+    "react-hooks",
+    "architecture",
+    "mentorship"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_jordan_t1",
+      "name": "Jordan",
+      "comment": "User ID: user_jordan_002"
     },
-    "fp_alex_t1": {
-      "fingerprint_id": "fp_alex_t1",
-      "user_id": "user_alex_001",
-      "user_label": "Alex"
+    {
+      "id": "fp_alex_t1",
+      "name": "Alex",
+      "comment": "User ID: user_alex_001"
     }
-  },
+  ],
   "location": "video_conference",
-  "background_sounds": "quiet office ambient",
-  "metadata": {
-    "source_type": "audio_transcript",
-    "duration_minutes": 10.3,
-    "word_count": 294,
-    "speaker_count": 2,
-    "meeting_type": "code_review",
-    "technical_depth": "high"
-  }
+  "background_sounds": "quiet office ambient"
 }

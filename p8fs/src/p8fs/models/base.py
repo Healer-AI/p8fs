@@ -224,21 +224,42 @@ class AbstractModel(BaseModel):
                 import json
                 schema = cls.model_json_schema()
 
-                if schema_format.lower() == "yaml":
-                    import yaml
-                    schema_text = yaml.dump(schema, default_flow_style=False, sort_keys=False)
-                    description += f"\n\nPlease provide your response in the following structured format:\n\n```yaml\n{schema_text}```\n\nReturn your response as valid JSON matching this schema structure."
+                # Only add schema formatting if there are custom properties
+                # (beyond the base AbstractModel 'properties' field)
+                has_custom_properties = (
+                    'properties' in schema and
+                    len(schema['properties']) > 0 and
+                    not (len(schema['properties']) == 1 and 'properties' in schema['properties'])
+                )
 
-                elif schema_format.lower() == "json":
-                    schema_text = json.dumps(schema, indent=2)
-                    description += f"\n\nPlease provide your response in the following structured format:\n\n```json\n{schema_text}\n```\n\nReturn your response as valid JSON matching this schema structure."
+                if has_custom_properties:
+                    if schema_format.lower() == "yaml":
+                        import yaml
+                        # Extract just the properties with their descriptions, types, etc.
+                        # Remove top-level schema metadata to avoid LLM echoing it back
+                        properties_schema = {"properties": schema.get("properties", {})}
+                        if "required" in schema:
+                            properties_schema["required"] = schema["required"]
 
-                elif schema_format.lower() == "markdown":
-                    # TODO: Implement markdown table format
-                    description += f"\n\n[Markdown table format not yet implemented - falling back to YAML]"
-                    import yaml
-                    schema_text = yaml.dump(schema, default_flow_style=False, sort_keys=False)
-                    description += f"\n\n```yaml\n{schema_text}```"
+                        schema_text = yaml.dump(properties_schema, default_flow_style=False, sort_keys=False)
+                        description += f"\n\nReturn your response as valid JSON matching this schema:\n\n```yaml\n{schema_text}```"
+
+                    elif schema_format.lower() == "json":
+                        # Extract just the properties with their descriptions, types, etc.
+                        # Remove top-level schema metadata to avoid LLM echoing it back
+                        properties_schema = {"properties": schema.get("properties", {})}
+                        if "required" in schema:
+                            properties_schema["required"] = schema["required"]
+
+                        schema_text = json.dumps(properties_schema, indent=2)
+                        description += f"\n\nReturn your response as valid JSON matching this schema:\n\n```json\n{schema_text}\n```"
+
+                    elif schema_format.lower() == "markdown":
+                        # TODO: Implement markdown table format
+                        description += f"\n\n[Markdown table format not yet implemented - falling back to YAML]"
+                        import yaml
+                        schema_text = yaml.dump(schema, default_flow_style=False, sort_keys=False)
+                        description += f"\n\n```yaml\n{schema_text}```"
             else:
                 # Legacy behavior: simple field list
                 description += f"\n\nModel: {cls.__name__}"
@@ -298,9 +319,10 @@ class AbstractModel(BaseModel):
             if isinstance(field_info, FieldInfo) and field_info.json_schema_extra:
                 embedding_provider = field_info.json_schema_extra.get('embedding_provider')
                 if embedding_provider:
-                    # Resolve 'default' to actual provider name
+                    # Resolve 'default' to actual provider name from config
                     if embedding_provider == 'default':
-                        embedding_provider = 'text-embedding-ada-002'
+                        from p8fs.config.embedding import get_default_embedding_provider
+                        embedding_provider = get_default_embedding_provider()
                     providers[field_name] = embedding_provider
         
         return providers

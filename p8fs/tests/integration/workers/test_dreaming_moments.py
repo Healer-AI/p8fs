@@ -12,7 +12,7 @@ from p8fs.models.agentlets.moments import MomentBuilder
 from p8fs.services.llm import MemoryProxy
 from p8fs.services.llm.models import CallingContext
 from p8fs.repository import TenantRepository
-from p8fs.models.engram.models import Moment
+from p8fs.models.p8 import Moment
 
 
 @pytest.mark.integration
@@ -40,15 +40,20 @@ async def test_moment_processing_and_storage():
         merge_strategy="last"
     )
 
+    # Result might be a dict or model object depending on merge_strategy
+    if isinstance(result, dict):
+        moments_list = result.get('moments', [])
+    else:
+        moments_list = result.moments if hasattr(result, 'moments') else []
+
     # Verify we got moments back
-    assert hasattr(result, 'moments'), "Result should have moments attribute"
-    assert len(result.moments) > 0, "Should have at least one moment"
+    assert len(moments_list) > 0, f"Should have at least one moment, got: {type(result)}"
 
     # Save each moment to database
     moment_repo = TenantRepository(Moment, tenant_id="tenant-test-moments")
     saved_moment_ids = []
 
-    for moment_data in result.moments:
+    for moment_data in moments_list:
         # Convert present_persons from list to dict if needed
         present_persons = moment_data.get('present_persons', {})
         if isinstance(present_persons, list):

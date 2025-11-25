@@ -1351,6 +1351,44 @@ curl http://localhost:8001/.well-known/openid-configuration
 open http://localhost:8001/docs
 ```
 
+### Disable Authentication for Local Testing
+
+For local testing and development, you can disable JWT authentication validation. This allows testing API endpoints without registering devices or managing tokens.
+
+**WARNING**: This setting should ONLY be used for local development. Never use in production.
+
+```bash
+# Start API server with authentication disabled
+cd /Users/sirsh/code/p8fs-modules/p8fs-api
+P8FS_AUTH_DISABLED=true uv run uvicorn src.p8fs_api.main:app --reload --host 0.0.0.0 --port 8001
+
+# Test chat endpoint without token (normally requires authentication)
+curl -X POST http://localhost:8001/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4.1-mini",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": false
+  }'
+```
+
+When authentication is disabled:
+
+- All requests return a test token with tenant_id `tenant-test`
+- No JWT validation occurs
+- Useful for testing API functionality without auth setup
+- Server logs warnings when auth is bypassed
+
+**Configuration:**
+
+```bash
+# Environment variable
+export P8FS_AUTH_DISABLED=true
+
+# Or in .env file
+P8FS_AUTH_DISABLED=true
+```
+
 ### Test Device Registration with PostgreSQL
 
 ```bash
@@ -1571,7 +1609,7 @@ python3 -c "import json; print(json.load(open('~/.p8fs/auth/token.json'.replace(
 
 # Use token to authenticate
 TOKEN=$(cat /tmp/token.txt)
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8001/oauth/ping
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8001/api/v1/oauth/ping
 
 # Actual response (200 OK):
 {"authenticated":true,"user_id":"dev-xxxxxxxxxxxx","email":"test@example.com","tenant_id":"tenant-test"}
@@ -1581,13 +1619,13 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8001/oauth/ping
 
 ```bash
 # Test 3a: No token provided
-curl http://localhost:8001/oauth/ping
+curl http://localhost:8001/api/v1/oauth/ping
 
 # Actual response (403 Forbidden):
 {"error":"http_error_403","message":"Not authenticated","details":null,"request_id":null}
 
 # Test 3b: Invalid token format
-curl -H "Authorization: Bearer invalid-token-here" http://localhost:8001/oauth/ping
+curl -H "Authorization: Bearer invalid-token-here" http://localhost:8001/api/v1/oauth/ping
 
 # Actual response (401 Unauthorized):
 {"error":"http_error_401","message":"AUTH_INVALID_TOKEN: Token validation failed: Not enough segments","details":null,"request_id":null}

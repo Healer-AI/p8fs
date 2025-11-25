@@ -1,0 +1,86 @@
+- session_id: f880332c-8333-4753-927f-16e2542366b1
+  date: '2025-11-18T00:32:15.048442+00:00'
+  query: Tell me about quantum computing
+  session_type: chat
+  messages:
+  - role: user
+    content: Tell me about quantum computing
+    timestamp: '2025-11-18T00:32:15.063991+00:00'
+  - role: assistant
+    content: 'Quantum computing leverages quantum mechanical phenomena to perform
+      computations. Unlike classical bits that are either 0 or 1, quantum bits (qubits)
+      can exist in superposition, representing both stat
+
+
+      ... [Message truncated - REM LOOKUP session-f880332c-8333-4753-927f-16e2542366b1-msg-1
+      to recover full content] ...
+
+
+      lude maintaining quantum coherence (decoherence), error correction, and scaling
+      to practical qubit counts. Applications span cryptography, drug discovery, optimization
+      problems, and materials science.'
+    timestamp: '2025-11-18T00:32:15.063999+00:00'
+    _compressed: true
+    _entity_key: session-f880332c-8333-4753-927f-16e2542366b1-msg-1
+    _original_length: 747
+  - role: user
+    content: How does it differ from classical computing?
+    timestamp: '2025-11-18T00:32:15.064001+00:00'
+  - role: assistant
+    content: Classical computers use bits (0 or 1) and process sequentially. Quantum
+      computers use qubits that can be in superposition, enabling parallel processing
+      of multiple states simultaneously.
+    timestamp: '2025-11-18T00:32:15.064002+00:00'
+  metadata:
+    message_count: 4
+    total_tokens: 0
+    model: unknown
+- session_id: 3317bade-4b11-49c0-99cb-2b1c5f692256
+  date: '2025-11-18T00:32:14.829407+00:00'
+  query: Explain neural networks in detail
+  session_type: chat
+  messages:
+  - role: user
+    content: Explain neural networks in detail
+    timestamp: '2025-11-18T00:32:14.845870+00:00'
+  - role: assistant
+    content: "Neural networks are computational models inspired by biological neural\
+      \ networks in animal brains. They consist of interconnected nodes (neurons)\
+      \ organized in layers. Each connection has a weight that \n\n... [Message truncated\
+      \ - REM LOOKUP session-3317bade-4b11-49c0-99cb-2b1c5f692256-msg-1 to recover\
+      \ full content] ...\n\networks with many hidden layers, enabling the model to\
+      \ learn complex hierarchical representations of data. Applications include image\
+      \ recognition, natural language processing, and autonomous vehicles."
+    timestamp: '2025-11-18T00:32:14.845878+00:00'
+    _compressed: true
+    _entity_key: session-3317bade-4b11-49c0-99cb-2b1c5f692256-msg-1
+    _original_length: 773
+  metadata:
+    message_count: 2
+    total_tokens: 0
+    model: unknown
+- session_id: 471bece6-eef1-4c4b-91fb-7ae18575f372
+  date: '2025-11-18T00:32:13.390613+00:00'
+  query: What is machine learning?
+  session_type: chat
+  messages:
+  - role: user
+    content: What is machine learning?
+    timestamp: '2025-11-18T00:32:14.800312+00:00'
+  - role: assistant
+    content: Machine learning is a subset of AI that enables systems to learn from
+      data.
+    timestamp: '2025-11-18T00:32:14.800333+00:00'
+  metadata:
+    message_count: 2
+    total_tokens: 0
+    model: unknown
+- session_id: 3257cf18-f555-4802-8b60-6e642e79ec51
+  date: '2025-11-18T00:31:41.083823+00:00'
+  query: What is machine learning?
+  session_type: chat
+  messages: []
+  metadata:
+    message_count: 0
+    total_tokens: 0
+    model: unknown

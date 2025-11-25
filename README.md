@@ -3,7 +3,6 @@
 P8FS is a distributed content management system designed for secure, scalable storage with advanced indexing capabilities. The system leverages S3-compatible blob storage (SeaweedFS) and TiDB/TiKV for managing a secure "memory vault" where users can upload and manage content with end-to-end encryption.
 
 It can be used with other clients e.g. for Chat Assistants Claude Desktop or Chat GPT via MCP or Obsedian and other note management systems.
-Let's update.
 
 ## System Architecture
 

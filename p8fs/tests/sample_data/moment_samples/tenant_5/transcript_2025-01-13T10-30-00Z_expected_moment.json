@@ -1,34 +1,5 @@
 {
   "metadata": {
-    "real_world_timestamp": "2025-01-13T10:30:00Z",
-    "recording_date": "Monday, January 13, 2025",
-    "recording_time": "10:30 AM UTC"
-  },
-  "name": "Protein Crystal Growth Experiment - Insulin Research",
-  "content": "Commander Chen and Dr. Novak conducting protein crystallization experiment in microgravity environment. Observed 72-hour growth batch showing superior clarity and lattice structure compared to Earth-grown samples, attributed to absence of gravity-induced convection enabling uniform protein arrangement. Documented current batch with 4K time-lapse photography for pharmaceutical partner analysis. Prepared new sample tray with insulin variant for diabetes research consortium, emphasizing medical breakthrough potential. Executed precise protocol: maintained 4°C temperature in growth chamber, verified seal integrity to prevent contamination, loaded six pristine protein solution vials. Initiated 96-hour growth cycle with daily observation schedule. High-resolution photography captured crystal reflection patterns. Collaboration demonstrated effective teamwork: Chen's steady hands and technical precision complementing Novak's scientific expertise. Both expressed fulfillment from contributing to medical research with tangible Earth benefits. Session concluded with workspace cleanup before scheduled EVA preparation. Experiment represents ISS contribution to pharmaceutical development through unique microgravity crystallization capabilities.",
-  "summary": "Science experiment: observed protein crystals, loaded new insulin research batch, 96-hour growth initiated, medical breakthrough focus",
-  "category": "space",
-  "uri": "s3://p8fs-tenant5/recordings/2025-01-13/protein_crystal_growth.wav",
-  "resource_timestamp": "2025-01-13T10:30:00Z",
-  "resource_ends_timestamp": "2025-01-13T10:39:58Z",
-  "moment_type": "collaboration",
-  "emotion_tags": ["focused", "professional", "fulfilled", "meticulous"],
-  "topic_tags": ["scientific-research", "protein-crystallization", "medical-applications", "microgravity-science", "collaboration"],
-  "present_persons": {
-    "fp_chen_t5": {
-      "fingerprint_id": "fp_chen_t5",
-      "user_id": "user_chen_001",
-      "user_label": "Commander Chen"
-    },
-    "fp_novak_t5": {
-      "fingerprint_id": "fp_novak_t5",
-      "user_id": "user_novak_002",
-      "user_label": "Dr. Novak"
-    }
-  },
-  "location": "iss_destiny_lab",
-  "background_sounds": "equipment humming, camera shutter clicks, gentle air circulation",
-  "metadata": {
     "source_type": "audio_transcript",
     "duration_minutes": 9.97,
     "word_count": 312,
@@ -36,5 +7,40 @@
     "activity_type": "scientific_experiment",
     "mission_day": 87,
     "experiment_type": "protein_crystallization"
-  }
+  },
+  "name": "Protein Crystal Growth Experiment - Insulin Research",
+  "content": "Commander Chen and Dr. Novak conducting protein crystallization experiment in microgravity environment. Observed 72-hour growth batch showing superior clarity and lattice structure compared to Earth-grown samples, attributed to absence of gravity-induced convection enabling uniform protein arrangement. Documented current batch with 4K time-lapse photography for pharmaceutical partner analysis. Prepared new sample tray with insulin variant for diabetes research consortium, emphasizing medical breakthrough potential. Executed precise protocol: maintained 4\u00b0C temperature in growth chamber, verified seal integrity to prevent contamination, loaded six pristine protein solution vials. Initiated 96-hour growth cycle with daily observation schedule. High-resolution photography captured crystal reflection patterns. Collaboration demonstrated effective teamwork: Chen's steady hands and technical precision complementing Novak's scientific expertise. Both expressed fulfillment from contributing to medical research with tangible Earth benefits. Session concluded with workspace cleanup before scheduled EVA preparation. Experiment represents ISS contribution to pharmaceutical development through unique microgravity crystallization capabilities.",
+  "summary": "Science experiment: observed protein crystals, loaded new insulin research batch, 96-hour growth initiated, medical breakthrough focus",
+  "category": "space",
+  "uri": "s3://p8fs-tenant5/recordings/2025-01-13/protein_crystal_growth.wav",
+  "resource_timestamp": "2025-01-13T10:30:00Z",
+  "resource_ends_timestamp": "2025-01-13T10:39:58Z",
+  "moment_type": "collaboration",
+  "emotion_tags": [
+    "focused",
+    "professional",
+    "fulfilled",
+    "meticulous"
+  ],
+  "topic_tags": [
+    "scientific-research",
+    "protein-crystallization",
+    "medical-applications",
+    "microgravity-science",
+    "collaboration"
+  ],
+  "present_persons": [
+    {
+      "id": "fp_chen_t5",
+      "name": "Commander Chen",
+      "comment": "User ID: user_chen_001"
+    },
+    {
+      "id": "fp_novak_t5",
+      "name": "Dr. Novak",
+      "comment": "User ID: user_novak_002"
+    }
+  ],
+  "location": "iss_destiny_lab",
+  "background_sounds": "equipment humming, camera shutter clicks, gentle air circulation"
 }

@@ -361,7 +361,7 @@ entity = provider.get_entities_by_storage_key(connection, "document/doc123", "te
 
 #### Documentation & Examples
 - **README**: `docs/providers/tidb-provider-readme.md` (comprehensive guide)
-- **Example Script**: `examples/tidb_provider_example.py` (working demo)
+- **Integration Tests**: `tests/integration/test_tidb_provider.py` (working examples)
 
 ### Semantic Search Implementation
 
@@ -456,11 +456,11 @@ pytest tests/integration/test_tidb_provider_override.py -v
 #### Live Connection Test
 
 ```bash
-# Quick connection validation
-python examples/tidb_provider_example.py
+# Run integration tests
+pytest tests/integration/test_tidb_provider.py -v
 
-# Or run the validation script directly
-python /tmp/test_tidb_fixed.py
+# Or run specific test
+pytest tests/integration/test_tidb_provider.py::test_tidb_connection -v
 ```
 
 ## Development Setup

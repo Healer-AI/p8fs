@@ -261,12 +261,12 @@ def auth_example(format: str):
     examples = {
         'curl': {
             'device_flow': f"""# Initiate device flow
-            curl -X POST {base_url}/oauth/device/code \\
+            curl -X POST {base_url}/api/v1/oauth/device/code \\
             -H "Content-Type: application/json" \\
             -d '{{"client_id": "desktop-app", "scope": "read write"}}'
 
             # Poll for token
-            curl -X POST {base_url}/oauth/token \\
+            curl -X POST {base_url}/api/v1/oauth/token \\
             -H "Content-Type: application/x-www-form-urlencoded" \\
             -d "grant_type=urn:ietf:params:oauth:grant-type:device_code&device_code=<code>&client_id=desktop-app"
             """,
@@ -282,12 +282,12 @@ def auth_example(format: str):
                     },
                     'httpie': {
                         'device_flow': f"""# Initiate device flow
-            http POST {base_url}/oauth/device/code \\
+            http POST {base_url}/api/v1/oauth/device/code \\
             client_id=desktop-app \\
             scope="read write"
 
-            # Poll for token  
-            http --form POST {base_url}/oauth/token \\
+            # Poll for token
+            http --form POST {base_url}/api/v1/oauth/token \\
             grant_type=urn:ietf:params:oauth:grant-type:device_code \\
             device_code=<code> \\
             client_id=desktop-app
@@ -309,7 +309,7 @@ def auth_example(format: str):
 
             # Start device flow
             response = requests.post(
-                "{base_url}/oauth/device/code",
+                "{base_url}/api/v1/oauth/device/code",
                 json={{"client_id": "desktop-app", "scope": "read write"}}
             )
             device_data = response.json()
@@ -318,7 +318,7 @@ def auth_example(format: str):
             import time
             while True:
                 response = requests.post(
-                    "{base_url}/oauth/token",
+                    "{base_url}/api/v1/oauth/token",
                     data={{
                         "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                         "device_code": device_data["device_code"],

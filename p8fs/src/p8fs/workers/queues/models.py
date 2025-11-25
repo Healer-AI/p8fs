@@ -1,6 +1,7 @@
 """Data models for P8FS storage events."""
 
 import re
+import time
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any
@@ -103,8 +104,6 @@ class StorageEvent:
             raise ValueError("path cannot be empty")
         if not self.tenant_id:
             raise ValueError("tenant_id cannot be empty")
-        if self.timestamp <= 0:
-            raise ValueError(f"timestamp must be > 0, got {self.timestamp}")
     
     @classmethod
     def _normalize_event_type(cls, event_type_str: str) -> StorageEventType:
@@ -187,19 +186,42 @@ class StorageEvent:
         if path_info.is_directory:
             raise ValueError(f"Directory events not supported: {path}")
             
-        # Build metadata
+        # Build metadata - extract file_size from nested structure
+        # Try multiple locations for file_size
+        file_size = raw_event.get("size", 0)
+        if not file_size:
+            file_size = raw_event.get("file_size", 0)
+        if not file_size:
+            # SeaweedFS format: entry.attributes.file_size
+            entry = raw_event.get("entry", {})
+            attributes = entry.get("attributes", {})
+            file_size = attributes.get("file_size", 0)
+
+        # Ensure file_size is an integer (not string)
+        try:
+            file_size = int(file_size) if file_size else 0
+        except (ValueError, TypeError):
+            file_size = 0
+
         metadata = StorageEventMetadata(
-            file_size=raw_event.get("file_size", raw_event.get("size", 0)),
+            file_size=file_size,
             content_type=raw_event.get("content_type", raw_event.get("mime_type")),
             last_modified=raw_event.get("last_modified", raw_event.get("timestamp")),
             etag=raw_event.get("etag"),
             source=raw_event.get("source", "seaweedfs")
         )
-        
+
         # Extract tenant ID and relative path
         tenant_id = cls._extract_tenant_id(path, path_info.tenant_id)
         relative_path = cls._extract_relative_path(path_info)
-        
+
+        # Ensure timestamp is a float, use current time if missing/invalid
+        timestamp_value = raw_event.get("timestamp")
+        try:
+            timestamp = float(timestamp_value) if timestamp_value else time.time()
+        except (ValueError, TypeError):
+            timestamp = time.time()
+
         # Create validated event
         return cls(
             event_type=event_type,
@@ -209,7 +231,7 @@ class StorageEvent:
             tenant_id=tenant_id,
             relative_path=relative_path,
             full_path=path,
-            timestamp=raw_event.get("timestamp", 0.0)
+            timestamp=timestamp
         )
         
     def should_process(self) -> bool:

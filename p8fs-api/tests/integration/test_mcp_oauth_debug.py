@@ -15,7 +15,7 @@ async def debug_device_auth_flow():
         
         # Create device authorization
         device_auth_response = await client.post(
-            "/oauth/device_authorization",
+            "/api/v1/oauth/device_authorization",
             data={
                 "client_id": "debug_test_client",
                 "scope": "read write"
@@ -95,7 +95,7 @@ async def debug_device_auth_flow():
             print(f"\nTrying user code format: {code_format}")
             
             approval_response = await client.post(
-                "/oauth/device/approve",
+                "/api/v1/oauth/device/approve",
                 json={
                     "user_code": code_format,
                     "approved": True,
@@ -118,7 +118,7 @@ async def debug_device_auth_flow():
         # Try to poll for token to see if it was approved
         print("\nTrying token poll...")
         token_response = await client.post(
-            "/oauth/token",
+            "/api/v1/oauth/token",
             data={
                 "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                 "device_code": device_code,

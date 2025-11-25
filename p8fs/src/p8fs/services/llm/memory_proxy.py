@@ -520,6 +520,10 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
                     arguments = json.loads(arguments_str) if arguments_str else {}
                     result = await self._function_handler.execute(func_name, arguments)
 
+                    # Serialize result to handle datetime and other non-JSON types
+                    # Convert to JSON and back to ensure all types are serializable
+                    result = json.loads(json.dumps(result, default=str))
+
                     # Add function result to messages in native dialect
                     func_call = FunctionCall.from_openai_tool_call(
                         tool_call, model_scheme
@@ -584,160 +588,190 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
         Yields:
             Streaming response chunks
         """
+        # Import tracing utilities
+        from p8fs.utils.otel_utils import get_tracer, set_agent_attributes
+        from p8fs.utils.span_kinds import OpenInferenceSpanKind, set_span_kind
+        from opentelemetry.trace import SpanKind
+
         if context is None:
             context = CallingContext()
 
-        # Initialize streaming context
-        self._setup_streaming_context(context)
-
-        # Build initial message stack
-        messages = self._build_message_stack(question)
-
-        # Get function schemas
-        function_schemas = None
-        if self._function_handler:
-            function_schemas = self._function_handler.get_schemas()
-
-        # Get model scheme for native dialect conversion
-        from .language_model import LanguageModel
-        from .utils import convert_tool_calls_to_native_message
-
-        tenant_id = context.tenant_id or "default"
-        language_model = LanguageModel(context.model, tenant_id)
-        model_scheme = language_model.params.get("scheme", "openai")
-
-        final_response_content = ""
-        saw_stop = False  # Track stop signal from LLM
-
-        # Agentic loop - iterate until completion or max iterations
-        for iteration in range(max_iterations):
-            logger.debug(
-                f"Streaming agentic loop iteration {iteration + 1}/{max_iterations}"
+        # Start agent span for distributed tracing
+        tracer = get_tracer(__name__)
+        with tracer.start_as_current_span("agent.stream", kind=SpanKind.CLIENT) as span:
+            # Set agent attributes
+            set_span_kind(span, OpenInferenceSpanKind.AGENT)
+            agent_name = self._model_context.get_model_full_name() if self._model_context else "MemoryProxy"
+            set_agent_attributes(
+                span,
+                agent_name=agent_name,
+                agent_type="memory_proxy",
+                user_id=getattr(context, 'user_id', None) if context else None,
+                session_id=getattr(context, 'conversation_id', None) if context else None,
             )
 
-            # Yield iteration start event
+            # Initialize streaming context
+            self._setup_streaming_context(context)
+
+            # Build initial message stack
+            # System prompt comes from agent model, additional messages appended after
+            messages = self._build_message_stack(question)
+
+            # Append context messages (historical, context hints) if provided
+            if context and getattr(context, 'messages', None):
+                # System prompt is first message, insert context messages after it
+                if messages and messages[0].get('role') == 'system':
+                    messages = [messages[0]] + context.messages + messages[1:]
+                    logger.debug(f"Inserted {len(context.messages)} context messages after system prompt")
+                else:
+                    messages.extend(context.messages)
+                    logger.debug(f"Appended {len(context.messages)} context messages")
+
+            # Get function schemas
+            function_schemas = None
+            if self._function_handler:
+                function_schemas = self._function_handler.get_schemas()
+
+            # Get model scheme for native dialect conversion
+            from .language_model import LanguageModel
+            from .utils import convert_tool_calls_to_native_message
+
+            tenant_id = context.tenant_id or "default"
+            language_model = LanguageModel(context.model, tenant_id)
+            model_scheme = language_model.params.get("scheme", "openai")
+
+            final_response_content = ""
+            saw_stop = False  # Track stop signal from LLM
+
+            # Agentic loop - iterate until completion or max iterations
+            for iteration in range(max_iterations):
+                logger.info(
+                    f"Streaming agentic loop iteration {iteration + 1}/{max_iterations}"
+                )
+
+                # Yield iteration start event
+                yield {
+                    "type": "iteration_start",
+                    "iteration": iteration + 1,
+                    "max_iterations": max_iterations,
+                }
+
+                try:
+                    # Initialize iteration state
+                    iteration_content = ""
+                    complete_tool_calls = []
+                    tool_call_buffer = {}
+                    saw_tool_call_complete = False
+
+                    # Prepare parameters from context
+                    params = context.model_dump(include={"temperature", "max_tokens"})
+
+                    # Add response_format if present (from metadata or prefer_json)
+                    metadata = getattr(context, "metadata", None)
+                    if metadata and "response_format" in metadata:
+                        params["response_format"] = metadata["response_format"]
+                    elif context.prefer_json:
+                        params["response_format"] = {"type": "json_object"}
+
+                    # Stream the completion for this iteration
+                    async for chunk in self.stream_completion(
+                        messages=messages,
+                        model_name=context.model,
+                        **params,
+                        stream=True,  # Always stream in the streaming method
+                        tools=function_schemas,
+                    ):
+                        # Forward the chunk
+                        yield chunk
+
+                        # Check for stop signal in chunk
+                        if isinstance(chunk, dict):
+                            # OpenAI format
+                            if "choices" in chunk:
+                                choices = chunk.get("choices", [])
+                                if choices:
+                                    finish_reason = choices[0].get("finish_reason")
+                                    if finish_reason == "stop":
+                                        saw_stop = True
+                            # Anthropic format
+                            elif chunk.get("type") == "message_delta":
+                                delta = chunk.get("delta", {})
+                                stop_reason = delta.get("stop_reason")
+                                if stop_reason == "end_turn":
+                                    saw_stop = True
+
+                        # Process chunk for content and tool calls
+                        (
+                            iteration_content,
+                            final_response_content,
+                            chunk_tool_calls,
+                            saw_completion,
+                        ) = self._process_streaming_chunk(
+                            chunk,
+                            tool_call_buffer,
+                            iteration_content,
+                            final_response_content,
+                        )
+
+                        if chunk_tool_calls:
+                            complete_tool_calls = chunk_tool_calls
+                            saw_tool_call_complete = saw_completion
+
+                            # Emit function announcements for better UX
+                            for tool_call in complete_tool_calls:
+                                if "function" in tool_call:
+                                    yield {
+                                        "type": "function_announcement",
+                                        "function_name": tool_call["function"]["name"],
+                                        "arguments": tool_call["function"]["arguments"],
+                                    }
+
+                    # Execute function calls if we have them
+                    if complete_tool_calls:
+                        # Add assistant message with tool calls to conversation in native dialect
+                        assistant_message = convert_tool_calls_to_native_message(
+                            complete_tool_calls,
+                            model_scheme,
+                            iteration_content if iteration_content else "",
+                        )
+                        messages.append(assistant_message)
+
+                        # Execute all function calls
+                        async for func_result in self._execute_function_calls(
+                            complete_tool_calls, messages, model_scheme
+                        ):
+                            yield func_result
+
+                        # Continue to next iteration after function execution
+                        continue
+
+                    # No tool calls - check if LLM signaled stop
+                    if saw_stop:
+                        # LLM explicitly finished with stop signal
+                        break
+                    # Otherwise continue to next iteration
+
+                except Exception as e:
+                    import traceback
+                    logger.error(
+                        f"Error in streaming agentic loop iteration {iteration + 1}: {traceback.format_exc()}",
+                        exc_info=True  # This will include the full stack trace
+                    )
+                    yield {"type": "error", "iteration": iteration + 1, "error": str(e)}
+                    break
+
+            # Yield completion event
             yield {
-                "type": "iteration_start",
-                "iteration": iteration + 1,
-                "max_iterations": max_iterations,
+                "type": "completion",
+                "final_response": final_response_content,
+                "total_iterations": iteration + 1,
             }
 
-            try:
-                # Initialize iteration state
-                iteration_content = ""
-                complete_tool_calls = []
-                tool_call_buffer = {}
-                saw_tool_call_complete = False
-
-                # Prepare parameters from context
-                params = context.model_dump(include={"temperature", "max_tokens"})
-
-                # Add response_format if present (from metadata or prefer_json)
-                metadata = getattr(context, "metadata", None)
-                if metadata and "response_format" in metadata:
-                    params["response_format"] = metadata["response_format"]
-                elif context.prefer_json:
-                    params["response_format"] = {"type": "json_object"}
-
-                # Stream the completion for this iteration
-                async for chunk in self.stream_completion(
-                    messages=messages,
-                    model_name=context.model,
-                    **params,
-                    stream=True,  # Always stream in the streaming method
-                    tools=function_schemas,
-                ):
-                    # Forward the chunk
-                    yield chunk
-
-                    # Check for stop signal in chunk
-                    if isinstance(chunk, dict):
-                        # OpenAI format
-                        if "choices" in chunk:
-                            choices = chunk.get("choices", [])
-                            if choices:
-                                finish_reason = choices[0].get("finish_reason")
-                                if finish_reason == "stop":
-                                    saw_stop = True
-                        # Anthropic format
-                        elif chunk.get("type") == "message_delta":
-                            delta = chunk.get("delta", {})
-                            stop_reason = delta.get("stop_reason")
-                            if stop_reason == "end_turn":
-                                saw_stop = True
-
-                    # Process chunk for content and tool calls
-                    (
-                        iteration_content,
-                        final_response_content,
-                        chunk_tool_calls,
-                        saw_completion,
-                    ) = self._process_streaming_chunk(
-                        chunk,
-                        tool_call_buffer,
-                        iteration_content,
-                        final_response_content,
-                    )
-
-                    if chunk_tool_calls:
-                        complete_tool_calls = chunk_tool_calls
-                        saw_tool_call_complete = saw_completion
-
-                        # Emit function announcements for better UX
-                        for tool_call in complete_tool_calls:
-                            if "function" in tool_call:
-                                yield {
-                                    "type": "function_announcement",
-                                    "function_name": tool_call["function"]["name"],
-                                    "arguments": tool_call["function"]["arguments"],
-                                }
-
-                # Execute function calls if we have them
-                if complete_tool_calls:
-                    # Add assistant message with tool calls to conversation in native dialect
-                    assistant_message = convert_tool_calls_to_native_message(
-                        complete_tool_calls,
-                        model_scheme,
-                        iteration_content if iteration_content else "",
-                    )
-                    messages.append(assistant_message)
-
-                    # Execute all function calls
-                    async for func_result in self._execute_function_calls(
-                        complete_tool_calls, messages, model_scheme
-                    ):
-                        yield func_result
-
-                    # Continue to next iteration after function execution
-                    continue
-
-                # No tool calls - check if LLM signaled stop
-                if saw_stop:
-                    # LLM explicitly finished with stop signal
-                    break
-                # Otherwise continue to next iteration
-
-            except Exception as e:
-                import traceback
-                logger.error(
-                    f"Error in streaming agentic loop iteration {iteration + 1}: {traceback.format_exc()}",
-                    exc_info=True  # This will include the full stack trace
-                )
-                yield {"type": "error", "iteration": iteration + 1, "error": str(e)}
-                break
-
-        # Yield completion event
-        yield {
-            "type": "completion",
-            "final_response": final_response_content,
-            "total_iterations": iteration + 1,
-        }
-
-        # Audit the session
-        logger.trace(
-            f"Attempting to audit session - streaming: {context.prefers_streaming}, response length: {len(final_response_content)}"
-        )
-        await self._audit_session(context, question, final_response_content)
+            # Audit the session
+            logger.trace(
+                f"Attempting to audit session - streaming: {context.prefers_streaming}, response length: {len(final_response_content)}"
+            )
+            await self._audit_session(context, question, final_response_content)
 
     def _build_message_stack(self, question: str) -> list[dict[str, Any]]:
         """
@@ -1289,6 +1323,13 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
             response: Agent's response (truncated)
         """
         try:
+            # Truncate query to avoid storing large data loads in session audit
+            # For agentic workflows with data loads, only store first 500 chars
+            max_query_length = 500
+            truncated_query = question[:max_query_length] if question else None
+            if question and len(question) > max_query_length:
+                truncated_query += "... [truncated]"
+
             # Start the audit session with the query
             await self.start_audit_session(
                 tenant_id=context.tenant_id or self._tenant_id or DEFAULT_TENANT_ID,
@@ -1297,10 +1338,12 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
                 streaming=getattr(context, "stream", context.prefers_streaming),
                 user_id=context.user_id,
                 temperature=context.temperature,
-                query=question,  # Pass the question as the query
-                moment_id=context.moment_id  # Link to moment if provided
+                query=truncated_query,  # Pass truncated query to avoid large data storage
+                moment_id=context.moment_id,  # Link to moment if provided
+                session_type=context.session_type,  # Pass session type for filtering
+                session_id=context.session_id  # Use session ID from context if provided
             )
-            
+
             # Track token usage if we have a response
             if response:
                 # Simple token estimation - in production you'd use tiktoken
@@ -1310,7 +1353,25 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
                     prompt_tokens=prompt_tokens,
                     completion_tokens=completion_tokens
                 )
-            
+
+            # Save messages with compression BEFORE ending session
+            if question or response:
+                messages = []
+                if question:
+                    messages.append({
+                        "role": "user",
+                        "content": question,
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    })
+                if response:
+                    messages.append({
+                        "role": "assistant",
+                        "content": response,
+                        "timestamp": datetime.now(timezone.utc).isoformat()
+                    })
+
+                await self.save_session_messages(messages, compress=True)
+
             # End the session
             await self.end_audit_session()
 
@@ -1325,22 +1386,97 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
         """
         Process messages that may contain audio content.
 
-        Currently, audio processing is not supported.
+        When has_audio is True, the first user message content should be base64-encoded
+        audio data. This method decodes the audio, transcribes it using OpenAI Whisper,
+        and replaces the base64 content with the transcription.
 
         Args:
             messages: List of message dictionaries
-            has_audio: Whether the first user message contains audio
+            has_audio: Whether the first user message contains base64 audio
 
         Returns:
-            Original messages unchanged
+            Messages with audio transcribed to text
 
         Raises:
-            ValueError: If audio processing is requested
+            ValueError: If audio processing fails
         """
-        if has_audio:
-            raise ValueError("Audio processing is not currently supported")
+        if not has_audio:
+            return messages
 
-        return messages
+        # Find first user message with audio content
+        user_message_idx = None
+        for i, message in enumerate(messages):
+            if message.get("role") == "user":
+                user_message_idx = i
+                break
+
+        if user_message_idx is None:
+            logger.warning("has_audio=True but no user message found")
+            return messages
+
+        user_message = messages[user_message_idx]
+        base64_audio = user_message.get("content", "")
+
+        if not base64_audio or not isinstance(base64_audio, str):
+            logger.warning("has_audio=True but user message has no string content")
+            return messages
+
+        try:
+            # Decode base64 audio to temporary file
+            from p8fs.utils.audio import audio_file_from_base64
+            import os
+            import tempfile
+
+            logger.info("Decoding base64 audio for transcription")
+            audio_file_path = audio_file_from_base64(base64_audio, "chat_audio.wav")
+
+            try:
+                # Use OpenAI Whisper API via requests (lightweight, no extra dependencies)
+                import requests
+                from p8fs_cluster.config.settings import config
+
+                logger.info(f"Transcribing audio file: {audio_file_path}")
+
+                # Call OpenAI Whisper API directly with requests
+                url = "https://api.openai.com/v1/audio/transcriptions"
+                headers = {
+                    "Authorization": f"Bearer {config.openai_api_key}"
+                }
+
+                with open(audio_file_path, "rb") as audio_file:
+                    files = {
+                        "file": ("audio.wav", audio_file, "audio/wav")
+                    }
+                    data = {
+                        "model": "whisper-1",
+                        "response_format": "text"
+                    }
+
+                    response = requests.post(url, headers=headers, files=files, data=data)
+                    response.raise_for_status()
+
+                    transcription = response.text
+
+                # Replace base64 content with transcription
+                messages[user_message_idx]["content"] = transcription
+                logger.info(f"Audio transcribed successfully: {len(transcription)} characters")
+
+            finally:
+                # Clean up temporary file
+                if os.path.exists(audio_file_path):
+                    os.unlink(audio_file_path)
+                    logger.debug(f"Cleaned up temporary audio file: {audio_file_path}")
+
+            return messages
+
+        except ImportError as e:
+            error_msg = f"Audio processing failed - missing dependency: {str(e)}"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+        except Exception as e:
+            error_msg = f"Audio processing failed: {str(e)}"
+            logger.error(error_msg, exc_info=True)
+            raise ValueError(error_msg)
 
     async def batch(
         self, q: str | list[str], context: BatchCallingContext, save_job: bool = False
@@ -1683,7 +1819,10 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
             )
         )
 
-        return await client.retrieve_batch(batch_id)
+        try:
+            return await client.retrieve_batch(batch_id)
+        finally:
+            await client.close()
 
     async def _download_batch_results(self, file_id: str) -> list[dict[str, Any]]:
         """Download and parse batch results from OpenAI"""
@@ -1699,16 +1838,19 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
             )
         )
 
-        # Download file content
-        content = await client.download_file(file_id)
+        try:
+            # Download file content
+            content = await client.download_file(file_id)
 
-        # Parse JSONL results
-        results = []
-        for line in content.strip().split("\n"):
-            if line.strip():
-                results.append(json.loads(line))
+            # Parse JSONL results
+            results = []
+            for line in content.strip().split("\n"):
+                if line.strip():
+                    results.append(json.loads(line))
 
-        return results
+            return results
+        finally:
+            await client.close()
 
     async def parse_content(
         self,
@@ -1769,9 +1911,13 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
             question = f"Analyze this content (part {i+1}/{len(chunks)}) and return only the structured JSON analysis without using any tools or functions.\n\n{chunk}"
             response = await self.run(question, context, max_iterations=1)
 
+            # Debug: Log raw response
+            logger.debug(f"RAW LLM RESPONSE for chunk {i+1}/{len(chunks)} (length={len(response)}): {response[:500]}")
+
             # Parse JSON response
             parsed = self._extract_json(response)
             if parsed:
+                logger.debug(f"PARSED JSON for chunk {i+1}/{len(chunks)}: {json.dumps(parsed, indent=2, default=str)[:500]}")
                 results.append(parsed)
                 logger.debug(f"Parsed chunk {i+1}/{len(chunks)}: {len(parsed)} keys")
             else:
@@ -1779,11 +1925,14 @@ class MemoryProxy(BaseProxy, AuditSessionMixin):
 
         # Merge results
         merged = self._merge_results(results, merge_strategy)
+        logger.debug(f"MERGED RESULTS: {json.dumps(merged, indent=2, default=str)[:1000]}")
 
         # Validate with model
         if merged and self._model_context:
             try:
-                return self._model_context(**merged)
+                validated = self._model_context(**merged)
+                logger.debug(f"VALIDATED MODEL: {validated}")
+                return validated
             except Exception as e:
                 logger.warning(f"Failed to validate merged results with model: {e}")
                 return merged

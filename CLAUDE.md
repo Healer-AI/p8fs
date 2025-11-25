@@ -118,6 +118,43 @@ git push --no-verify
 
 See `p8fs/docs/pre-commit-hooks.md` for detailed setup and usage.
 
+#### Build and Release Process
+
+Two-stage pipeline separating build from release:
+
+**Version Bumping Workflow**:
+
+CRITICAL: Always read the current version from pyproject.toml, never from git tags.
+
+```bash
+# 1. Check current version (ALWAYS do this first)
+grep '^version = ' pyproject.toml
+
+# 2. Bump version in pyproject.toml (e.g., 1.1.50 -> 1.1.51)
+# Edit the file manually or with sed
+
+# 3. Commit and create RC tag
+git add -A
+git commit -m "* build v1.1.51 - Description of changes"
+git tag v1.1.51-rc
+git push origin <branch-name>
+git push origin v1.1.51-rc
+```
+
+**RC Builds** (`vX.Y.ZrcN` tags):
+- Triggers Build Pipeline (GitHub Actions)
+- Creates CalVer-tagged Docker images
+- Runs tests and security scans
+- Pushes to container registry
+
+**Production Releases** (semantic version tags):
+- Triggers Release Pipeline
+- Promotes tested RC images
+- Generates security attestations
+- Updates Kubernetes deployments
+
+See README.md for detailed workflow.
+
 ### Documentation Guidelines
 
 - Factual, evidence-based documentation
@@ -350,6 +387,32 @@ Environment Variables → P8FSConfig → Computed Properties → Providers
 - **Integration Tests**: Use real centralized config (no mocking)
 - **Unit Tests**: Mock config locally within specific test functions, not globally
 - **Never**: Override config globally in `conftest.py` for integration tests
+
+## Health Check System
+
+The P8FS API includes startup health checks that validate critical services on initialization.
+
+### Endpoints
+
+- **`/health`**: Full system health with TiKV, database, NATS, and embedding checks
+- **`/health?extended=true`**: Includes LLM check using gpt-4.1-nano via MemoryProxy
+- **`/ready`**: Kubernetes readiness probe
+- **`/live`**: Kubernetes liveness probe
+
+### NATS Queue Metrics
+
+NATS health check reports three metrics per queue:
+- `messages`: Total messages in stream (includes processed messages - 24-hour retention)
+- `unprocessed`: Active pending messages (num_pending from consumer)
+- `bytes`: Total stream size
+
+Interpretation: `messages > 0` with `unprocessed = 0` is healthy - workers are keeping up, messages are historical.
+
+### Implementation
+
+Health checks run non-blocking on startup. Failures are logged but don't prevent API initialization. See:
+- `p8fs-api/src/p8fs_api/startup_health.py` (lines 22-391)
+- `p8fs-api/src/p8fs_api/routers/health.py` (lines 14-50)
 
 ## Technical Stack
 

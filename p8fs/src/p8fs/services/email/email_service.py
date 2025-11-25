@@ -59,12 +59,12 @@ class EmailService:
                 logger.info("   Reason: Mock email provider")
             return
 
-        subject = "P8FS Verification Code"
+        subject = "EEPIS Verification Code"
         html_content = f"""
         <html>
         <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
             <div style="max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <h2 style="color: #333; text-align: center;">P8FS Authentication</h2>
+                <h2 style="color: #333; text-align: center;">EEPIS Authentication</h2>
                 <p style="color: #666; font-size: 16px;">Your verification code is:</p>
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0;">
                     <h1 style="color: #007bff; letter-spacing: 5px; font-size: 36px; margin: 0;">{code}</h1>
@@ -76,7 +76,7 @@ class EmailService:
         </html>
         """
 
-        text_content = f"Your P8FS verification code is: {code}\n\nThis code will expire in 10 minutes."
+        text_content = f"Your EEPIS verification code is: {code}\n\nThis code will expire in 10 minutes."
 
         # Use sync method wrapped in async
         import asyncio

@@ -1,262 +1,281 @@
 """Unit tests for EngramProcessor."""
 
-import json
-from unittest.mock import AsyncMock, Mock
+import pytest
+from unittest.mock import AsyncMock, Mock, patch
 from uuid import uuid4
 
-import pytest
-from p8fs.models.engram.models import EngramDocument, EngramMetadata, EngramSpec
 from p8fs.models.engram.processor import EngramProcessor
-from p8fs.repository import TenantRepository
+from p8fs.models.p8 import Resources, InlineEdge
+from p8fs.repository.TenantRepository import TenantRepository
 
 
 @pytest.fixture
 def mock_repository():
     """Create a mock repository."""
     repo = Mock(spec=TenantRepository)
-    repo.create_resource = AsyncMock()
-    repo.create_moment = AsyncMock()
+    repo.upsert = AsyncMock()
+    repo.provider = Mock()
+    repo.tenant_id = "tenant-test"
     return repo
 
 
 @pytest.fixture
 def engram_processor(mock_repository):
-    """Create an engram processor instance."""
-    return EngramProcessor(mock_repository)
+    """Create an engram processor with ensure_nodes enabled."""
+    return EngramProcessor(mock_repository, ensure_nodes=True)
+
+
+@pytest.fixture
+def engram_processor_no_ensure(mock_repository):
+    """Create an engram processor with ensure_nodes disabled."""
+    return EngramProcessor(mock_repository, ensure_nodes=False)
 
 
 @pytest.fixture
 def sample_engram_yaml():
-    """Sample Engram YAML content."""
+    """Sample engram YAML content (new format)."""
     return """
 kind: engram
-metadata:
-  name: test-engram
-  summary: Test Engram document
-spec:
-  upserts:
-    - id: entity1
-      entityType: resource
-      content: Test resource content
-    - id: entity2
-      entityType: moment
-      startTime: "2024-01-01T00:00:00Z"
-      endTime: "2024-01-01T01:00:00Z"
-      content: Test moment content
+name: Test Meeting
+category: meeting
+content: |
+  Discussion about project planning and resource allocation.
+summary: Team planning session
+resource_timestamp: "2024-11-16T10:00:00Z"
+
+graph_edges:
+  - dst: Sarah Chen
+    rel_type: attended_by
+    weight: 1.0
+    properties:
+      dst_entity_type: person/supervisor
+      confidence: 1.0
+
+  - dst: Project Alpha
+    rel_type: discusses
+    weight: 0.9
+    properties:
+      dst_entity_type: resource:project/technical
+      confidence: 0.95
 """
 
 
 @pytest.fixture
-def sample_engram_json():
-    """Sample Engram JSON content."""
-    return json.dumps({
-        "kind": "engram",
-        "metadata": {
-            "name": "test-engram",
-            "summary": "Test Engram document"
-        },
-        "spec": {
-            "upserts": [{
-                "id": "entity1",
-                "entityType": "resource",
-                "content": "Test resource content"
-            }]
-        }
-    })
+def sample_engram_with_moments():
+    """Sample engram with moments."""
+    return """
+kind: engram
+name: Weekly Standup
+category: meeting
+content: Team status update
+
+graph_edges:
+  - dst: Team Lead
+    rel_type: attended_by
+    weight: 1.0
+    properties:
+      dst_entity_type: person/lead
+
+moments:
+  - name: Project Update
+    moment_type: insight
+    content: Discussed new feature requirements
+    emotion_tags: ["focused"]
+    topic_tags: ["planning"]
+"""
 
 
 @pytest.mark.asyncio
-async def test_process_valid_engram_yaml(engram_processor, mock_repository, sample_engram_yaml):
-    """Test processing a valid Engram YAML document."""
-    tenant_id = "test-tenant"
-    session_id = uuid4()
-    
+async def test_process_basic_engram(engram_processor, mock_repository, sample_engram_yaml):
+    """Test processing a basic engram without moments."""
+    tenant_id = "tenant-test"
+
     result = await engram_processor.process(
         sample_engram_yaml,
         "application/x-yaml",
-        tenant_id,
-        session_id
-    )
-    
-    assert result["engram_id"] is not None
-    assert result["upserts"] == 2
-    assert result["patches"] == 0
-    assert result["associations"] == 0
-    
-    # Verify Engram was stored
-    assert mock_repository.create_resource.call_count >= 1
-    
-    # Verify upserts were processed
-    assert mock_repository.create_moment.call_count == 1
-
-
-@pytest.mark.asyncio
-async def test_process_valid_engram_json(engram_processor, mock_repository, sample_engram_json):
-    """Test processing a valid Engram JSON document."""
-    tenant_id = "test-tenant"
-    
-    result = await engram_processor.process(
-        sample_engram_json,
-        "application/json",
         tenant_id
     )
-    
-    assert result["engram_id"] is not None
-    assert result["upserts"] == 1
-    
-    # Verify resource was created
-    assert mock_repository.create_resource.call_count >= 1
 
-
-@pytest.mark.asyncio
-async def test_process_engram_without_summary(engram_processor, mock_repository):
-    """Test processing an Engram without a summary doesn't store the Engram itself."""
-    content = json.dumps({
-        "kind": "engram",
-        "metadata": {
-            "name": "test-engram"
-            # No summary
-        },
-        "spec": {
-            "upserts": [{
-                "id": "entity1",
-                "content": "Test content"
-            }]
-        }
-    })
-    
-    result = await engram_processor.process(content, "application/json", "test-tenant")
-    
-    assert result["engram_id"] is None
-    assert result["upserts"] == 1
-    
-    # Only the upserted resource should be created, not the Engram
-    assert mock_repository.create_resource.call_count == 1
-
-
-@pytest.mark.asyncio
-async def test_process_non_engram_json(engram_processor, mock_repository):
-    """Test processing non-Engram JSON content."""
-    content = json.dumps({
-        "type": "regular",
-        "data": "some data"
-    })
-    
-    result = await engram_processor.process(content, "application/json", "test-tenant")
-    
+    # Verify result structure
     assert "resource_id" in result
-    assert mock_repository.create_resource.call_count == 1
-    
-    # Verify it was stored as regular resource
-    call_args = mock_repository.create_resource.call_args[0][0]
-    assert call_args["content_type"] == "application/json"
+    assert result["chunks_created"] == 1
+    assert result["moment_ids"] == []
+
+    # Verify repository upsert was called for main resource
+    assert mock_repository.upsert.call_count >= 1  # At least main resource
 
 
 @pytest.mark.asyncio
-async def test_process_invalid_yaml(engram_processor, mock_repository):
-    """Test handling invalid YAML content."""
-    content = "invalid: yaml: content:"
-    
-    with pytest.raises(Exception):
-        await engram_processor.process(content, "application/x-yaml", "test-tenant")
+async def test_process_engram_with_moments(engram_processor, mock_repository, sample_engram_with_moments):
+    """Test processing an engram with attached moments."""
+    tenant_id = "tenant-test"
+
+    # Create a mock for the Moment TenantRepository
+    mock_moment_repo = Mock(spec=TenantRepository)
+    mock_moment_repo.upsert = AsyncMock()
+
+    # Patch TenantRepository in p8fs.repository (where it's imported from in _process_moments)
+    with patch('p8fs.repository.TenantRepository') as mock_tenant_repo_class:
+        def tenant_repo_factory(model_class, tenant_id, *args, **kwargs):
+            # Return mock for Moment repository, real mock_repository for Resources
+            if model_class.__name__ == "Moment":
+                return mock_moment_repo
+            else:
+                # This shouldn't be called as engram_processor already has its repo
+                return mock_repository
+
+        mock_tenant_repo_class.side_effect = tenant_repo_factory
+
+        result = await engram_processor.process(
+            sample_engram_with_moments,
+            "application/x-yaml",
+            tenant_id
+        )
+
+        # Verify moments were created
+        assert len(result["moment_ids"]) == 1
+        # Verify moment repository was used
+        mock_moment_repo.upsert.assert_called_once()
+        # Main resource upsert (engram itself)
+        assert mock_repository.upsert.call_count >= 1
 
 
 @pytest.mark.asyncio
-async def test_process_upserts_resource_type(engram_processor, mock_repository):
-    """Test processing upserts with resource type."""
-    upserts = [{
-        "id": "test-id",
-        "entityType": "resource",
-        "content": "Test content",
-        "metadata": {"key": "value"}
-    }]
-    
-    count = await engram_processor._process_upserts(upserts, "test-tenant", uuid4())
-    
-    assert count == 1
-    mock_repository.create_resource.assert_called_once()
-    
-    call_args = mock_repository.create_resource.call_args[0][0]
-    assert call_args["id"] == "test-id"
-    assert call_args["metadata"] == {"key": "value"}
+async def test_ensure_nodes_enabled(engram_processor, mock_repository, sample_engram_yaml):
+    """Test that ensure_nodes=True creates referenced entities."""
+    tenant_id = "tenant-test"
+
+    await engram_processor.process(
+        sample_engram_yaml,
+        "application/x-yaml",
+        tenant_id
+    )
+
+    # Should call upsert for:
+    # 1. Main resource (Test Meeting)
+    # 2. Sarah Chen node
+    # 3. Project Alpha node
+    assert mock_repository.upsert.call_count >= 3
 
 
 @pytest.mark.asyncio
-async def test_process_upserts_moment_type(engram_processor, mock_repository):
-    """Test processing upserts with moment type."""
-    session_id = uuid4()
-    upserts = [{
-        "id": "moment-id",
-        "entityType": "moment",
-        "startTime": "2024-01-01T00:00:00Z",
-        "endTime": "2024-01-01T01:00:00Z",
-        "content": "Moment content",
-        "metadata": {"tag": "important"}
-    }]
-    
-    count = await engram_processor._process_upserts(upserts, "test-tenant", session_id)
-    
-    assert count == 1
-    mock_repository.create_moment.assert_called_once()
-    
-    call_args = mock_repository.create_moment.call_args[0][0]
-    assert call_args["id"] == "a236b2f2-f596-5c87-b6fa-56f0fb53124a"
-    assert call_args["content"] == "Moment content"
-    assert call_args["metadata"] == {"tag": "important"}
+async def test_ensure_nodes_disabled(engram_processor_no_ensure, mock_repository, sample_engram_yaml):
+    """Test that ensure_nodes=False does not create referenced entities."""
+    tenant_id = "tenant-test"
+
+    await engram_processor_no_ensure.process(
+        sample_engram_yaml,
+        "application/x-yaml",
+        tenant_id
+    )
+
+    # Should only call upsert for main resource (Test Meeting)
+    # Not for Sarah Chen or Project Alpha
+    assert mock_repository.upsert.call_count == 1
+
+
+def test_parse_entity_type():
+    """Test InlineEdge entity type parsing."""
+    # Test default to resources
+    edge = InlineEdge(
+        dst="Test",
+        rel_type="test",
+        properties={"dst_entity_type": "person/supervisor"}
+    )
+    table, category = edge.parse_entity_type()
+    assert table == "resources"
+    assert category == "person/supervisor"
+
+    # Test explicit table
+    edge = InlineEdge(
+        dst="Test",
+        rel_type="test",
+        properties={"dst_entity_type": "moments:reflection"}
+    )
+    table, category = edge.parse_entity_type()
+    assert table == "moments"
+    assert category == "reflection"
+
+    # Test resource table explicit
+    edge = InlineEdge(
+        dst="Test",
+        rel_type="test",
+        properties={"dst_entity_type": "resource:project/technical"}
+    )
+    table, category = edge.parse_entity_type()
+    assert table == "resource"
+    assert category == "project/technical"
+
+
+def test_create_node_data_with_reverse_edge():
+    """Test creating node data with reverse edge."""
+    edge = InlineEdge(
+        dst="Sarah Chen",
+        rel_type="managed_by",
+        weight=0.9,
+        properties={"dst_entity_type": "person/supervisor"}
+    )
+
+    node_data = edge.create_node_data(
+        tenant_id="tenant-test",
+        add_reverse_edge=True,
+        source_name="Project Meeting"
+    )
+
+    # Verify node properties
+    assert node_data["name"] == "Sarah Chen"
+    assert node_data["category"] == "person/supervisor"
+    assert node_data["metadata"]["is_lightweight"] is True
+
+    # Verify reverse edge
+    assert len(node_data["graph_paths"]) == 1
+    reverse_edge = node_data["graph_paths"][0]
+    assert reverse_edge["rel_type"] == "inv-managed_by"
+    assert reverse_edge["dst"] == "Project Meeting"
+    assert reverse_edge["properties"]["inverse_of"] == "managed_by"
+
+
+def test_create_node_data_without_reverse_edge():
+    """Test creating node data without reverse edge."""
+    edge = InlineEdge(
+        dst="Project Alpha",
+        rel_type="references",
+        weight=0.7,
+        properties={"dst_entity_type": "project"}
+    )
+
+    node_data = edge.create_node_data(
+        tenant_id="tenant-test",
+        add_reverse_edge=False
+    )
+
+    # No reverse edges
+    assert len(node_data["graph_paths"]) == 0
 
 
 @pytest.mark.asyncio
-async def test_process_upserts_generates_ids(engram_processor, mock_repository):
-    """Test that upserts without IDs get generated IDs."""
-    upserts = [{
-        "entityType": "resource",
-        "content": "No ID content"
-    }]
-    
-    count = await engram_processor._process_upserts(upserts, "test-tenant", None)
-    
-    assert count == 1
-    call_args = mock_repository.create_resource.call_args[0][0]
-    assert call_args["id"] is not None
-    assert len(call_args["id"]) == 36  # UUID string length
+async def test_invalid_engram_kind(engram_processor, mock_repository):
+    """Test that invalid engram kind raises error."""
+    invalid_yaml = """
+kind: not-an-engram
+name: Test
+"""
+    with pytest.raises(ValueError, match="Expected kind='engram'"):
+        await engram_processor.process(
+            invalid_yaml,
+            "application/x-yaml",
+            "tenant-test"
+        )
 
 
-def test_engram_document_is_engram():
-    """Test EngramDocument.is_engram() method."""
-    # Test with kind
-    doc1 = EngramDocument(
-        kind="engram",
-        metadata=EngramMetadata(name="test"),
-        spec=EngramSpec()
-    )
-    assert doc1.is_engram()
-    
-    # Test with p8Kind
-    doc2 = EngramDocument(
-        p8Kind="engram",
-        metadata=EngramMetadata(name="test"),
-        spec=EngramSpec()
-    )
-    assert doc2.is_engram()
-    
-    # Test with wrong kind
-    doc3 = EngramDocument(
-        kind="other",
-        metadata=EngramMetadata(name="test"),
-        spec=EngramSpec()
-    )
-    assert not doc3.is_engram()
+@pytest.mark.asyncio
+async def test_malformed_yaml(engram_processor, mock_repository):
+    """Test that malformed YAML raises error."""
+    malformed = "this is not: valid: yaml: content:"
 
-
-def test_engram_metadata_extra_fields():
-    """Test that EngramMetadata accepts extra fields."""
-    metadata = EngramMetadata(
-        name="test",
-        customField="value",
-        anotherField=123
-    )
-    
-    data = metadata.model_dump()
-    assert data["name"] == "test"
-    assert data["customField"] == "value"
-    assert data["anotherField"] == 123
+    with pytest.raises(Exception):  # YAML parsing error
+        await engram_processor.process(
+            malformed,
+            "application/x-yaml",
+            "tenant-test"
+        )

@@ -42,22 +42,39 @@ async def test_process_file_creates_file_entry(storage_worker):
     # Use sample file from tests folder
     test_file = Path(__file__).parent.parent.parent / "sample_data" / "content" / "Sample.md"
     assert test_file.exists(), f"Sample file not found: {test_file}"
-    
+
     tenant_id = "test-tenant"
-    
+
     # Mock content provider to handle extraction
     mock_provider = Mock()
     mock_provider.to_markdown_chunks = AsyncMock(return_value=[])
-    
-    with patch("p8fs.workers.storage.get_content_provider", return_value=mock_provider):
+
+    # Mock repository instances that will be created inside process_file
+    mock_files_repo = Mock()
+    mock_files_repo.upsert = AsyncMock()
+    mock_resources_repo = Mock()
+    mock_resources_repo.upsert = AsyncMock()
+
+    with patch("p8fs.workers.storage.get_content_provider", return_value=mock_provider), \
+         patch("p8fs.workers.storage.TenantRepository") as mock_repo_class:
+
+        # Configure mock to return appropriate repos based on model type
+        def repo_factory(model, tenant_id):
+            if model.__name__ == 'Files':
+                return mock_files_repo
+            else:
+                return mock_resources_repo
+
+        mock_repo_class.side_effect = repo_factory
+
         # Process file
         await storage_worker.process_file(str(test_file), tenant_id)
-    
+
     # Verify file entry was created
     expected_file_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:{test_file}"))
-    storage_worker.files_repo.upsert.assert_called_once()
-    
-    call_args = storage_worker.files_repo.upsert.call_args[0][0]
+    mock_files_repo.upsert.assert_called_once()
+
+    call_args = mock_files_repo.upsert.call_args[0][0]
     assert call_args["id"] == expected_file_id
     assert call_args["tenant_id"] == tenant_id
     assert call_args["metadata"]["name"] == "Sample.md"
@@ -72,12 +89,20 @@ async def test_process_file_error_handling(storage_worker):
     # Use sample file from tests folder
     test_file = Path(__file__).parent.parent.parent / "sample_data" / "content" / "Sample.md"
     assert test_file.exists(), f"Sample file not found: {test_file}"
-    
-    storage_worker.files_repo.upsert.side_effect = Exception("Database error")
-    
-    with pytest.raises(Exception) as exc_info:
-        await storage_worker.process_file(str(test_file), "test-tenant")
-    
+
+    # Mock repository that will be created inside process_file to raise error
+    mock_files_repo = Mock()
+    mock_files_repo.upsert = AsyncMock(side_effect=Exception("Database error"))
+
+    with patch("p8fs.workers.storage.TenantRepository") as mock_repo_class:
+        # Return the error-raising repo for Files model
+        mock_repo_class.side_effect = lambda model, tenant_id: (
+            mock_files_repo if model.__name__ == 'Files' else Mock()
+        )
+
+        with pytest.raises(Exception) as exc_info:
+            await storage_worker.process_file(str(test_file), "test-tenant")
+
     assert "Database error" in str(exc_info.value)
 
 

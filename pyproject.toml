@@ -16,7 +16,7 @@ p8fs-api = { workspace = true }
 
 [project]
 name = "p8fs-modules"
-version = "1.1.27"
+version = "1.2.9"
 description = "P8FS Smart Content Management System - Monorepo"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -72,7 +72,7 @@ python_functions = "test_*"
 
 [tool.ruff]
 line-length = 88
-target-version = "1.1.27"
+target-version = "1.2.6"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "C4", "SIM"]

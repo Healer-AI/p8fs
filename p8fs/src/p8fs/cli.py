@@ -24,6 +24,7 @@ from p8fs.cli_commands import (
     storage_worker_command,
     ingest_images_command,
     retry_command,
+    rem_command,
 )
 
 
@@ -278,20 +279,30 @@ Examples:
         help="Run dreaming worker to analyze user content insights",
         epilog="""
 Examples:
-  # Process specific tenant in direct mode (default)
-  p8fs dreaming --tenant-id tenant-test
+  # Process specific tenant with moments task
+  p8fs dreaming --tenant-id tenant-test --task moments
 
-  # Process all active tenants from last 24 hours
-  p8fs dreaming
+  # Build resource affinity graph (fast semantic mode)
+  p8fs dreaming --tenant-id tenant-test --task affinity
+
+  # Build resource affinity with LLM (intelligent but slower)
+  p8fs dreaming --tenant-id tenant-test --task affinity --use-llm
+
+  # Process both moments and affinity
+  p8fs dreaming --tenant-id tenant-test --task both
+
+  # Limit processing to 100 resources
+  p8fs dreaming --tenant-id tenant-test --task affinity --limit 100
+
+  # Process with custom lookback and send email
+  p8fs dreaming --tenant-id tenant-test --task moments \\
+    --lookback-hours 168 --recipient-email user@example.com
 
   # Use batch mode for async processing
   p8fs dreaming --mode batch --tenant-id tenant-test
 
   # Check batch job completions
   p8fs dreaming --mode completion
-
-  # Process tenants from last 48 hours
-  p8fs dreaming --lookback-hours 48
 """
     )
     dreaming_parser.add_argument(
@@ -312,18 +323,29 @@ Examples:
     )
     dreaming_parser.add_argument(
         "--model",
-        default="gpt-4-turbo-preview",
-        help="LLM model to use (default: gpt-4-turbo-preview)"
+        default=config.default_model,
+        help=f"LLM model to use (default: {config.default_model})"
     )
     dreaming_parser.add_argument(
         "--task",
         default="dreams",
-        choices=["dreams", "moments"],
-        help="Task type: dreams (extract goals/fears/dreams) or moments (classify temporal activities)"
+        choices=["dreams", "moments", "affinity", "both"],
+        help="Task type: dreams (extract goals/fears/dreams), moments (classify temporal activities), affinity (build resource graph), both (moments + affinity)"
     )
     dreaming_parser.add_argument(
         "--recipient-email",
         help="Email address to send moment digest (defaults to tenant email from database)"
+    )
+    dreaming_parser.add_argument(
+        "--limit",
+        type=int,
+        help="Maximum number of resources to process (default: no limit)"
+    )
+    dreaming_parser.add_argument(
+        "--use-llm",
+        action="store_true",
+        default=False,
+        help="Use LLM mode for resource affinity (more intelligent but slower and more expensive)"
     )
     dreaming_parser.add_argument(
         "--polling",
@@ -617,6 +639,74 @@ Note: File must already be uploaded to SeaweedFS. Use 'p8fs files upload' first.
         help="Check if file exists in SeaweedFS before retrying (requires admin credentials)"
     )
 
+    # REM query command
+    rem_parser = subparsers.add_parser(
+        "rem",
+        help="Execute REM queries using query strings",
+        epilog="""
+Query Syntax:
+  LOOKUP table:key                    - Key-based lookup
+  SEARCH table: query text            - Semantic search
+  SELECT ... FROM table WHERE ...     - SQL query
+  table WHERE condition               - Shorthand SQL
+
+Examples:
+  # PostgreSQL LOOKUP
+  p8fs rem "LOOKUP resources:test-resource-1" --provider postgresql
+
+  # PostgreSQL SQL (shorthand)
+  p8fs rem "resources WHERE category='diary'" --provider postgresql
+
+  # PostgreSQL SQL (full)
+  p8fs rem "SELECT * FROM resources WHERE category='diary' LIMIT 5" --provider postgresql
+
+  # PostgreSQL SEARCH
+  p8fs rem "SEARCH resources: what did I do today?" --provider postgresql
+
+  # TiDB (port-forward to cluster)
+  kubectl port-forward -n tikv-cluster svc/fresh-cluster-tidb 4000:4000 &
+
+  # TiDB LOOKUP
+  P8FS_TIDB_HOST=localhost P8FS_TIDB_PORT=4000 p8fs rem "LOOKUP resources:test-1" --provider tidb
+
+  # TiDB SQL
+  P8FS_TIDB_HOST=localhost P8FS_TIDB_PORT=4000 p8fs rem "resources WHERE category='diary'" --provider tidb
+
+  # TiDB SEARCH
+  P8FS_TIDB_HOST=localhost P8FS_TIDB_PORT=4000 p8fs rem "SEARCH resources: diary entries" --provider tidb
+
+  # From stdin
+  echo "LOOKUP resources:test-1" | p8fs rem --provider postgresql
+"""
+    )
+    rem_parser.add_argument(
+        "query",
+        nargs="?",
+        help="REM query string (reads from stdin if not provided)"
+    )
+    rem_parser.add_argument(
+        "--provider",
+        default="postgresql",
+        choices=["postgres", "postgresql", "tidb"],
+        help="Database provider (default: postgresql)"
+    )
+    rem_parser.add_argument(
+        "--table",
+        default="resources",
+        help="Default table name for queries without table specified (default: resources)"
+    )
+    rem_parser.add_argument(
+        "--tenant-id",
+        default=config.default_tenant_id,
+        help=f"Tenant ID (default: {config.default_tenant_id})"
+    )
+    rem_parser.add_argument(
+        "--format",
+        default="table",
+        choices=["table", "json", "jsonl"],
+        help="Output format (default: table)"
+    )
+
     args = parser.parse_args()
 
     if not args.command:
@@ -650,6 +740,8 @@ Note: File must already be uploaded to SeaweedFS. Use 'p8fs files upload' first.
         return ingest_images_command(args)
     elif args.command == "retry":
         return asyncio.run(retry_command(args))
+    elif args.command == "rem":
+        return asyncio.run(rem_command(args))
     else:
         print(f"Unknown command: {args.command}", file=sys.stderr)
         return 1

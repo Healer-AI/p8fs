@@ -1,0 +1,108 @@
+kind: engram
+name: "Monday Evening Reflection"
+category: "diary"
+summary: "Personal reflection on sprint planning and design review. Feeling positive about team alignment but concerned about timeline for onboarding flow A/B testing."
+resource_timestamp: "2024-11-11T18:30:00Z"
+metadata:
+  author: "Sarah Chen"
+  tone: "reflective, cautiously optimistic"
+  key_themes:
+    - "sprint planning satisfaction"
+    - "timeline concerns"
+    - "team alignment"
+    - "Q4 roadmap pressure"
+content: |
+  Feeling pretty good about today. The sprint planning went smoothly - Mike and the team
+  are aligned on priorities. The API rate limiting issue that's been plaguing us needs
+  to be fixed this sprint, and everyone agrees that's the right call.
+
+  The design review with Jamie this afternoon was productive. The new onboarding flow
+  looks really clean. I'm a bit concerned about the A/B testing timeline - we need to
+  get this right before launch, but we're cutting it close. Kevin seemed confident about
+  the implementation though.
+
+  Q4 is going to be intense. The roadmap feels ambitious but achievable if we stay
+  focused. Need to keep the team energized and make sure we don't burn out.
+
+  Tomorrow: Deep dive with Mike and Alex on the API architecture. Want to make sure
+  the rate limiting solution is solid before we commit.
+
+graph_edges:
+  - dst: "Monday Morning Team Standup"
+    rel_type: "reflects_on"
+    weight: 0.9
+  - dst: "Monday Afternoon Design Review"
+    rel_type: "reflects_on"
+    weight: 0.9
+  - dst: "Q4 Roadmap"
+    rel_type: "mentions"
+    weight: 0.7
+
+moments:
+  - name: "Sprint Planning Satisfaction"
+    category: "emotion"
+    content: "Feeling pretty good about today. The sprint planning went smoothly - Mike and the team are aligned on priorities."
+    summary: "Positive feelings about sprint planning alignment"
+    resource_timestamp: "2024-11-11T18:30:00Z"
+    resource_ends_timestamp: "2024-11-11T18:31:00Z"
+    moment_type: "reflection"
+    emotion_tags:
+      - "satisfaction"
+      - "confidence"
+    topic_tags:
+      - "sprint planning"
+      - "team alignment"
+    present_persons:
+      - id: "Sarah Chen"
+        name: "Sarah Chen"
+        comment: "Reflecting on the day"
+    graph_edges:
+      - dst: "Monday Morning Team Standup"
+        rel_type: "emotional_response_to"
+        weight: 0.9
+      - dst: "Mike Johnson"
+        rel_type: "mentions"
+        weight: 0.7
+
+  - name: "Onboarding Timeline Concerns"
+    category: "concern"
+    content: "I'm a bit concerned about the A/B testing timeline - we need to get this right before launch, but we're cutting it close."
+    summary: "Worry about tight timeline for A/B testing the onboarding flow"
+    resource_timestamp: "2024-11-11T18:32:00Z"
+    resource_ends_timestamp: "2024-11-11T18:33:00Z"
+    moment_type: "concern"
+    emotion_tags:
+      - "concern"
+      - "pressure"
+    topic_tags:
+      - "A/B testing"
+      - "onboarding flow"
+      - "launch timeline"
+    graph_edges:
+      - dst: "Monday Afternoon Design Review"
+        rel_type: "concern_about"
+        weight: 0.8
+      - dst: "Onboarding Flow Redesign"
+        rel_type: "discusses"
+        weight: 0.8
+
+  - name: "Q4 Roadmap Anxiety"
+    category: "planning"
+    content: "Q4 is going to be intense. The roadmap feels ambitious but achievable if we stay focused."
+    summary: "Mixed feelings about ambitious Q4 goals"
+    resource_timestamp: "2024-11-11T18:34:00Z"
+    resource_ends_timestamp: "2024-11-11T18:35:00Z"
+    moment_type: "planning"
+    emotion_tags:
+      - "determination"
+      - "anxiety"
+    topic_tags:
+      - "Q4 roadmap"
+      - "team focus"
+    graph_edges:
+      - dst: "Q4 Roadmap"
+        rel_type: "discusses"
+        weight: 0.9
+      - dst: "Monday Morning Team Standup"
+        rel_type: "follows_from"
+        weight: 0.6

@@ -92,7 +92,7 @@ class TenantRepository(BaseRepository):
 
     async def put(self, entity: T) -> bool:
         """
-        Store a single entity.
+        Store a single entity and populate KV entries for entity lookups.
 
         Args:
             entity: Entity to store
@@ -101,12 +101,18 @@ class TenantRepository(BaseRepository):
             True if successful, False otherwise
         """
         try:
-            self.upsert(entity)
+            await self.upsert(entity)
+            # Entity indexing happens via p8.add_nodes() and AGE graph
+            # LOOKUP queries use p8.get_entities() to query the graph
+            # No need for separate KV entity indexing
             return True
         except Exception as e:
             logger.error(f"Database error in put {self.model_class.__name__}: {e}", exc_info=True)
             # Don't return False for database errors - let them propagate
             raise RuntimeError(f"Database error storing {self.model_class.__name__}: {e}") from e
+
+    # Entity indexing removed - now handled by AGE graph via p8.add_nodes()
+    # LOOKUP queries use p8.get_entities() to query the graph directly
 
     # Note: Old complex embedding methods removed. 
     # TenantRepository now inherits clean embedding implementation from BaseRepository:

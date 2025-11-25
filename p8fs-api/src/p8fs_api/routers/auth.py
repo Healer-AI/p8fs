@@ -77,6 +77,7 @@ from pathlib import Path
 from fastapi import APIRouter, Cookie, Depends, Form, Header, Query, Request, status
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
+from p8fs_cluster.config.settings import config
 from pydantic import BaseModel
 
 from ..controllers import AuthController
@@ -94,11 +95,11 @@ from p8fs_cluster.logging import get_logger
 logger = get_logger(__name__)
 
 # Public OAuth endpoints (no auth required)
-public_router = APIRouter(prefix="/oauth", tags=["Authentication - Public"])
+public_router = APIRouter(prefix="/api/v1/oauth", tags=["Authentication - Public"])
 
 # Protected OAuth endpoints (JWT auth required)
 protected_router = APIRouter(
-    prefix="/oauth",
+    prefix="/api/v1/oauth",
     tags=["Authentication - Protected"],
     dependencies=[Depends(get_current_user)],
 )
@@ -222,7 +223,7 @@ async def device_code_legacy(
 
 
 # Removed /device/token - use standard /token endpoint with device_code grant type
-# Example: POST /oauth/token
+# Example: POST /api/v1/oauth/token
 #   grant_type=urn:ietf:params:oauth:grant-type:device_code
 #   device_code=xxx
 #   client_id=xxx
@@ -358,33 +359,26 @@ async def verify_registration(request: VerificationRequest):
     )
 
 
-# .well-known endpoints - backward compatibility redirects
-# Standard OAuth/OpenID discovery is at root level (/.well-known/*)
-# but we provide redirects for clients that look under /oauth
+# .well-known endpoints - OAuth/OpenID discovery
+# Implementing directly under /api/v1/oauth for client convenience
+# Root level (/.well-known/*) also available for standards compliance
 
 @public_router.get("/.well-known/openid-configuration")
-async def oauth_openid_configuration_redirect(request: Request):
-    """Redirect to root-level OpenID configuration."""
-    return RedirectResponse(
-        url="/.well-known/openid-configuration",
-        status_code=status.HTTP_301_MOVED_PERMANENTLY,
-    )
+async def oauth_openid_configuration(request: Request):
+    """OpenID Connect discovery document."""
+    return await auth_controller.get_oauth_discovery(request)
 
 @public_router.get("/.well-known/oauth-authorization-server")
-async def oauth_authorization_server_redirect(request: Request):
-    """Redirect to root-level OAuth authorization server metadata."""
-    return RedirectResponse(
-        url="/.well-known/oauth-authorization-server",
-        status_code=status.HTTP_301_MOVED_PERMANENTLY,
-    )
+async def oauth_authorization_server(request: Request):
+    """OAuth 2.1 authorization server metadata."""
+    return await auth_controller.get_oauth_discovery(request)
 
 @public_router.get("/.well-known/jwks.json")
-async def oauth_jwks_redirect():
-    """Redirect to root-level JWKS."""
-    return RedirectResponse(
-        url="/.well-known/jwks.json",
-        status_code=status.HTTP_301_MOVED_PERMANENTLY,
-    )
+async def oauth_jwks():
+    """JSON Web Key Set for token verification."""
+    from p8fs_auth.services.jwt_key_manager import JWTKeyManager
+    jwt_manager = JWTKeyManager()
+    return jwt_manager.get_jwks()
 
 
 # TODO: CRITICAL MCP COMPLIANCE - Implement Protected Resource Metadata (RFC 9728)
@@ -448,7 +442,7 @@ async def oauth_callback(
         query_params = {k: v for k, v in query_params.items() if v is not None}
         query_string = urlencode(query_params)
         return RedirectResponse(
-            url=f"/oauth/device?{query_string}", status_code=status.HTTP_302_FOUND
+            url=f"/api/v1/oauth/device?{query_string}", status_code=status.HTTP_302_FOUND
         )
 
     try:
@@ -474,7 +468,7 @@ async def oauth_callback(
             query_params = {k: v for k, v in query_params.items() if v is not None}
             query_string = urlencode(query_params)
             response = RedirectResponse(
-                url=f"/oauth/device?{query_string}", status_code=status.HTTP_302_FOUND
+                url=f"/api/v1/oauth/device?{query_string}", status_code=status.HTTP_302_FOUND
             )
             # Clear the expired cookie
             response.delete_cookie("p8fs_access_token")
@@ -575,8 +569,8 @@ async def device_verification_page(
             device_response = DeviceCodeResponse(
                 device_code="",  # Will be looked up
                 user_code=user_code,
-                verification_uri=f"{request.url.scheme}://{request.headers.get('host', 'localhost:8000')}/oauth/device",
-                verification_uri_complete=f"{request.url.scheme}://{request.headers.get('host', 'localhost:8000')}/oauth/device?user_code={user_code}",
+                verification_uri=f"{request.url.scheme}://{request.headers.get('host', 'localhost:8000')}/api/v1/oauth/device",
+                verification_uri_complete=f"{request.url.scheme}://{request.headers.get('host', 'localhost:8000')}/api/v1/oauth/device?user_code={user_code}",
                 expires_in=600,
                 interval=5,
             )
@@ -601,28 +595,32 @@ async def device_verification_page(
                 "code_challenge_method": code_challenge_method,
             }
 
-        # Save device code to standard location for testing/approval
-        import os
-        import json
-        from datetime import datetime
-        from pathlib import Path
-        
-        device_auth_file = Path.home() / ".p8fs" / "device_auth.json"
-        device_auth_file.parent.mkdir(parents=True, exist_ok=True)
-        
-        device_auth_data = {
-            "user_code": device_response.user_code,
-            "device_code": device_response.device_code,
-            "client_id": effective_client_id,
-            "expires_in": device_response.expires_in,
-            "poll_interval": device_response.interval,
-            "verification_uri": device_response.verification_uri,
-            "verification_uri_complete": device_response.verification_uri_complete,
-            "created_at": datetime.utcnow().isoformat() + "Z"
-        }
-        
-        with open(device_auth_file, 'w') as f:
-            json.dump(device_auth_data, f, indent=2)
+        # Save device code to standard location for testing/approval (dev only)
+        if config.debug:
+            import os
+            import json
+            from datetime import datetime
+            from pathlib import Path
+
+            try:
+                device_auth_file = Path.home() / ".p8fs" / "device_auth.json"
+                device_auth_file.parent.mkdir(parents=True, exist_ok=True)
+
+                device_auth_data = {
+                    "user_code": device_response.user_code,
+                    "device_code": device_response.device_code,
+                    "client_id": effective_client_id,
+                    "expires_in": device_response.expires_in,
+                    "poll_interval": device_response.interval,
+                    "verification_uri": device_response.verification_uri,
+                    "verification_uri_complete": device_response.verification_uri_complete,
+                    "created_at": datetime.utcnow().isoformat() + "Z"
+                }
+
+                with open(device_auth_file, 'w') as f:
+                    json.dump(device_auth_data, f, indent=2)
+            except Exception:
+                pass
 
         # Create page context using Pydantic model
         page_context = DeviceVerificationPageContext.from_device_response(
@@ -651,7 +649,7 @@ async def device_verification_page(
                 <h1>Login Error</h1>
                 <p>Failed to initialize device verification. Please try again.</p>
                 <p>Error: {str(e)}</p>
-                <a href="/oauth/device">Try Again</a>
+                <a href="/api/v1/oauth/device">Try Again</a>
             </body>
             </html>
             """,
@@ -689,7 +687,7 @@ async def authorization_endpoint(
 
     1. **MCP Client Request**: When an MCP client (like Claude Desktop) initiates OAuth,
        it typically starts with the authorization code flow:
-       GET /oauth/authorize?response_type=code&client_id=Claude+Code&redirect_uri=...
+       GET /api/v1/oauth/authorize?response_type=code&client_id=Claude+Code&redirect_uri=...
 
     2. **Authentication Detection**: The endpoint checks for a valid JWT Bearer token
        in the Authorization header.
@@ -697,10 +695,10 @@ async def authorization_endpoint(
     3. **Automatic Flow Selection**:
        - **Authenticated**: With valid JWT token → processes authorization code flow,
          generates auth code, and redirects to client's callback URL
-       - **Unauthenticated**: No/invalid token → redirects to device bound auth flow (/oauth/device)
+       - **Unauthenticated**: No/invalid token → redirects to device bound auth flow (/api/v1/oauth/device)
          with all parameters preserved
 
-    4. **Device Flow Experience**: When redirected to /oauth/device:
+    4. **Device Flow Experience**: When redirected to /api/v1/oauth/device:
        - User sees QR code for mobile authentication
        - User code displayed for manual entry
        - All original OAuth parameters preserved
@@ -708,7 +706,7 @@ async def authorization_endpoint(
 
     5. **Flow Completion**: After device authentication:
        - Client receives JWT token from device flow
-       - Can retry /oauth/authorize with Bearer token
+       - Can retry /api/v1/oauth/authorize with Bearer token
        - Original authorization code flow completes successfully
 
     This design allows MCP clients to use standard OAuth flows without implementing
@@ -733,7 +731,7 @@ async def authorization_endpoint(
         query_string = urlencode(query_params)
 
         # Redirect to the device verification page
-        device_url = f"/oauth/device?{query_string}"
+        device_url = f"/api/v1/oauth/device?{query_string}"
         return RedirectResponse(url=device_url, status_code=status.HTTP_302_FOUND)
 
     # For authenticated requests, get the current user
@@ -755,7 +753,7 @@ async def authorization_endpoint(
         }
         query_params = {k: v for k, v in query_params.items() if v is not None}
         query_string = urlencode(query_params)
-        device_url = f"/oauth/device?{query_string}"
+        device_url = f"/api/v1/oauth/device?{query_string}"
         return RedirectResponse(url=device_url, status_code=status.HTTP_302_FOUND)
 
     # Get authorization code

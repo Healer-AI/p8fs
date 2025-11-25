@@ -1,0 +1,54 @@
+{
+  "p8-type": "agent",
+  "short_name": "sample_qa_agent",
+  "name": "Sample QA Agent",
+  "title": "Sample Question Answering Agent",
+  "version": "1.0.0",
+  "description": "A sample agent that demonstrates the agent schema format. This agent answers questions using a knowledge base and provides structured responses with confidence scores.",
+  "fully_qualified_name": "sample.agents.qa_agent",
+  "use_in_dreaming": true,
+  "properties": {
+    "answer": {
+      "type": "string",
+      "description": "The answer to the user's question"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score for the answer (0-1)"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of source references used to generate the answer"
+    },
+    "follow_up_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Suggested follow-up questions the user might want to ask"
+    }
+  },
+  "required": ["answer", "confidence"],
+  "tools": [
+    {
+      "name": "search_knowledge_base",
+      "description": "Search the knowledge base for relevant information",
+      "parameters": {
+        "query": {
+          "type": "string",
+          "description": "The search query"
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum number of results to return",
+          "default": 5
+        }
+      }
+    }
+  ]
+}

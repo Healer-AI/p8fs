@@ -673,6 +673,457 @@ def _merge_results(self, results: list[dict], strategy: str) -> dict:
 - **Memory Proxy**: `02 memory-proxy.md` - MemoryProxy usage
 - **Document Parsers**: `09 doc-parsers.md` - Advanced document processing
 
+## Agent File Handling System
+
+### Overview
+
+The agent file handling system enables users to create, upload, and manage custom agent schemas as JSON or YAML files. These agents can be configured for background processing, automatic content analysis, and insight extraction.
+
+### Architecture
+
+```mermaid
+graph TB
+    subgraph "Agent Creation"
+        MCP[MCP Prompt: create_agent]
+        JSON[JSON/YAML Schema]
+        SAMPLE[Sample Agent Files]
+    end
+
+    subgraph "Upload & Storage"
+        S3[S3 Upload]
+        CLI[CLI Process]
+        PROC[AgentDocumentProcessor]
+        DB[(Resources Table)]
+    end
+
+    subgraph "Agent Loader"
+        LOAD[AgentLoader Service]
+        QUERY[Query by Name]
+        LIST[List Agents]
+        DREAM[Get Dreaming Agents]
+    end
+
+    subgraph "Usage"
+        BG[Background Workers]
+        CHAT[Chat Integration]
+        CUSTOM[Custom Processing]
+    end
+
+    MCP --> JSON
+    SAMPLE --> JSON
+    JSON --> S3
+    JSON --> CLI
+
+    S3 --> PROC
+    CLI --> PROC
+    PROC --> DB
+
+    DB --> LOAD
+    LOAD --> QUERY
+    LOAD --> LIST
+    LOAD --> DREAM
+
+    QUERY --> BG
+    LIST --> CHAT
+    DREAM --> BG
+
+    style PROC fill:#fff4e1
+    style LOAD fill:#e1f5ff
+    style DB fill:#e8f5e9
+```
+
+### Agent Schema Structure
+
+Agents are defined as JSON Schema documents with special metadata:
+
+```json
+{
+  "p8-type": "agent",
+  "short_name": "action_tracker",
+  "name": "Action Item Tracker",
+  "title": "Meeting Action Item Extraction Agent",
+  "version": "1.0.0",
+  "description": "Extracts action items, deadlines, and assignees from meeting notes and documents. Focuses on identifying concrete tasks with clear ownership.",
+  "fully_qualified_name": "user.agents.action_tracker",
+  "use_in_dreaming": true,
+  "priority": 1,
+  "properties": {
+    "action_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "task": {"type": "string", "description": "The action to be taken"},
+          "assignee": {"type": "string", "description": "Person responsible"},
+          "deadline": {"type": "string", "description": "Due date if specified"}
+        },
+        "required": ["task"]
+      },
+      "description": "List of extracted action items"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence in the extraction"
+    }
+  },
+  "required": ["action_items"],
+  "tools": []
+}
+```
+
+### Required Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `p8-type` | string | Must be `"agent"` for automatic processing |
+| `short_name` | string | Unique identifier (lowercase, underscores) |
+| `version` | string | Semantic version (e.g., "1.0.0") |
+| `description` | string | System prompt with agent instructions |
+| `properties` | object | JSON Schema for structured output |
+
+### Optional Fields
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `name` | string | short_name | Display name |
+| `title` | string | name | Full title |
+| `fully_qualified_name` | string | auto-generated | Namespace identifier |
+| `use_in_dreaming` | boolean | `false` | Include in background processing |
+| `priority` | integer | 2 | Processing priority (1-3) |
+| `tools` | array | `[]` | Available tool definitions |
+
+### Priority Levels
+
+- **Priority 1 (High)**: Critical agents (security monitoring, compliance checks)
+- **Priority 2 (Normal)**: Standard agents (insight extraction, categorization)
+- **Priority 3 (Low)**: Optional agents (suggestions, creative analysis)
+
+### Creating Agents with MCP Prompt
+
+The `create_agent` MCP prompt guides users through agent creation:
+
+```python
+# In your MCP-enabled IDE/client
+create_agent(
+    purpose="Extract key insights from daily activity",
+    name="daily_insights",
+    priority=2
+)
+```
+
+The prompt provides:
+- Suggested agent name based on purpose
+- Complete JSON schema template
+- Field definitions tailored to the use case
+- Upload instructions
+
+### Uploading Agents
+
+#### Option 1: S3 Upload (Recommended for MCP clients)
+
+```bash
+# 1. Get presigned upload URL
+read_resource(uri="s3-upload://tenant-test/daily_insights.json")
+
+# 2. Upload using curl
+curl -T daily_insights.json "{presigned_url}"
+
+# 3. Agent is automatically processed and stored
+```
+
+#### Option 2: CLI Processing
+
+```bash
+# Process agent file directly
+uv run python -m p8fs.cli process agents/daily_insights.json --tenant-id tenant-test
+
+# Or process entire directory
+uv run python -m p8fs.cli process agents/ --tenant-id tenant-test
+```
+
+### Agent Processing Pipeline
+
+When an agent file is uploaded:
+
+1. **Detection**: `AgentDocumentProcessor` detects `p8-type == "agent"`
+2. **Extraction**: Metadata extracted (name, version, priority, etc.)
+3. **Storage**: Saved as resource with `category="agent"`
+4. **Indexing**: Stored with deterministic ID for upsert by name
+5. **Embeddings**: Description embedded for semantic search
+
+### Loading Agents
+
+#### AgentLoader Service
+
+```python
+from p8fs.services.agent_loader import AgentLoader
+
+# Initialize loader
+loader = AgentLoader(tenant_id="tenant-test")
+
+# Load specific agent
+agent = await loader.load_agent_by_name("daily_insights")
+
+# Access schema
+print(agent["version"])  # "1.0.0"
+print(agent["description"])  # System prompt
+print(agent["properties"])  # Output schema
+```
+
+#### List Agents
+
+```python
+# List all agents
+all_agents = await loader.list_agents()
+
+# List only dreaming agents
+dreaming_agents = await loader.list_agents(use_in_dreaming=True)
+
+# Convenience method
+dreaming_agents = await loader.get_dreaming_agents()
+```
+
+#### Delete Agents
+
+```python
+# Delete by name
+deleted = await loader.delete_agent_by_name("daily_insights")
+```
+
+### Upsert Behavior
+
+Agents are upserted by `short_name`:
+
+```python
+# First upload - creates new agent
+{
+  "short_name": "insights",
+  "version": "1.0.0",
+  "description": "Extract insights..."
+}
+
+# Second upload - updates existing agent
+{
+  "short_name": "insights",  # Same name
+  "version": "1.1.0",         # New version
+  "description": "Extract insights and trends..."  # Updated
+}
+```
+
+The second upload replaces the first, maintaining the same resource ID.
+
+### Background Processing Integration
+
+Agents with `use_in_dreaming: true` are automatically included in background processing:
+
+```python
+from p8fs.services.agent_loader import AgentLoader
+
+async def process_dreaming_agents(tenant_id: str):
+    """Run all dreaming agents on recent content."""
+
+    loader = AgentLoader(tenant_id)
+    agents = await loader.get_dreaming_agents()
+
+    # Sort by priority
+    agents.sort(key=lambda a: a.get("priority", 2))
+
+    for agent_schema in agents:
+        # Load agent into processing pipeline
+        await process_with_agent(agent_schema)
+```
+
+### Example Use Cases
+
+#### 1. Security Monitor (Priority 1)
+
+```json
+{
+  "p8-type": "agent",
+  "short_name": "security_monitor",
+  "description": "Monitor content for security concerns, PII leakage, or sensitive data exposure.",
+  "priority": 1,
+  "use_in_dreaming": true,
+  "properties": {
+    "alerts": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Security alerts found"
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    }
+  }
+}
+```
+
+#### 2. Theme Extractor (Priority 2)
+
+```json
+{
+  "p8-type": "agent",
+  "short_name": "theme_extractor",
+  "description": "Identify recurring themes, topics, and patterns across documents.",
+  "priority": 2,
+  "use_in_dreaming": true,
+  "properties": {
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "frequency": {"type": "integer"},
+          "examples": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}
+```
+
+#### 3. Suggestion Generator (Priority 3)
+
+```json
+{
+  "p8-type": "agent",
+  "short_name": "suggestions",
+  "description": "Generate creative suggestions and recommendations based on user activity.",
+  "priority": 3,
+  "use_in_dreaming": true,
+  "properties": {
+    "suggestions": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "reasoning": {"type": "string"}
+  }
+}
+```
+
+### Testing
+
+#### Integration Tests
+
+```bash
+# Run agent file handler tests
+uv run pytest tests/integration/test_agent_document_processor.py --integration -v
+```
+
+Tests cover:
+- JSON and YAML processing
+- Upsert by name
+- Agent loader operations
+- End-to-end file processing
+
+#### Manual Testing
+
+```bash
+# 1. Create sample agent
+cat > test_agent.json <<EOF
+{
+  "p8-type": "agent",
+  "short_name": "test_agent",
+  "version": "1.0.0",
+  "description": "Test agent for validation",
+  "use_in_dreaming": false,
+  "properties": {
+    "result": {"type": "string"}
+  }
+}
+EOF
+
+# 2. Process agent
+uv run python -m p8fs.cli process test_agent.json --tenant-id tenant-test
+
+# 3. Verify in database
+docker exec percolate psql -U postgres -d app -c \
+  "SELECT name, category, metadata->>'version' as version FROM resources WHERE category='agent';"
+```
+
+### Sample Agents
+
+Sample agent schemas are available in:
+- `tests/sample_data/agents/sample_qa_agent.json` - Question answering agent
+- Reference implementation showing all features
+
+### API Reference
+
+#### AgentLoader
+
+```python
+class AgentLoader:
+    """Service for loading agent schemas from resources table."""
+
+    def __init__(self, tenant_id: str):
+        """Initialize with tenant context."""
+
+    async def load_agent_by_name(self, name: str) -> Optional[Dict[str, Any]]:
+        """Load agent schema by short_name."""
+
+    async def list_agents(
+        self,
+        use_in_dreaming: Optional[bool] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """List all agents with optional filtering."""
+
+    async def get_dreaming_agents(self) -> List[Dict[str, Any]]:
+        """Get all agents with use_in_dreaming=True."""
+
+    async def delete_agent_by_name(self, name: str) -> bool:
+        """Delete agent by name."""
+```
+
+#### Convenience Functions
+
+```python
+async def load_agent(name: str, tenant_id: str) -> Optional[Dict[str, Any]]:
+    """Load agent schema (convenience function)."""
+
+async def list_agents(
+    tenant_id: str,
+    use_in_dreaming: Optional[bool] = None
+) -> List[Dict[str, Any]]:
+    """List agents (convenience function)."""
+```
+
+### Best Practices
+
+1. **Descriptive System Prompts**: The `description` field should clearly explain what the agent does and how it should behave
+2. **Specific Output Schema**: Define precise `properties` for structured output
+3. **Appropriate Priority**: Use priority 1 only for critical agents
+4. **Versioning**: Increment version when making significant changes
+5. **Testing**: Test agents locally before enabling in production
+6. **Unique Names**: Use descriptive, unique `short_name` values
+
+### Troubleshooting
+
+**Agent not found after upload:**
+- Check category: `SELECT * FROM resources WHERE category='agent' AND tenant_id='tenant-test';`
+- Verify p8-type in file: Must be exactly `"agent"`
+- Check processing logs for errors
+
+**Agent not in dreaming:**
+- Verify `use_in_dreaming: true` in schema
+- Reload agent list: `await loader.get_dreaming_agents()`
+
+**Version not updating:**
+- Check if upload succeeded
+- Verify same `short_name` is being used
+- Check resource updated_at timestamp
+
+### Related Files
+
+- `src/p8fs/workers/processors/document_processor.py:63-127` - AgentDocumentProcessor
+- `src/p8fs/services/agent_loader.py` - AgentLoader service
+- `tests/integration/test_agent_document_processor.py` - Integration tests
+- `tests/sample_data/agents/sample_qa_agent.json` - Sample agent
+- `p8fs-api/src/p8fs_api/routers/mcp_server.py:195-294` - MCP create_agent prompt
+
 ## Implementation Files
 
 - `src/p8fs/services/llm/memory_proxy.py:1647-1769` - Core implementation

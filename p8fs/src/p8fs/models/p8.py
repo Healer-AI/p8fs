@@ -40,6 +40,16 @@ class SessionType(str, Enum):
     API = "api"
     BATCH = "batch"
     ANALYSIS = "analysis"
+    DREAMING = "dreaming"
+    ASSISTANT_CHAT_RESPONSE = "assistant-chat-response"
+
+
+class EncryptionKeyOwner(str, Enum):
+    """Who owns/manages the encryption key for a resource."""
+
+    USER = "USER"  # User-managed encryption (client-side keys)
+    SYSTEM = "SYSTEM"  # System-managed encryption (server-side keys)
+    NONE = "NONE"  # No encryption
 
 
 class ChannelType(str, Enum):
@@ -310,6 +320,39 @@ class Session(AbstractEntityModel):
         "indexed": ["moment_id"],
     }
 
+    @classmethod
+    async def summarize_user(
+        cls,
+        tenant_id: str,
+        max_sessions: int = 100,
+        max_moments: int = 20,
+        max_resources: int = 20,
+        max_files: int = 10
+    ) -> dict[str, Any]:
+        """
+        Convenience method to summarize user activity.
+
+        This delegates to the dreaming worker's summarize_user function.
+
+        Args:
+            tenant_id: Tenant identifier
+            max_sessions: Maximum number of recent chat sessions to analyze
+            max_moments: Maximum number of recent moment keys to include
+            max_resources: Maximum number of recent resource keys to include
+            max_files: Maximum number of recent file uploads to include
+
+        Returns:
+            Dictionary with summary results
+        """
+        from p8fs.workers.dreaming import summarize_user
+        return await summarize_user(
+            tenant_id=tenant_id,
+            max_sessions=max_sessions,
+            max_moments=max_moments,
+            max_resources=max_resources,
+            max_files=max_files
+        )
+
 
 # @deprecate for p8fs - we probably can focus on tenants but lets leave it here for now as it may be useful for user group modelling
 class User(AbstractEntityModel):
@@ -366,6 +409,193 @@ class User(AbstractEntityModel):
         return f"user:{email}"
 
 
+class InlineEdge(AbstractModel):
+    """
+    REM knowledge graph edge representation with natural, user-friendly labels.
+
+    Edges connect resources using natural names that match how entities are labeled.
+    REM LOOKUP finds ALL entities with matching labels; LLM resolves ambiguity.
+
+    **Key Design Principles:**
+    - dst uses natural entity names (e.g., "TiDB Migration Spec", "Sarah Chen")
+    - rel_type describes relationship semantics (e.g., "builds-on", "authored_by")
+    - weight represents relationship strength (0.0-1.0), not confidence
+    - properties stores rich metadata about the relationship
+
+    **Edge Weight Guidelines:**
+    - 1.0: Primary/strong relationships (authored_by, owns, part_of)
+    - 0.8-0.9: Important relationships (depends_on, reviewed_by, implements)
+    - 0.5-0.7: Secondary relationships (references, related_to, inspired_by)
+    - 0.3-0.4: Weak relationships (mentions, cites)
+
+    **Entity Type Convention (dst_entity_type):**
+    - Format: [table:]<category>[/<subcategory>]
+    - Table defaults to "resources" if not specified
+    - Examples:
+      - "person/supervisor" → resources table, category="person/supervisor"
+      - "resource:person/supervisor" → resources table, category="person/supervisor"
+      - "moments:reflection" → moments table, category="reflection"
+      - "files:image/screenshot" → files table, category="image/screenshot"
+    - Used to create orphan nodes when target entity doesn't exist yet
+
+    **Example:**
+    ```python
+    edge = InlineEdge(
+        dst="TiDB Migration Technical Specification",
+        rel_type="builds-on",
+        weight=0.85,
+        properties={
+            "dst_name": "TiDB Migration Technical Specification",
+            "dst_entity_type": "document/technical-spec",
+            "match_type": "semantic-historical",
+            "confidence": 0.92,
+            "context": "References migration approach from technical spec"
+        },
+        created_at=datetime.now(timezone.utc)
+    )
+    ```
+
+    See: /docs/REM/design.md for complete edge documentation
+    """
+
+    dst: str = Field(
+        ...,
+        description=(
+            "Natural entity label used in REM LOOKUP (NOT UUID or kebab-case). "
+            "Use the same user-friendly name as the target entity (e.g., 'Sarah Chen', 'Q4 Planning Meeting'). "
+            "LOOKUP finds all matching entities; LLM resolves ambiguity when multiple matches exist."
+        )
+    )
+
+    rel_type: str = Field(
+        ...,
+        description=(
+            "Relationship type describing the semantic connection. "
+            "Examples: 'authored_by', 'builds-on', 'references', 'contradicts', "
+            "'depends_on', 'implements', 'extends'. "
+            "Use lowercase with underscores."
+        )
+    )
+
+    weight: float = Field(
+        default=0.5,
+        ge=0.0,
+        le=1.0,
+        description=(
+            "Relationship strength (0.0-1.0). NOT confidence - represents "
+            "how strong/important the relationship is. "
+            "1.0=primary, 0.8-0.9=important, 0.5-0.7=secondary, 0.3-0.4=weak"
+        )
+    )
+
+    properties: dict[str, Any] = Field(
+        default_factory=dict,
+        description=(
+            "Rich metadata about the relationship. "
+            "Common fields: dst_name (display name), dst_entity_type (schema/category), "
+            "confidence (0.0-1.0), context (textual description), match_type, "
+            "semantic_similarity, graph_depth, llm_assessed, reasoning"
+        )
+    )
+
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="When this edge was created (UTC timestamp)"
+    )
+
+    model_config = {"extra": "forbid"}  # Strict validation - use properties for additional data
+
+    def parse_entity_type(self) -> tuple[str, str]:
+        """
+        Parse dst_entity_type into (table_name, category).
+
+        Format: [table:]category[/subcategory]
+        - "person/supervisor" → ("resources", "person/supervisor")
+        - "resource:person/supervisor" → ("resources", "person/supervisor")
+        - "moments:reflection" → ("moments", "reflection")
+        - "files:image/screenshot" → ("files", "image/screenshot")
+
+        Returns:
+            tuple: (table_name, category)
+        """
+        entity_type = self.properties.get("dst_entity_type", "")
+
+        if not entity_type:
+            return ("resources", "")
+
+        # Check if table is specified (contains colon)
+        if ":" in entity_type:
+            table, category = entity_type.split(":", 1)
+            return (table.strip(), category.strip())
+        else:
+            # No table specified, default to resources
+            return ("resources", entity_type.strip())
+
+    def create_node_data(self, tenant_id: str, add_reverse_edge: bool = True, source_name: str = None) -> dict[str, Any]:
+        """
+        Create lightweight node data for this edge's target entity.
+
+        Creates a minimal entity (resource/moment/etc) that can be "filled in" later
+        when more information is available. The node is not orphaned - it has edges
+        connecting to it, just minimal content until enriched.
+
+        Args:
+            tenant_id: Tenant ID for the node
+            add_reverse_edge: If True, adds inverse edge back to source (e.g., inv-managed-by)
+            source_name: Name of source entity (required if add_reverse_edge=True)
+
+        Returns:
+            dict: Entity data ready to upsert (compatible with Resources/Moment models)
+        """
+        table_name, category = self.parse_entity_type()
+
+        # Generate stable ID based on tenant + name
+        from uuid import NAMESPACE_DNS, uuid5
+        entity_id = str(uuid5(NAMESPACE_DNS, f"{tenant_id}:{table_name}:{self.dst}"))
+
+        # Reverse edge if requested
+        graph_paths = []
+        if add_reverse_edge and source_name:
+            reverse_rel = f"inv-{self.rel_type}"
+            reverse_edge = {
+                "dst": source_name,
+                "rel_type": reverse_rel,
+                "weight": self.weight,
+                "properties": {
+                    "dst_name": source_name,
+                    "confidence": 1.0,
+                    "match_type": "inverse_edge",
+                    "inverse_of": self.rel_type
+                },
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            graph_paths.append(reverse_edge)
+
+        # Base node data
+        node_data = {
+            "id": entity_id,
+            "tenant_id": tenant_id,
+            "name": self.dst,
+            "category": category or "reference",
+            "content": f"Lightweight node for '{self.dst}'. Will be enriched when full entity is created.",
+            "metadata": {
+                "is_lightweight": True,
+                "created_from_edge": True,
+                "edge_rel_type": self.rel_type,
+                "dst_entity_type": self.properties.get("dst_entity_type", ""),
+            },
+            "graph_paths": graph_paths
+        }
+
+        # Add table-specific fields for moments
+        if table_name == "moments":
+            node_data["moment_type"] = category or "reference"
+            node_data["emotion_tags"] = []
+            node_data["topic_tags"] = []
+
+        return node_data
+
+
 class Resources(AbstractEntityModel):
     """Generic content resources with metadata."""
 
@@ -380,17 +610,52 @@ class Resources(AbstractEntityModel):
     metadata: dict[str, Any] | None = Field(
         default_factory=dict, description="Resource metadata"
     )
-    graph_paths: list[str] | None = Field(
-        default_factory=list, description="Knowledge graph paths"
+    graph_paths: list[dict[str, Any]] | None = Field(
+        default_factory=list,
+        description=(
+            "Knowledge graph edges connecting this resource to others. "
+            "Stored as JSONB array of InlineEdge objects (serialized as dicts). "
+            "Each edge uses human-readable dst keys and includes relationship metadata."
+        )
     )
     resource_timestamp: datetime | None = Field(None, description="Resource timestamp")
     userid: str | None = Field(None, description="Associated user ID")
 
     model_config = {
-        "key_field": "id",
+        "key_field": "name",
         "table_name": "resources",
         "description": "Generic parsed content resources",
     }
+
+    @model_validator(mode="before")
+    @classmethod
+    def sanitize_graph_paths(cls, values):
+        """Clean up graph_paths to handle legacy string format.
+
+        Old data may have graph_paths as strings instead of dicts.
+        This validator filters out invalid entries while preserving valid ones.
+        """
+        graph_paths = values.get("graph_paths")
+        if graph_paths is not None:
+            # Filter to only keep dict entries, discard strings or other invalid types
+            valid_paths = []
+            invalid_count = 0
+            for item in graph_paths:
+                if isinstance(item, dict):
+                    valid_paths.append(item)
+                else:
+                    invalid_count += 1
+
+            if invalid_count > 0:
+                from p8fs_cluster.logging import get_logger
+                logger = get_logger(__name__)
+                logger.debug(
+                    f"Filtered out {invalid_count} invalid graph_path entries "
+                    f"(kept {len(valid_paths)} valid entries)"
+                )
+
+            values["graph_paths"] = valid_paths
+        return values
 
     @model_validator(mode="before")
     @classmethod
@@ -532,6 +797,9 @@ class Files(AbstractEntityModel):
         None,
         description="Timestamp when advanced model pipeline processing was completed",
     )
+    encryption_key_owner: EncryptionKeyOwner | None = Field(
+        None, description="Who owns/manages the encryption key (USER|SYSTEM|NONE)"
+    )
 
     model_config = {
         "key_field": "id",
@@ -568,79 +836,51 @@ class Files(AbstractEntityModel):
         from p8fs.repository import TenantRepository
 
         try:
-            client = TenantRepository(cls, tenant_id=tenant_id)
+            from p8fs.providers import get_provider
 
-            # Query for Files entities using provider-agnostic approach
-            files_query = """
-            SELECT * FROM files 
-            WHERE tenant_id = %s
-            ORDER BY upload_timestamp DESC 
-            LIMIT %s
-            """
+            provider = get_provider()
+            conn = provider.connect_sync()
 
-            files_results = client.execute(files_query, [tenant_id, limit])
+            try:
+                with conn.cursor() as cur:
+                    # Get dialect-specific query from provider
+                    files_query = provider.get_recent_uploads_query(limit)
 
-            # Parse files from query results
-            files_list = []
-            if files_results and "data" in files_results:
-                for row in files_results["data"]:
-                    if row:
+                    cur.execute(files_query, (tenant_id, limit))
+                    columns = [desc[0] for desc in cur.description]
+                    uploads = [dict(zip(columns, row)) for row in cur.fetchall()]
+
+                    # Parse files from query results
+                    files_list = []
+                    resource_names = []
+
+                    for upload in uploads:
                         file_data = {
-                            "file_id": row.get("id"),
-                            "uri": row.get("uri", ""),
-                            "file_size": row.get("file_size", 0),
-                            "mime_type": row.get("mime_type", "unknown"),
-                            "content_hash": row.get("content_hash"),
-                            "upload_timestamp": row.get("upload_timestamp"),
-                            "metadata": row.get("metadata", {}),
-                            "entity_key": f"{tenant_id}/entity/Files/{row.get('id', '')}",
+                            "file_id": upload.get("file_id"),
+                            "file_name": upload.get("file_name"),
+                            "uri": upload.get("uri", ""),
+                            "file_size": upload.get("file_size", 0),
+                            "mime_type": upload.get("mime_type", "unknown"),
+                            "upload_timestamp": upload.get("upload_timestamp"),
+                            "chunk_count": upload.get("chunk_count", 0),
+                            "entity_key": f"{tenant_id}/entity/Files/{upload.get('file_id', '')}",
                         }
                         files_list.append(file_data)
 
-            # Collect resource names if requested
-            resource_names = []
-            if include_resource_names and files_list:
-                try:
-                    # Get file IDs for resource lookup
-                    file_ids = [f["file_id"] for f in files_list if f["file_id"]]
-
-                    if file_ids:
-                        # Query for Resources associated with these files
-                        file_ids_placeholders = ",".join(["%s"] * len(file_ids))
-                        resources_query = f"""
-                        SELECT * FROM resources 
-                        WHERE metadata->>'file_id' IN ({file_ids_placeholders})
-                        ORDER BY name
-                        """
-
-                        resources_results = client.execute(resources_query, file_ids)
-
-                        if resources_results and "data" in resources_results:
-                            for row in resources_results["data"]:
-                                if row:
-                                    resource_name = row.get("name", "")
-                                    file_id = (
-                                        row.get("metadata", {}).get("file_id")
-                                        if isinstance(row.get("metadata"), dict)
-                                        else None
-                                    )
-
-                                    if resource_name and file_id:
-                                        resource_names.append(
-                                            {
-                                                "name": resource_name,
-                                                "file_id": file_id,
-                                                "entity_key": f"{tenant_id}/entity/Resources/{row.get('id', '')}",
-                                                "category": row.get("category", ""),
-                                                "uri": row.get("uri", ""),
-                                            }
-                                        )
-
-                except Exception as e:
-                    from p8fs_cluster.logging import get_logger
-
-                    logger = get_logger(__name__)
-                    logger.warning(f"Error retrieving resource names: {e}")
+                        # Collect resource names if requested
+                        if include_resource_names:
+                            chunk_entities = upload.get("chunk_entity_names", [])
+                            if chunk_entities and chunk_entities != [None]:
+                                for chunk in chunk_entities:
+                                    if chunk and chunk.get("name"):
+                                        resource_names.append({
+                                            "name": chunk.get("name", ""),
+                                            "entity_key": f"{tenant_id}/entity/Resources/{chunk.get('id', '')}",
+                                            "category": chunk.get("category", ""),
+                                            "ordinal": chunk.get("ordinal", 0),
+                                        })
+            finally:
+                conn.close()
 
             return {
                 "tenant_id": tenant_id,
@@ -863,6 +1103,12 @@ class Tenant(AbstractEntityModel):
         default_factory=dict, description="Additional tenant metadata"
     )
     active: bool = Field(True, description="Whether tenant is active")
+    security_policy: dict[str, Any] | None = Field(
+        None, description="Tenant security policy configuration (JSONB)"
+    )
+    encryption_wait_time_days: int | None = Field(
+        None, description="Days to wait before encrypting data (for user key setup)"
+    )
 
     @field_validator("device_ids", mode="before")
     @classmethod
@@ -965,9 +1211,9 @@ class Moment(Resources):
     )
 
     # Presence information
-    present_persons: dict[str, Any] | None = Field(
+    present_persons: list[dict[str, Any]] | None = Field(
         None,
-        description="People present during this moment. Key: fingerprint_id, Value: PresentPerson object",
+        description="People present during this moment. List of PresentPerson objects with id, name, and comment fields",
     )
 
     # Context information
@@ -1015,8 +1261,8 @@ class Moment(Resources):
         if not self.present_persons:
             return []
         return [
-            person.get("user_id") or person.get("fingerprint_id")
-            for person in self.present_persons.values()
+            person.get("user_id") or person.get("fingerprint_id") or person.get("id")
+            for person in self.present_persons
             if isinstance(person, dict)
         ]
 

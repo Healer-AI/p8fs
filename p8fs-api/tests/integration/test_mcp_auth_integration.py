@@ -260,9 +260,9 @@ class TestMCPAuthIntegration:
         assert "issuer" in discovery
         
         # Verify endpoints are correctly formatted
-        assert "/oauth/device_authorization" in discovery["device_authorization_endpoint"]
-        assert "/oauth/token" in discovery["token_endpoint"]
-        assert "/oauth/authorize" in discovery["authorization_endpoint"]
+        assert "/api/v1/oauth/device_authorization" in discovery["device_authorization_endpoint"]
+        assert "/api/v1/oauth/token" in discovery["token_endpoint"]
+        assert "/api/v1/oauth/authorize" in discovery["authorization_endpoint"]
     
     async def test_mcp_tools_list_with_auth(self, client, jwt_token):
         """Test listing available MCP tools with authentication."""

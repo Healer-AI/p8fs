@@ -69,6 +69,7 @@ The following content headers can be sent on any payload to identify users, devi
 | `X-Batch-ID` | Batch processing identifier | `batch-2024-01-15-001` | No |
 | **Chat/Conversation Context** | | | |
 | `X-Chat-Is-Audio` | Indicates audio input in chat completions | `true`, `false` | No |
+| `X-Moment-ID` | Moment identifier for filtering change messages or chat context | `moment-abc123def456`, `550e8400-e29b-41d4-a716-446655440000` | No |
 
 ## Notes
 
@@ -238,6 +239,28 @@ X-Platform: iOS
 ```
 
 When `X-Chat-Is-Audio: true` is present, the first user message content should be intercepted and processed as base64-encoded WAV audio data. The audio is transcribed to text before being passed to the chat completion handler.
+
+### Chat with Moment Context
+```http
+POST /api/v1/chat/completions
+Content-Type: application/json
+Authorization: Bearer p8fs_at_eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9...
+X-Moment-ID: moment-abc123def456
+X-User-Email: alice@example.com
+
+{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What happened during this moment?"
+    }
+  ],
+  "stream": true
+}
+```
+
+When `X-Moment-ID` is present, the system filters change messages and chat context to the specified moment. This allows chat interactions and message streams to be scoped to a specific temporal context or conversation thread.
 
 ## Header Validation
 

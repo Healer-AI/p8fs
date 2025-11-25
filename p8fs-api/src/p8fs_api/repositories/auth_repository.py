@@ -159,21 +159,33 @@ class P8FSAuthRepository(AbstractRepository):
     async def create_device(self, device) -> None:
         """Store device in tenant metadata."""
         try:
-            # Get or create tenant for this email
-            tenant = await self.get_tenant_by_email(device.email)
-            if not tenant:
-                # Create new tenant for this email
-                import hashlib
-                email_hash = hashlib.sha256(device.email.encode()).hexdigest()[:16]
-                tenant_id = f"tenant-{email_hash}"
-                
-                tenant = Tenant(
-                    tenant_id=tenant_id,
-                    email=device.email,
-                    public_key=device.public_key,
-                    metadata={"devices": {}}
-                )
-            
+            # Use device's tenant_id if already set (e.g., from IMEI-based creation)
+            # Otherwise get or create tenant for this email
+            if device.tenant_id:
+                tenant = await self.get_tenant_by_id(device.tenant_id)
+                if not tenant:
+                    # Create tenant with the specified tenant_id
+                    tenant = Tenant(
+                        tenant_id=device.tenant_id,
+                        email=device.email,
+                        public_key=device.public_key,
+                        metadata={"devices": {}}
+                    )
+            else:
+                # Legacy path: create tenant based on email hash
+                tenant = await self.get_tenant_by_email(device.email)
+                if not tenant:
+                    import hashlib
+                    email_hash = hashlib.sha256(device.email.encode()).hexdigest()[:16]
+                    tenant_id = f"tenant-{email_hash}"
+
+                    tenant = Tenant(
+                        tenant_id=tenant_id,
+                        email=device.email,
+                        public_key=device.public_key,
+                        metadata={"devices": {}}
+                    )
+
             # Store device info in tenant metadata
             devices = tenant.metadata.get("devices", {})
             devices[device.device_id] = {
@@ -504,28 +516,149 @@ class P8FSAuthRepository(AbstractRepository):
 
     # Token repository methods (for AuthenticationService compatibility)
     async def create_auth_token(self, auth_token) -> None:
-        """Store auth token (currently no-op as we use stateless JWTs)."""
-        # For stateless JWT tokens, we don't need to store them in the repository
-        # The token contains all necessary information and is validated via signature
-        logger.debug(f"Auth token created (stateless JWT): {getattr(auth_token, 'token_id', 'unknown')}")
-        pass
+        """Store auth token in KV storage.
+
+        Access tokens (JWTs) are stateless and don't need storage, but refresh tokens
+        must be persisted to enable token rotation and revocation per OAuth 2.1 spec.
+        """
+        from datetime import datetime
+
+        # Calculate TTL in seconds from expires_at
+        ttl_seconds = None
+        if hasattr(auth_token, 'expires_at') and auth_token.expires_at:
+            ttl_seconds = int((auth_token.expires_at - datetime.utcnow()).total_seconds())
+            if ttl_seconds <= 0:
+                logger.warning(f"Token already expired: {auth_token.token_id}")
+                return
+
+        # Convert auth_token to dict for storage
+        token_data = {
+            "token_id": getattr(auth_token, 'token_id', None),
+            "token_type": getattr(auth_token, 'token_type', None).value if hasattr(getattr(auth_token, 'token_type', None), 'value') else str(getattr(auth_token, 'token_type', None)),
+            "token_value": getattr(auth_token, 'token_value', None),
+            "user_id": getattr(auth_token, 'user_id', None),
+            "device_id": getattr(auth_token, 'device_id', None),
+            "client_id": getattr(auth_token, 'client_id', None),
+            "scope": getattr(auth_token, 'scope', []),
+            "expires_at": auth_token.expires_at.isoformat() if auth_token.expires_at else None,
+            "created_at": auth_token.created_at.isoformat() if hasattr(auth_token, 'created_at') and auth_token.created_at else datetime.utcnow().isoformat(),
+            "revoked_at": auth_token.revoked_at.isoformat() if hasattr(auth_token, 'revoked_at') and auth_token.revoked_at else None,
+            "refresh_token": getattr(auth_token, 'refresh_token', None),
+            "tenant_id": getattr(auth_token, 'tenant_id', None)
+        }
+
+        # Store by token value for quick lookup during refresh
+        key = f"auth_token:{auth_token.token_value}"
+        success = await self.store(key, token_data, ttl_seconds)
+
+        if success:
+            logger.debug(f"Auth token stored: {auth_token.token_id} type={token_data['token_type']} ttl={ttl_seconds}s")
+        else:
+            logger.error(f"Failed to store auth token: {auth_token.token_id}")
 
     async def get_auth_token_by_value(self, token_value: str):
-        """Get auth token by value (currently no-op as we use stateless JWTs)."""
-        # For stateless JWT tokens, we don't store them in the repository
-        # Token validation is done via signature verification, not database lookup
-        logger.debug(f"Auth token lookup requested (stateless JWT): {token_value[:20]}...")
-        return None
+        """Get auth token by value from KV storage.
+
+        Returns AuthToken object if found, None otherwise.
+        """
+        from p8fs_auth.models.auth import AuthToken, TokenType
+        from datetime import datetime
+
+        key = f"auth_token:{token_value}"
+        token_data = await self.retrieve(key)
+
+        if not token_data:
+            logger.debug(f"Auth token not found: {token_value[:20]}...")
+            return None
+
+        # Convert back to AuthToken object
+        try:
+            token_type = TokenType(token_data['token_type']) if token_data.get('token_type') else TokenType.ACCESS
+        except (KeyError, ValueError):
+            token_type = TokenType.ACCESS
+
+        # Parse timestamps
+        expires_at = datetime.fromisoformat(token_data['expires_at']) if token_data.get('expires_at') else None
+        created_at = datetime.fromisoformat(token_data['created_at']) if token_data.get('created_at') else datetime.utcnow()
+        revoked_at = datetime.fromisoformat(token_data['revoked_at']) if token_data.get('revoked_at') else None
+
+        auth_token = AuthToken(
+            token_id=token_data.get('token_id', ''),
+            token_type=token_type,
+            token_value=token_data.get('token_value', ''),
+            user_id=token_data.get('user_id', ''),
+            device_id=token_data.get('device_id'),
+            client_id=token_data.get('client_id', ''),
+            scope=token_data.get('scope', []),
+            expires_at=expires_at,
+            created_at=created_at,
+            revoked_at=revoked_at,
+            refresh_token=token_data.get('refresh_token'),
+            tenant_id=token_data.get('tenant_id')
+        )
+
+        logger.debug(f"Auth token retrieved: {auth_token.token_id} type={token_type.value}")
+        return auth_token
+
+    async def revoke_auth_token(self, token_id: str) -> bool:
+        """Revoke an auth token by setting revoked_at timestamp.
+
+        Note: This requires looking up the token first to get its value.
+        For now, we'll need to scan for it or track token_id -> token_value mapping.
+        """
+        from datetime import datetime
+
+        # For refresh tokens, we need to find by token_id
+        # Scan auth_token: prefix to find the token
+        tokens = await self.query("auth_token:", limit=1000)
+
+        for token_data in tokens:
+            if token_data.get('token_id') == token_id:
+                # Update revoked_at
+                token_data['revoked_at'] = datetime.utcnow().isoformat()
+
+                # Store back with same TTL (will inherit from existing)
+                key = f"auth_token:{token_data['token_value']}"
+                success = await self.store(key, token_data)
+
+                if success:
+                    logger.info(f"Auth token revoked: {token_id}")
+                    return True
+                else:
+                    logger.error(f"Failed to revoke auth token: {token_id}")
+                    return False
+
+        logger.warning(f"Auth token not found for revocation: {token_id}")
+        return False
 
     async def get_device_token_by_user_code(self, user_code: str):
         """Get device authorization by user code.
-        
+
         This method is for compatibility with the device service which expects
         to find device authorizations by user code.
         """
         # Just return the device authorization data
         # The device service will handle it appropriately
         return await self.get_device_authorization(user_code)
+
+    async def get_client(self, client_id: str):
+        """Get OAuth client by client_id.
+
+        For development, returns a mock public client.
+        In production, this should query a clients table/store.
+        """
+        from p8fs_auth.models.auth import OAuthClient
+
+        # Return a mock public client for all requests
+        # All dev/test clients are treated as public (no client secret)
+        return OAuthClient(
+            client_id=client_id,
+            client_name=f"Dev Client ({client_id})",
+            client_type="public",  # Public clients require refresh token rotation
+            redirect_uris=["http://localhost:*"],
+            grant_types=["authorization_code", "refresh_token", "urn:ietf:params:oauth:grant-type:device_code"],
+            scopes=["read", "write"]
+        )
 
     async def create_login_event(self, login_event) -> None:
         """Store login event (currently no-op for development)."""

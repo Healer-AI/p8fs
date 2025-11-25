@@ -343,17 +343,29 @@ class BaseRepository(ABC):
             raise
 
     async def upsert(
-        self, 
+        self,
         entities: T | list[T] | dict[str, Any] | list[dict[str, Any]],
         create_embeddings: bool = True
     ) -> dict[str, Any]:
         """
-        Async upsert one or more entities.
-        
+        Async upsert one or more entities with dual indexing.
+
+        CONTRACTUAL OBLIGATION: Upsert performs dual indexing automatically:
+        1. SQL persistence (INSERT/UPDATE in database table)
+        2. Embedding index generation (vector search capability)
+        3. Entity key index population (enables LOOKUP queries)
+
+        Provider-specific implementations:
+        - PostgreSQL: Stores entities in tables + creates AGE graph nodes for LOOKUP
+        - TiDB: Stores entities in tables + creates TiKV reverse key lookups
+
+        The caller should NEVER need to separately populate KV or manage indexing.
+        This abstraction ensures consistent behavior across all storage providers.
+
         Args:
             entities: Entity or list of entities to upsert
             create_embeddings: Whether to generate embeddings for entities with embedding fields (default: True)
-            
+
         Returns:
             Dictionary with success status and affected rows
         """
@@ -382,6 +394,7 @@ class BaseRepository(ABC):
 
             if len(data_list) == 1:
                 # Single entity
+                logger.debug(f"Upserting {self.model_class.__name__} with fields: {list(data_list[0].keys())}")
                 sql, params = self.provider.upsert_sql(self.model_class, data_list[0])
                 results = await self.provider.async_execute(conn, sql, params)
                 affected_rows = 1  # Assume success for async
@@ -417,6 +430,17 @@ class BaseRepository(ABC):
                         f"Embedding generation failed (entities still saved): {e}"
                     )
 
+            # Populate entity key index for LOOKUP queries (dual indexing)
+            # This must happen after SQL upsert to ensure entity exists
+            for entity_data in data_list:
+                try:
+                    await self._populate_entity_key_index(entity_data)
+                except Exception as e:
+                    # Log warning but don't fail upsert - KV population is best-effort
+                    logger.warning(
+                        f"Entity key index population failed for {entity_data.get('name', entity_data.get('id'))}: {e}"
+                    )
+
             return {
                 "success": True,
                 "affected_rows": affected_rows,
@@ -424,8 +448,100 @@ class BaseRepository(ABC):
             }
 
         except Exception as e:
+            import traceback
             logger.error(f"Failed to async upsert {self.model_class.__name__}: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
             raise
+
+    async def _populate_entity_key_index(self, entity_data: dict[str, Any]) -> None:
+        """
+        Populate entity key index for LOOKUP queries.
+
+        Provider-specific implementations:
+        - PostgreSQL: Creates AGE graph nodes + reverse key lookups
+        - TiDB: Stores reverse key mappings in TiKV
+        - RocksDB: Stores reverse key mappings in RocksDB
+
+        Creates KV entries:
+        - {tenant_id}/{entity_name}/{table_name} → {entity_ids: [UUID...], table_name, entity_type}
+        - {tenant_id}/{related_entity}/{table_name} → {entity_ids: [UUID...]} for graph edges
+
+        This enables LOOKUP queries to find entities by human-friendly labels
+        without knowing which table they're in.
+        """
+        try:
+            entity_id = entity_data.get("id")
+            table_name = self.model_class.get_model_table_name()
+
+            if not entity_id:
+                logger.debug(f"Entity missing ID, skipping key index: {entity_data.get('name', 'unknown')}")
+                return
+
+            # Get tenant_id for key namespacing
+            tenant_id = entity_data.get("tenant_id") or self.tenant_id or "system"
+            kv = self.provider.kv
+
+            async def add_entity_mapping(key: str, entity_type: str = "entity"):
+                """Add entity_id to the list of entities for this key."""
+                existing = await kv.get(key)
+
+                if existing:
+                    # Append to existing list
+                    if isinstance(existing, dict) and "entity_ids" in existing:
+                        entity_ids = existing["entity_ids"]
+                        if entity_id not in entity_ids:
+                            entity_ids.append(entity_id)
+                    else:
+                        # Old format (single entity_id), migrate to list
+                        old_id = existing.get("entity_id") if isinstance(existing, dict) else existing
+                        entity_ids = [old_id, entity_id] if old_id and old_id != entity_id else [entity_id]
+                else:
+                    entity_ids = [entity_id]
+
+                kv_value = {
+                    "entity_ids": entity_ids,
+                    "table_name": table_name,
+                    "entity_type": entity_type
+                }
+
+                await kv.put(key, kv_value)
+
+            # 1. Index by name (if present)
+            entity_name = entity_data.get("name")
+            if entity_name:
+                await add_entity_mapping(
+                    f"{tenant_id}/{entity_name}/{table_name}",
+                    entity_type=table_name
+                )
+                logger.debug(f"Indexed entity name: {entity_name} → {entity_id}")
+
+            # 2. Index graph_paths destinations (if present)
+            graph_paths = entity_data.get("graph_paths", [])
+            if graph_paths:
+                for edge in graph_paths:
+                    if isinstance(edge, dict):
+                        related_name = edge.get("dst")
+                        properties = edge.get("properties", {})
+                        related_type = properties.get("dst_entity_type", "entity")
+                    else:
+                        # Fallback for legacy string format
+                        related_name = str(edge)
+                        related_type = "entity"
+
+                    if not related_name:
+                        continue
+
+                    # Store mapping from related entity name back to this resource
+                    await add_entity_mapping(
+                        f"{tenant_id}/{related_name}/resource",
+                        entity_type=related_type
+                    )
+
+                    logger.debug(f"Indexed graph edge: {related_name} → {entity_id}")
+
+        except Exception as e:
+            # Log warning but don't fail - KV population is best-effort
+            logger.warning(f"Failed to populate entity key index: {e}")
 
     def create_with_embeddings(
         self, entities: T | list[T] | dict[str, Any] | list[dict[str, Any]]
@@ -884,9 +1000,14 @@ class BaseRepository(ABC):
             (id, entity_id, field_name, embedding_provider, embedding_vector, vector_dimension, tenant_id, created_at, updated_at)
             VALUES (%s, %s, %s, %s, VEC_FROM_TEXT(%s), %s, %s, NOW(), NOW())
             """
+            # Convert UUIDs to strings for database compatibility
+            from uuid import UUID
+            record_id = str(embedding_data["id"]) if isinstance(embedding_data["id"], UUID) else embedding_data["id"]
+            entity_id = str(embedding_data["entity_id"]) if isinstance(embedding_data["entity_id"], UUID) else embedding_data["entity_id"]
+
             params = (
-                embedding_data["id"],
-                embedding_data["entity_id"],
+                record_id,
+                entity_id,
                 embedding_data["field_name"],
                 embedding_data["embedding_provider"],
                 vector_json,
@@ -896,19 +1017,24 @@ class BaseRepository(ABC):
         else:
             # PostgreSQL uses ON CONFLICT
             sql = f"""
-            INSERT INTO {table_name} 
+            INSERT INTO {table_name}
             (id, entity_id, field_name, embedding_provider, embedding_vector, vector_dimension, tenant_id, created_at, updated_at)
             VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
-            ON CONFLICT (entity_id, field_name, tenant_id) 
-            DO UPDATE SET 
+            ON CONFLICT (entity_id, field_name, tenant_id)
+            DO UPDATE SET
                 embedding_provider = EXCLUDED.embedding_provider,
                 embedding_vector = EXCLUDED.embedding_vector,
                 vector_dimension = EXCLUDED.vector_dimension,
                 updated_at = NOW()
             """
+            # Convert UUIDs to strings for database compatibility
+            from uuid import UUID
+            record_id = str(embedding_data["id"]) if isinstance(embedding_data["id"], UUID) else embedding_data["id"]
+            entity_id = str(embedding_data["entity_id"]) if isinstance(embedding_data["entity_id"], UUID) else embedding_data["entity_id"]
+
             params = (
-                embedding_data["id"],
-                embedding_data["entity_id"],
+                record_id,
+                entity_id,
                 embedding_data["field_name"],
                 embedding_data["embedding_provider"],
                 embedding_data["embedding_vector"],
@@ -932,11 +1058,16 @@ class BaseRepository(ABC):
             """
             params_list = []
             for record in embedding_records:
+                # Convert UUIDs to strings for database compatibility
+                from uuid import UUID
+                record_id = str(record["id"]) if isinstance(record["id"], UUID) else record["id"]
+                entity_id = str(record["entity_id"]) if isinstance(record["entity_id"], UUID) else record["entity_id"]
+
                 vector_json = json.dumps(record["embedding_vector"])
                 params_list.append(
                     (
-                        record["id"],
-                        record["entity_id"],
+                        record_id,
+                        entity_id,
                         record["field_name"],
                         record["embedding_provider"],
                         vector_json,
@@ -965,11 +1096,16 @@ class BaseRepository(ABC):
                     vector_str = f"[{','.join(map(str, record['embedding_vector']))}]"
                 else:
                     vector_str = record["embedding_vector"]
-                    
+
+                # Convert UUIDs to strings for psycopg2 compatibility
+                from uuid import UUID
+                record_id = str(record["id"]) if isinstance(record["id"], UUID) else record["id"]
+                entity_id = str(record["entity_id"]) if isinstance(record["entity_id"], UUID) else record["entity_id"]
+
                 params_list.append(
                     (
-                        record["id"],
-                        record["entity_id"],
+                        record_id,
+                        entity_id,
                         record["field_name"],
                         record["embedding_provider"],
                         vector_str,

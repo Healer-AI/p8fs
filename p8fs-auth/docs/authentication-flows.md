@@ -2,6 +2,8 @@
 
 This document provides a comprehensive overview of the P8FS authentication system flows and required endpoints for OAuth 2.1 and keypair management.
 
+**Visual Diagrams**: See [sequence-diagrams.md](./sequence-diagrams.md) for detailed sequence diagrams of all authentication flows.
+
 ## System Architecture Overview
 
 P8FS implements a **mobile-first, zero-trust authentication system** combining OAuth 2.1 standards with cryptographic innovation. Mobile devices serve as primary authentication factors and hardware security modules, enabling secure access for desktop applications, APIs, and distributed storage.
@@ -29,11 +31,16 @@ Primary onboarding flow for new users with mobile devices.
 5. Server creates pending registration
 6. Server sends verification code to email
 7. User enters code in app
-8. App signs verification with private key
-9. Server validates signature and code
-10. Server creates tenant and OAuth tokens
+8. App sends verification code to server
+9. Server validates code
+10. Server creates tenant (IMEI-based if provided, otherwise random) and OAuth tokens
 11. User authenticated on mobile device
 ```
+
+**Tenant Creation**:
+- If `device_info.imei` provided: Deterministic `tenant-{SHA256(imei)[:16]}`
+- Otherwise: Random `tenant-{secrets.token_hex(16)}`
+- Tenant ID included in JWT `tenant` claim for all future requests
 
 **Required Endpoints:**
 - `POST /api/v1/auth/register`
@@ -79,7 +86,32 @@ Standard OAuth 2.1 token refresh and access.
 - `POST /oauth/revoke`
 - `POST /oauth/introspect`
 
-### Flow 4: S3 Credential Derivation
+### Flow 4: Device Re-authentication with Signature
+
+Signature-based authentication for expired tokens or sensitive operations.
+
+```
+1. Device's access token expires or sensitive operation required
+2. Device generates challenge (random nonce)
+3. Device signs challenge with private Ed25519 key
+4. Device sends device_id, challenge, and signature to server
+5. Server extracts tenant_id from JWT context (from auth middleware)
+6. Server looks up device in tenant metadata
+7. Server verifies signature using stored public key
+8. Server issues new OAuth tokens
+9. Device re-authenticated
+```
+
+**Implementation Requirements:**
+- **tenant_id Required**: Must be extracted from JWT token in request headers
+- Device lookup scoped by tenant (no cross-tenant device access)
+- Challenge prevents replay attacks
+- Signature proves device possession of private key
+
+**Required Endpoints:**
+- `POST /api/v1/auth/devices/authenticate`
+
+### Flow 5: S3 Credential Derivation
 
 Deterministic credential generation for storage access.
 

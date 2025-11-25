@@ -140,7 +140,7 @@ async def approve_device_request(
         try:
             # Use the OAuth device approval endpoint
             response = await client.post(
-                f"{base_url}/oauth/device/approve",
+                f"{base_url}/api/v1/oauth/device/approve",
                 json={
                     "user_code": user_code,  # Keep original format
                     "approved": True,
@@ -260,7 +260,7 @@ async def fetch_user_code_from_qr_page(
     for try_port in ports_to_try:
         try:
             # Check standard OAuth device endpoint first
-            url = f"http://localhost:{try_port}/oauth/device"
+            url = f"http://localhost:{try_port}/api/v1/oauth/device"
             print(f"Checking device verification page at {url}...")
             
             async with httpx.AsyncClient(timeout=5.0) as client:

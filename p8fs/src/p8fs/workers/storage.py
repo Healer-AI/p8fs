@@ -20,16 +20,21 @@ from p8fs.workers.processors import ProcessorRegistry
 
 logger = get_logger(__name__)
 
-# Optional import of p8fs-node for content processing
+# CRITICAL: p8fs-node is required for storage worker functionality
 try:
     from p8fs_node.providers import get_content_provider, auto_register
     # Auto-register content providers
     auto_register()
     HAS_P8FS_NODE = True
-except ImportError:
-    logger.warning("p8fs-node not installed - content processing features will be disabled")
-    HAS_P8FS_NODE = False
-    get_content_provider = None
+except ImportError as e:
+    logger.error("FATAL: p8fs-node is not installed - storage worker cannot function without it")
+    logger.error(f"Import error: {e}")
+    logger.error("Storage worker requires p8fs-node for content extraction and processing")
+    raise RuntimeError(
+        "p8fs-node is required but not installed. "
+        "Storage workers must be deployed with the 'heavy' image variant that includes p8fs-node. "
+        "Check your deployment configuration and ensure you're using the correct image."
+    ) from e
 app = typer.Typer(help="Storage worker for processing files")
 
 
@@ -101,6 +106,13 @@ class StorageWorker:
         from datetime import datetime, timezone
         start_time = time.time()
 
+        # IMPORTANT: Create tenant-specific repositories for this file
+        # The worker's self.files_repo and self.resources_repo are bound to worker's tenant_id
+        # But we need to use the tenant_id from the file being processed
+        from p8fs.models.p8 import Files, Resources
+        files_repo = TenantRepository(Files, tenant_id=tenant_id)
+        resources_repo = TenantRepository(Resources, tenant_id=tenant_id)
+
         # Download file from S3 if s3_key is provided
         temp_file = None
         try:
@@ -140,9 +152,9 @@ class StorageWorker:
             file_timestamp = file_mtime
             
             logger.info(f"Processing: {path.name} ({file_stat.st_size / 1024 / 1024:.1f} MB) from {file_timestamp.isoformat()}")
-            
-            # Create file entry
-            await self.files_repo.upsert({
+
+            # Create file entry using tenant-specific repository
+            await files_repo.upsert({
                 "id": file_id,
                 "tenant_id": tenant_id,
                 "uri": s3_key if s3_key else str(path),  # Use S3 key for S3 files, local path otherwise
@@ -153,6 +165,7 @@ class StorageWorker:
                     "s3_key": s3_key
                 }
             })
+            logger.info(f"Database: Created/updated file record with ID {file_id}")
             
             # Check if it's a YAML/JSON file that might be an Engram
             if path.suffix.lower() in ['.yaml', '.yml', '.json']:
@@ -168,9 +181,10 @@ class StorageWorker:
                     if content:
                         # Determine content type for document processor
                         content_type = "application/x-yaml" if path.suffix.lower() in ['.yaml', '.yml'] else "application/json"
-                        
-                        # Process using delegation system
-                        result = await self.processor_registry.process_document(content, content_type, tenant_id)
+
+                        # Process using delegation system with tenant-specific repository
+                        processor_registry = ProcessorRegistry(resources_repo)
+                        result = await processor_registry.process_document(content, content_type, tenant_id)
                         
                         processor_used = result.get("processor_used", "unknown")
                         logger.info(f"Processed {processor_used} document: {file_path}")
@@ -194,10 +208,6 @@ class StorageWorker:
             
             # Extract content using content providers
             try:
-                if not HAS_P8FS_NODE:
-                    logger.error(f"Cannot process {file_path} - p8fs-node is not installed")
-                    return
-                    
                 extraction_start = time.time()
                 logger.debug(f"Getting content provider for {path}")
                 provider = get_content_provider(str(path))
@@ -219,32 +229,39 @@ class StorageWorker:
                     logger.warning(f"No chunks created for {file_path} - file may be empty or processing failed")
                 else:
                     logger.debug(f"Processing {len(chunks)} chunks for storage")
-                    
-                resources_created = 0
+
+                # Build list of resource chunks to batch upsert
+                resources_to_create = []
                 for i, chunk in enumerate(chunks):
                     resource_id = str(uuid5(NAMESPACE_DNS, f"{file_id}:chunk:{i}"))
-                    logger.debug(f"Creating resource {i+1}/{len(chunks)}: {resource_id}")
-                    await self.resources_repo.upsert({
+                    logger.debug(f"Preparing resource {i+1}/{len(chunks)}: {resource_id}")
+                    resources_to_create.append({
                         "id": resource_id,
                         "tenant_id": tenant_id,
                         "name": f"{path.stem}_chunk_{i}",
                         "category": "content_chunk",
-                        "content": chunk.content,  # Extract content from ContentChunk
+                        "content": chunk.content,
                         "ordinal": i,
                         "uri": f"{file_path}#chunk_{i}",
-                        "resource_timestamp": file_timestamp,  # Add file timestamp
+                        "resource_timestamp": file_timestamp,
                         "metadata": {
                             "file_id": file_id,
                             "chunk_index": i,
                             "chunk_type": chunk.chunk_type,
                             "file_mtime": file_mtime.isoformat(),
                             "file_ctime": file_ctime.isoformat(),
-                            **chunk.metadata  # Include any chunk metadata
+                            **chunk.metadata
                         }
                     })
-                    resources_created += 1
-                
-                logger.info(f"Successfully created {resources_created} content resources for {file_path}")
+
+                # Batch upsert all chunks at once (generates embeddings in batch)
+                if resources_to_create:
+                    logger.info(f"Upserting {len(resources_to_create)} resource chunks in batch")
+                    await resources_repo.upsert(resources_to_create)
+                    resources_created = len(resources_to_create)
+                    logger.info(f"Database: Created {resources_created} resource chunk(s) in database for {file_path}")
+                else:
+                    resources_created = 0
                 
                 # Log timing summary
                 total_time = time.time() - start_time
